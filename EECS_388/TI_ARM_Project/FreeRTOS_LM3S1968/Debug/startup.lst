@@ -1,0 +1,843 @@
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE    1
+
+       1                    ;******************************************************************************
+       2                    ;* TI ARM C/C++ Codegen                                             PC v5.0.1 *
+       3                    ;* Date/Time created: Thu Apr 11 19:17:32 2013                                *
+       4                    ;******************************************************************************
+       5                            .compiler_opts --abi=eabi --arm_vmrs_si_workaround=on --code_state=16 --disable_dual_state --e
+       6 00000000                   .thumb
+       7                    
+       8                    $C$DW$CU        .dwtag  DW_TAG_compile_unit
+       9                            .dwattr $C$DW$CU, DW_AT_name("../startup.c")
+      10                            .dwattr $C$DW$CU, DW_AT_producer("TI TI ARM C/C++ Codegen PC v5.0.1 Copyright (c) 1996-2012 Te
+      11                            .dwattr $C$DW$CU, DW_AT_TI_version(0x01)
+      12                            .dwattr $C$DW$CU, DW_AT_comp_dir("C:\Projects\TI_ARM_Projects\FreeRTOS_LM3S1968\Debug")
+      13                    
+      14                    $C$DW$1 .dwtag  DW_TAG_subprogram, DW_AT_name("main")
+      15                            .dwattr $C$DW$1, DW_AT_TI_symbol_name("main")
+      16                            .dwattr $C$DW$1, DW_AT_type(*$C$DW$T$10)
+      17                            .dwattr $C$DW$1, DW_AT_declaration
+      18                            .dwattr $C$DW$1, DW_AT_external
+      19                            .dwattr $C$DW$1, DW_AT_decl_file("../startup.c")
+      20                            .dwattr $C$DW$1, DW_AT_decl_line(0x2b)
+      21                            .dwattr $C$DW$1, DW_AT_decl_column(0x0c)
+      22                    
+      23                    $C$DW$2 .dwtag  DW_TAG_subprogram, DW_AT_name("xPortPendSVHandler")
+      24                            .dwattr $C$DW$2, DW_AT_TI_symbol_name("xPortPendSVHandler")
+      25                            .dwattr $C$DW$2, DW_AT_declaration
+      26                            .dwattr $C$DW$2, DW_AT_external
+      27                            .dwattr $C$DW$2, DW_AT_decl_file("../startup.c")
+      28                            .dwattr $C$DW$2, DW_AT_decl_line(0x2c)
+      29                            .dwattr $C$DW$2, DW_AT_decl_column(0x0d)
+      30                    
+      31                    $C$DW$3 .dwtag  DW_TAG_subprogram, DW_AT_name("xPortSysTickHandler")
+      32                            .dwattr $C$DW$3, DW_AT_TI_symbol_name("xPortSysTickHandler")
+      33                            .dwattr $C$DW$3, DW_AT_declaration
+      34                            .dwattr $C$DW$3, DW_AT_external
+      35                            .dwattr $C$DW$3, DW_AT_decl_file("../startup.c")
+      36                            .dwattr $C$DW$3, DW_AT_decl_line(0x2d)
+      37                            .dwattr $C$DW$3, DW_AT_decl_column(0x0d)
+      38                    
+      39                    $C$DW$4 .dwtag  DW_TAG_subprogram, DW_AT_name("Timer0IntHandler")
+      40                            .dwattr $C$DW$4, DW_AT_TI_symbol_name("Timer0IntHandler")
+      41                            .dwattr $C$DW$4, DW_AT_declaration
+      42                            .dwattr $C$DW$4, DW_AT_external
+      43                            .dwattr $C$DW$4, DW_AT_decl_file("../startup.c")
+      44                            .dwattr $C$DW$4, DW_AT_decl_line(0x2e)
+      45                            .dwattr $C$DW$4, DW_AT_decl_column(0x0d)
+      46                    
+      47                    $C$DW$5 .dwtag  DW_TAG_subprogram, DW_AT_name("vEMAC_ISR")
+      48                            .dwattr $C$DW$5, DW_AT_TI_symbol_name("vEMAC_ISR")
+      49                            .dwattr $C$DW$5, DW_AT_declaration
+      50                            .dwattr $C$DW$5, DW_AT_external
+      51                            .dwattr $C$DW$5, DW_AT_decl_file("../startup.c")
+      52                            .dwattr $C$DW$5, DW_AT_decl_line(0x2f)
+      53                            .dwattr $C$DW$5, DW_AT_decl_column(0x0d)
+      54 00000000           pulStack:       .usect  ".bss:pulStack",256,4
+      55                    $C$DW$6 .dwtag  DW_TAG_variable, DW_AT_name("pulStack")
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE    2
+
+      56                            .dwattr $C$DW$6, DW_AT_TI_symbol_name("pulStack")
+      57                            .dwattr $C$DW$6, DW_AT_type(*$C$DW$T$29)
+      58                            .dwattr $C$DW$6, DW_AT_location[DW_OP_addr pulStack]
+      59                            .dwattr $C$DW$6, DW_AT_decl_file("../startup.c")
+      60                            .dwattr $C$DW$6, DW_AT_decl_line(0x39)
+      61                            .dwattr $C$DW$6, DW_AT_decl_column(0x16)
+      62                            .global g_pfnVectors
+      63 00000000                   .sect   ".intvecs"
+      64                            .align  4
+      65                            .elfsym g_pfnVectors,SYM_SIZE(240)
+      66 00000000           g_pfnVectors:
+      67 00000000 00000100!         .field  pulStack+256,32         ; g_pfnVectors[0] @ 0
+      68 00000004 00000000!         .field  ResetISR,32             ; g_pfnVectors[1] @ 32
+      69 00000008 00000000!         .field  NmiSR,32                ; g_pfnVectors[2] @ 64
+      70 0000000c 00000000!         .field  FaultISR,32             ; g_pfnVectors[3] @ 96
+      71 00000010 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[4] @ 128
+      72 00000014 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[5] @ 160
+      73 00000018 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[6] @ 192
+      74 0000001c 00000000          .field  0,32                    ; g_pfnVectors[7] @ 224
+      75 00000020 00000000          .field  0,32                    ; g_pfnVectors[8] @ 256
+      76 00000024 00000000          .field  0,32                    ; g_pfnVectors[9] @ 288
+      77 00000028 00000000          .field  0,32                    ; g_pfnVectors[10] @ 320
+      78 0000002c 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[11] @ 352
+      79 00000030 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[12] @ 384
+      80 00000034 00000000          .field  0,32                    ; g_pfnVectors[13] @ 416
+      81 00000038 00000000!         .field  xPortPendSVHandler,32           ; g_pfnVectors[14] @ 448
+      82 0000003c 00000000!         .field  xPortSysTickHandler,32          ; g_pfnVectors[15] @ 480
+      83 00000040 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[16] @ 512
+      84 00000044 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[17] @ 544
+      85 00000048 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[18] @ 576
+      86 0000004c 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[19] @ 608
+      87 00000050 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[20] @ 640
+      88 00000054 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[21] @ 672
+      89 00000058 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[22] @ 704
+      90 0000005c 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[23] @ 736
+      91 00000060 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[24] @ 768
+      92 00000064 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[25] @ 800
+      93 00000068 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[26] @ 832
+      94 0000006c 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[27] @ 864
+      95 00000070 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[28] @ 896
+      96 00000074 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[29] @ 928
+      97 00000078 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[30] @ 960
+      98 0000007c 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[31] @ 992
+      99 00000080 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[32] @ 1024
+     100 00000084 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[33] @ 1056
+     101 00000088 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[34] @ 1088
+     102 0000008c 00000000!         .field  Timer0IntHandler,32             ; g_pfnVectors[35] @ 1120
+     103 00000090 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[36] @ 1152
+     104 00000094 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[37] @ 1184
+     105 00000098 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[38] @ 1216
+     106 0000009c 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[39] @ 1248
+     107 000000a0 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[40] @ 1280
+     108 000000a4 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[41] @ 1312
+     109 000000a8 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[42] @ 1344
+     110 000000ac 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[43] @ 1376
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE    3
+
+     111 000000b0 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[44] @ 1408
+     112 000000b4 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[45] @ 1440
+     113 000000b8 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[46] @ 1472
+     114 000000bc 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[47] @ 1504
+     115 000000c0 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[48] @ 1536
+     116 000000c4 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[49] @ 1568
+     117 000000c8 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[50] @ 1600
+     118 000000cc 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[51] @ 1632
+     119 000000d0 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[52] @ 1664
+     120 000000d4 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[53] @ 1696
+     121 000000d8 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[54] @ 1728
+     122 000000dc 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[55] @ 1760
+     123 000000e0 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[56] @ 1792
+     124 000000e4 00000000          .field  0,32                    ; g_pfnVectors[57] @ 1824
+     125 000000e8 00000000!         .field  vEMAC_ISR,32            ; g_pfnVectors[58] @ 1856
+     126 000000ec 00000000!         .field  IntDefaultHandler,32            ; g_pfnVectors[59] @ 1888
+     127                    
+     128                    $C$DW$7 .dwtag  DW_TAG_variable, DW_AT_name("g_pfnVectors")
+     129                            .dwattr $C$DW$7, DW_AT_TI_symbol_name("g_pfnVectors")
+     130                            .dwattr $C$DW$7, DW_AT_location[DW_OP_addr g_pfnVectors]
+     131                            .dwattr $C$DW$7, DW_AT_type(*$C$DW$T$22)
+     132                            .dwattr $C$DW$7, DW_AT_external
+     133                            .dwattr $C$DW$7, DW_AT_decl_file("../startup.c")
+     134                            .dwattr $C$DW$7, DW_AT_decl_line(0x44)
+     135                            .dwattr $C$DW$7, DW_AT_decl_column(0x0f)
+     136                    $C$DW$8 .dwtag  DW_TAG_variable, DW_AT_name("_etext")
+     137                            .dwattr $C$DW$8, DW_AT_TI_symbol_name("_etext")
+     138                            .dwattr $C$DW$8, DW_AT_type(*$C$DW$T$13)
+     139                            .dwattr $C$DW$8, DW_AT_declaration
+     140                            .dwattr $C$DW$8, DW_AT_external
+     141                            .dwattr $C$DW$8, DW_AT_decl_file("../startup.c")
+     142                            .dwattr $C$DW$8, DW_AT_decl_line(0x8c)
+     143                            .dwattr $C$DW$8, DW_AT_decl_column(0x16)
+     144                    $C$DW$9 .dwtag  DW_TAG_variable, DW_AT_name("_data")
+     145                            .dwattr $C$DW$9, DW_AT_TI_symbol_name("_data")
+     146                            .dwattr $C$DW$9, DW_AT_type(*$C$DW$T$13)
+     147                            .dwattr $C$DW$9, DW_AT_declaration
+     148                            .dwattr $C$DW$9, DW_AT_external
+     149                            .dwattr $C$DW$9, DW_AT_decl_file("../startup.c")
+     150                            .dwattr $C$DW$9, DW_AT_decl_line(0x8d)
+     151                            .dwattr $C$DW$9, DW_AT_decl_column(0x16)
+     152                    $C$DW$10        .dwtag  DW_TAG_variable, DW_AT_name("_edata")
+     153                            .dwattr $C$DW$10, DW_AT_TI_symbol_name("_edata")
+     154                            .dwattr $C$DW$10, DW_AT_type(*$C$DW$T$13)
+     155                            .dwattr $C$DW$10, DW_AT_declaration
+     156                            .dwattr $C$DW$10, DW_AT_external
+     157                            .dwattr $C$DW$10, DW_AT_decl_file("../startup.c")
+     158                            .dwattr $C$DW$10, DW_AT_decl_line(0x8e)
+     159                            .dwattr $C$DW$10, DW_AT_decl_column(0x16)
+     160                    $C$DW$11        .dwtag  DW_TAG_variable, DW_AT_name("_bss")
+     161                            .dwattr $C$DW$11, DW_AT_TI_symbol_name("_bss")
+     162                            .dwattr $C$DW$11, DW_AT_type(*$C$DW$T$13)
+     163                            .dwattr $C$DW$11, DW_AT_declaration
+     164                            .dwattr $C$DW$11, DW_AT_external
+     165                            .dwattr $C$DW$11, DW_AT_decl_file("../startup.c")
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE    4
+
+     166                            .dwattr $C$DW$11, DW_AT_decl_line(0x8f)
+     167                            .dwattr $C$DW$11, DW_AT_decl_column(0x16)
+     168                    $C$DW$12        .dwtag  DW_TAG_variable, DW_AT_name("_ebss")
+     169                            .dwattr $C$DW$12, DW_AT_TI_symbol_name("_ebss")
+     170                            .dwattr $C$DW$12, DW_AT_type(*$C$DW$T$13)
+     171                            .dwattr $C$DW$12, DW_AT_declaration
+     172                            .dwattr $C$DW$12, DW_AT_external
+     173                            .dwattr $C$DW$12, DW_AT_decl_file("../startup.c")
+     174                            .dwattr $C$DW$12, DW_AT_decl_line(0x90)
+     175                            .dwattr $C$DW$12, DW_AT_decl_column(0x16)
+     176                    ;       C:\Tools\TI_CodeComposer\ccsv5\tools\compiler\arm_5.0.1\bin\armacpia.exe -@C:\\Users\\gminden\
+     177 00000000                   .sect   ".text"
+     178                            .clink
+     179                            .thumbfunc ResetISR
+     180 00000000                   .thumb
+     181                            .global ResetISR
+     182                    
+     183                    $C$DW$13        .dwtag  DW_TAG_subprogram, DW_AT_name("ResetISR")
+     184                            .dwattr $C$DW$13, DW_AT_low_pc(ResetISR)
+     185                            .dwattr $C$DW$13, DW_AT_high_pc(0x00)
+     186                            .dwattr $C$DW$13, DW_AT_TI_symbol_name("ResetISR")
+     187                            .dwattr $C$DW$13, DW_AT_external
+     188                            .dwattr $C$DW$13, DW_AT_TI_begin_file("../startup.c")
+     189                            .dwattr $C$DW$13, DW_AT_TI_begin_line(0x9d)
+     190                            .dwattr $C$DW$13, DW_AT_TI_begin_column(0x01)
+     191                            .dwattr $C$DW$13, DW_AT_decl_file("../startup.c")
+     192                            .dwattr $C$DW$13, DW_AT_decl_line(0x9d)
+     193                            .dwattr $C$DW$13, DW_AT_decl_column(0x01)
+     194                            .dwattr $C$DW$13, DW_AT_TI_max_frame_size(0x10)
+     195                            .dwpsn  file "../startup.c",line 158,column 1,is_stmt,address ResetISR,isa 1
+     196                    
+     197                            .dwfde $C$DW$CIE, ResetISR
+     198                    
+     199                    ;*****************************************************************************
+     200                    ;* FUNCTION NAME: ResetISR                                                   *
+     201                    ;*                                                                           *
+     202                    ;*   Regs Modified     : A1,A2,A3,A4,V9,SP,LR,SR                             *
+     203                    ;*   Regs Used         : A1,A2,A3,A4,V9,SP,LR,SR                             *
+     204                    ;*   Local Frame Size  : 0 Args + 8 Auto + 4 Save = 12 byte                  *
+     205                    ;*****************************************************************************
+     206 00000000           ResetISR:
+     207                    ;* --------------------------------------------------------------------------*
+     208                            .dwcfi  cfa_offset, 0
+     209 00000000 B50E              PUSH      {A2, A3, A4, LR}      ; [DPU_3_PIPE]  ; [ORIG 16-BIT INS]
+     210                            .dwcfi  cfa_offset, 4
+     211                            .dwcfi  save_reg_to_mem, 14, -4
+     212                            .dwcfi  cfa_offset, 8
+     213                            .dwcfi  save_reg_to_mem, 3, -8
+     214                            .dwcfi  cfa_offset, 12
+     215                            .dwcfi  save_reg_to_mem, 2, -12
+     216                            .dwcfi  cfa_offset, 16
+     217                            .dwcfi  save_reg_to_mem, 1, -16
+     218                            .dwcfi  cfa_offset, 16
+     219                    $C$DW$14        .dwtag  DW_TAG_variable, DW_AT_name("pulSrc")
+     220                            .dwattr $C$DW$14, DW_AT_TI_symbol_name("pulSrc")
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE    5
+
+     221                            .dwattr $C$DW$14, DW_AT_type(*$C$DW$T$31)
+     222                            .dwattr $C$DW$14, DW_AT_location[DW_OP_breg13 0]
+     223                    $C$DW$15        .dwtag  DW_TAG_variable, DW_AT_name("pulDest")
+     224                            .dwattr $C$DW$15, DW_AT_TI_symbol_name("pulDest")
+     225                            .dwattr $C$DW$15, DW_AT_type(*$C$DW$T$31)
+     226                            .dwattr $C$DW$15, DW_AT_location[DW_OP_breg13 4]
+     227                            .dwpsn  file "../startup.c",line 164,column 5,is_stmt,isa 1
+     228 00000002 4816              LDR       A1, $C$CON1           ; [DPU_3_PIPE] |164|  ; [ORIG 16-BIT INS]
+     229 00000004 9000              STR       A1, [SP, #0]          ; [DPU_3_PIPE] |164|  ; [ORIG 16-BIT INS]
+     230                            .dwpsn  file "../startup.c",line 165,column 9,is_stmt,isa 1
+     231 00000006 4816              LDR       A1, $C$CON2           ; [DPU_3_PIPE] |165|  ; [ORIG 16-BIT INS]
+     232 00000008 9001              STR       A1, [SP, #4]          ; [DPU_3_PIPE] |165|  ; [ORIG 16-BIT INS]
+     233                            .dwpsn  file "../startup.c",line 165,column 27,is_stmt,isa 1
+     234 0000000a 4916              LDR       A2, $C$CON3           ; [DPU_3_PIPE] |165|  ; [ORIG 16-BIT INS]
+     235 0000000c 9801              LDR       A1, [SP, #4]          ; [DPU_3_PIPE] |165|  ; [ORIG 16-BIT INS]
+     236 0000000e 4281              CMP       A2, A1                ; [DPU_3_PIPE] |165|  ; [ORIG 16-BIT INS]
+     237 00000010 D90B              BLS       ||$C$L2||             ; [DPU_3_PIPE] |165|  ; [ORIG 16-BIT INS]
+     238                            ; BRANCHCC OCCURS {||$C$L2||}    ; [] |165| 
+     239                    ;* --------------------------------------------------------------------------*
+     240                    ;*   BEGIN LOOP ||$C$L1||
+     241                    ;*
+     242                    ;*   Loop source line                : 165
+     243                    ;*   Loop closing brace source line  : 168
+     244                    ;*   Known Minimum Trip Count        : 1
+     245                    ;*   Known Maximum Trip Count        : 4294967295
+     246                    ;*   Known Max Trip Count Factor     : 1
+     247                    ;* --------------------------------------------------------------------------*
+     248 00000012           ||$C$L1||:    
+     249 00000012           $C$DW$L$ResetISR$2$B:
+     250                            .dwpsn  file "../startup.c",line 167,column 9,is_stmt,isa 1
+     251 00000012 9800              LDR       A1, [SP, #0]          ; [DPU_3_PIPE] |167|  ; [ORIG 16-BIT INS]
+     252 00000014 2B04F850          LDR       A3, [A1], #4          ; [DPU_3_PIPE] |167|  ; [KEEP 32-BIT INS]
+     253 00000018 9000              STR       A1, [SP, #0]          ; [DPU_3_PIPE] |167|  ; [ORIG 16-BIT INS]
+     254 0000001a 9801              LDR       A1, [SP, #4]          ; [DPU_3_PIPE] |167|  ; [ORIG 16-BIT INS]
+     255 0000001c 1D01              ADDS      A2, A1, #4            ; [DPU_3_PIPE] |167|  ; [ORIG 16-BIT INS]
+     256 0000001e 9101              STR       A2, [SP, #4]          ; [DPU_3_PIPE] |167|  ; [ORIG 16-BIT INS]
+     257 00000020 6002              STR       A3, [A1, #0]          ; [DPU_3_PIPE] |167|  ; [ORIG 16-BIT INS]
+     258                            .dwpsn  file "../startup.c",line 165,column 27,is_stmt,isa 1
+     259 00000022 4910              LDR       A2, $C$CON3           ; [DPU_3_PIPE] |165|  ; [ORIG 16-BIT INS]
+     260 00000024 9801              LDR       A1, [SP, #4]          ; [DPU_3_PIPE] |165|  ; [ORIG 16-BIT INS]
+     261 00000026 4281              CMP       A2, A1                ; [DPU_3_PIPE] |165|  ; [ORIG 16-BIT INS]
+     262 00000028 D8F3              BHI       ||$C$L1||             ; [DPU_3_PIPE] |165|  ; [ORIG 16-BIT INS]
+     263                            ; BRANCHCC OCCURS {||$C$L1||}    ; [] |165| 
+     264 0000002a           $C$DW$L$ResetISR$2$E:
+     265                    ;* --------------------------------------------------------------------------*
+     266 0000002a           ||$C$L2||:    
+     267                            .dwpsn  file "../startup.c",line 173,column 9,is_stmt,isa 1
+     268 0000002a 480F              LDR       A1, $C$CON4           ; [DPU_3_PIPE] |173|  ; [ORIG 16-BIT INS]
+     269 0000002c 9001              STR       A1, [SP, #4]          ; [DPU_3_PIPE] |173|  ; [ORIG 16-BIT INS]
+     270                            .dwpsn  file "../startup.c",line 173,column 26,is_stmt,isa 1
+     271 0000002e 490F              LDR       A2, $C$CON5           ; [DPU_3_PIPE] |173|  ; [ORIG 16-BIT INS]
+     272 00000030 9801              LDR       A1, [SP, #4]          ; [DPU_3_PIPE] |173|  ; [ORIG 16-BIT INS]
+     273 00000032 4281              CMP       A2, A1                ; [DPU_3_PIPE] |173|  ; [ORIG 16-BIT INS]
+     274 00000034 D908              BLS       ||$C$L4||             ; [DPU_3_PIPE] |173|  ; [ORIG 16-BIT INS]
+     275                            ; BRANCHCC OCCURS {||$C$L4||}    ; [] |173| 
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE    6
+
+     276                    ;* --------------------------------------------------------------------------*
+     277                    ;*   BEGIN LOOP ||$C$L3||
+     278                    ;*
+     279                    ;*   Loop source line                : 173
+     280                    ;*   Loop closing brace source line  : 176
+     281                    ;*   Known Minimum Trip Count        : 1
+     282                    ;*   Known Maximum Trip Count        : 4294967295
+     283                    ;*   Known Max Trip Count Factor     : 1
+     284                    ;* --------------------------------------------------------------------------*
+     285 00000036           ||$C$L3||:    
+     286 00000036           $C$DW$L$ResetISR$4$B:
+     287                            .dwpsn  file "../startup.c",line 175,column 9,is_stmt,isa 1
+     288 00000036 9801              LDR       A1, [SP, #4]          ; [DPU_3_PIPE] |175|  ; [ORIG 16-BIT INS]
+     289 00000038 1D01              ADDS      A2, A1, #4            ; [DPU_3_PIPE] |175|  ; [ORIG 16-BIT INS]
+     290 0000003a 9101              STR       A2, [SP, #4]          ; [DPU_3_PIPE] |175|  ; [ORIG 16-BIT INS]
+     291 0000003c 2100              MOVS      A2, #0                ; [DPU_3_PIPE] |175|  ; [ORIG 16-BIT INS]
+     292 0000003e 6001              STR       A2, [A1, #0]          ; [DPU_3_PIPE] |175|  ; [ORIG 16-BIT INS]
+     293                            .dwpsn  file "../startup.c",line 173,column 26,is_stmt,isa 1
+     294 00000040 490A              LDR       A2, $C$CON5           ; [DPU_3_PIPE] |173|  ; [ORIG 16-BIT INS]
+     295 00000042 9801              LDR       A1, [SP, #4]          ; [DPU_3_PIPE] |173|  ; [ORIG 16-BIT INS]
+     296 00000044 4281              CMP       A2, A1                ; [DPU_3_PIPE] |173|  ; [ORIG 16-BIT INS]
+     297 00000046 D8F6              BHI       ||$C$L3||             ; [DPU_3_PIPE] |173|  ; [ORIG 16-BIT INS]
+     298                            ; BRANCHCC OCCURS {||$C$L3||}    ; [] |173| 
+     299 00000048           $C$DW$L$ResetISR$4$E:
+     300                    ;* --------------------------------------------------------------------------*
+     301 00000048           ||$C$L4||:    
+     302                            .dwpsn  file "../startup.c",line 181,column 5,is_stmt,isa 1
+     303                    $C$DW$16        .dwtag  DW_TAG_TI_branch
+     304                            .dwattr $C$DW$16, DW_AT_low_pc(0x00)
+     305                            .dwattr $C$DW$16, DW_AT_name("main")
+     306                            .dwattr $C$DW$16, DW_AT_TI_call
+     307 00000048 FFFEF7FF!         BL        main                  ; [DPU_3_PIPE] |181|  ; [KEEP 32-BIT INS]
+     308                            ; CALL OCCURS {main }            ; [] |181| 
+     309                            .dwpsn  file "../startup.c",line 182,column 1,is_stmt,isa 1
+     310                            .dwcfi  cfa_offset, 16
+     311                    $C$DW$17        .dwtag  DW_TAG_TI_branch
+     312                            .dwattr $C$DW$17, DW_AT_low_pc(0x00)
+     313                            .dwattr $C$DW$17, DW_AT_TI_return
+     314 0000004c BD0E              POP       {A2, A3, A4, PC}      ; [DPU_3_PIPE]  ; [ORIG 16-BIT INS]
+     315                            ; BRANCH OCCURS                  ; [] 
+     316                    
+     317                    $C$DW$18        .dwtag  DW_TAG_TI_loop
+     318                            .dwattr $C$DW$18, DW_AT_name("C:\Projects\TI_ARM_Projects\FreeRTOS_LM3S1968\Debug\startup.asm:
+     319                            .dwattr $C$DW$18, DW_AT_TI_begin_file("../startup.c")
+     320                            .dwattr $C$DW$18, DW_AT_TI_begin_line(0xad)
+     321                            .dwattr $C$DW$18, DW_AT_TI_end_line(0xb0)
+     322                    $C$DW$19        .dwtag  DW_TAG_TI_loop_range
+     323                            .dwattr $C$DW$19, DW_AT_low_pc($C$DW$L$ResetISR$4$B)
+     324                            .dwattr $C$DW$19, DW_AT_high_pc($C$DW$L$ResetISR$4$E)
+     325                            .dwendtag $C$DW$18
+     326                    
+     327                    
+     328                    $C$DW$20        .dwtag  DW_TAG_TI_loop
+     329                            .dwattr $C$DW$20, DW_AT_name("C:\Projects\TI_ARM_Projects\FreeRTOS_LM3S1968\Debug\startup.asm:
+     330                            .dwattr $C$DW$20, DW_AT_TI_begin_file("../startup.c")
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE    7
+
+     331                            .dwattr $C$DW$20, DW_AT_TI_begin_line(0xa5)
+     332                            .dwattr $C$DW$20, DW_AT_TI_end_line(0xa8)
+     333                    $C$DW$21        .dwtag  DW_TAG_TI_loop_range
+     334                            .dwattr $C$DW$21, DW_AT_low_pc($C$DW$L$ResetISR$2$B)
+     335                            .dwattr $C$DW$21, DW_AT_high_pc($C$DW$L$ResetISR$2$E)
+     336                            .dwendtag $C$DW$20
+     337                    
+     338                            .dwattr $C$DW$13, DW_AT_TI_end_file("../startup.c")
+     339                            .dwattr $C$DW$13, DW_AT_TI_end_line(0xb6)
+     340                            .dwattr $C$DW$13, DW_AT_TI_end_column(0x01)
+     341                            .dwendentry
+     342                            .dwendtag $C$DW$13
+     343                    
+     344 0000004e                   .sect   ".text"
+     345                            .clink
+     346                            .thumbfunc NmiSR
+     347 0000004e                   .thumb
+     348                    
+     349                    $C$DW$22        .dwtag  DW_TAG_subprogram, DW_AT_name("NmiSR")
+     350                            .dwattr $C$DW$22, DW_AT_low_pc(NmiSR)
+     351                            .dwattr $C$DW$22, DW_AT_high_pc(0x00)
+     352                            .dwattr $C$DW$22, DW_AT_TI_symbol_name("NmiSR")
+     353                            .dwattr $C$DW$22, DW_AT_TI_begin_file("../startup.c")
+     354                            .dwattr $C$DW$22, DW_AT_TI_begin_line(0xc0)
+     355                            .dwattr $C$DW$22, DW_AT_TI_begin_column(0x01)
+     356                            .dwattr $C$DW$22, DW_AT_decl_file("../startup.c")
+     357                            .dwattr $C$DW$22, DW_AT_decl_line(0xc0)
+     358                            .dwattr $C$DW$22, DW_AT_decl_column(0x01)
+     359                            .dwattr $C$DW$22, DW_AT_TI_max_frame_size(0x00)
+     360                            .dwpsn  file "../startup.c",line 193,column 1,is_stmt,address NmiSR,isa 1
+     361                    
+     362                            .dwfde $C$DW$CIE, NmiSR
+     363                    
+     364                    ;*****************************************************************************
+     365                    ;* FUNCTION NAME: NmiSR                                                      *
+     366                    ;*                                                                           *
+     367                    ;*   Regs Modified     :                                                     *
+     368                    ;*   Regs Used         : LR                                                  *
+     369                    ;*   Local Frame Size  : 0 Args + 0 Auto + 0 Save = 0 byte                   *
+     370                    ;*****************************************************************************
+     371 0000004e           NmiSR:
+     372                    ;* --------------------------------------------------------------------------*
+     373                            .dwcfi  cfa_offset, 0
+     374                            .dwpsn  file "../startup.c",line 197,column 11,is_stmt,isa 1
+     375                    ;* --------------------------------------------------------------------------*
+     376                    ;*   BEGIN LOOP ||$C$L5||
+     377                    ;*
+     378                    ;*   Loop source line                : 197
+     379                    ;*   Loop closing brace source line  : 199
+     380                    ;*   Known Minimum Trip Count        : 1
+     381                    ;*   Known Maximum Trip Count        : 4294967295
+     382                    ;*   Known Max Trip Count Factor     : 1
+     383                    ;* --------------------------------------------------------------------------*
+     384 0000004e           ||$C$L5||:    
+     385 0000004e           $C$DW$L$NmiSR$2$B:
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE    8
+
+     386 0000004e E7FE              B         ||$C$L5||             ; [DPU_3_PIPE] |197|  ; [ORIG 16-BIT INS]
+     387                            ; BRANCH OCCURS {||$C$L5||}      ; [] |197| 
+     388                    $C$DW$L$NmiSR$2$E:
+     389                    ;* --------------------------------------------------------------------------*
+     390                    
+     391                    $C$DW$23        .dwtag  DW_TAG_TI_loop
+     392                            .dwattr $C$DW$23, DW_AT_name("C:\Projects\TI_ARM_Projects\FreeRTOS_LM3S1968\Debug\startup.asm:
+     393                            .dwattr $C$DW$23, DW_AT_TI_begin_file("../startup.c")
+     394                            .dwattr $C$DW$23, DW_AT_TI_begin_line(0xc5)
+     395                            .dwattr $C$DW$23, DW_AT_TI_end_line(0xc7)
+     396                    $C$DW$24        .dwtag  DW_TAG_TI_loop_range
+     397                            .dwattr $C$DW$24, DW_AT_low_pc($C$DW$L$NmiSR$2$B)
+     398                            .dwattr $C$DW$24, DW_AT_high_pc($C$DW$L$NmiSR$2$E)
+     399                            .dwendtag $C$DW$23
+     400                    
+     401                            .dwattr $C$DW$22, DW_AT_TI_end_file("../startup.c")
+     402                            .dwattr $C$DW$22, DW_AT_TI_end_line(0xc8)
+     403                            .dwattr $C$DW$22, DW_AT_TI_end_column(0x01)
+     404                            .dwendentry
+     405                            .dwendtag $C$DW$22
+     406                    
+     407 00000050                   .sect   ".text"
+     408                            .clink
+     409                            .thumbfunc FaultISR
+     410 00000050                   .thumb
+     411                    
+     412                    $C$DW$25        .dwtag  DW_TAG_subprogram, DW_AT_name("FaultISR")
+     413                            .dwattr $C$DW$25, DW_AT_low_pc(FaultISR)
+     414                            .dwattr $C$DW$25, DW_AT_high_pc(0x00)
+     415                            .dwattr $C$DW$25, DW_AT_TI_symbol_name("FaultISR")
+     416                            .dwattr $C$DW$25, DW_AT_TI_begin_file("../startup.c")
+     417                            .dwattr $C$DW$25, DW_AT_TI_begin_line(0xd2)
+     418                            .dwattr $C$DW$25, DW_AT_TI_begin_column(0x01)
+     419                            .dwattr $C$DW$25, DW_AT_decl_file("../startup.c")
+     420                            .dwattr $C$DW$25, DW_AT_decl_line(0xd2)
+     421                            .dwattr $C$DW$25, DW_AT_decl_column(0x01)
+     422                            .dwattr $C$DW$25, DW_AT_TI_max_frame_size(0x00)
+     423                            .dwpsn  file "../startup.c",line 211,column 1,is_stmt,address FaultISR,isa 1
+     424                    
+     425                            .dwfde $C$DW$CIE, FaultISR
+     426                    
+     427                    ;*****************************************************************************
+     428                    ;* FUNCTION NAME: FaultISR                                                   *
+     429                    ;*                                                                           *
+     430                    ;*   Regs Modified     :                                                     *
+     431                    ;*   Regs Used         : LR                                                  *
+     432                    ;*   Local Frame Size  : 0 Args + 0 Auto + 0 Save = 0 byte                   *
+     433                    ;*****************************************************************************
+     434 00000050           FaultISR:
+     435                    ;* --------------------------------------------------------------------------*
+     436                            .dwcfi  cfa_offset, 0
+     437                            .dwpsn  file "../startup.c",line 215,column 11,is_stmt,isa 1
+     438                    ;* --------------------------------------------------------------------------*
+     439                    ;*   BEGIN LOOP ||$C$L6||
+     440                    ;*
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE    9
+
+     441                    ;*   Loop source line                : 215
+     442                    ;*   Loop closing brace source line  : 217
+     443                    ;*   Known Minimum Trip Count        : 1
+     444                    ;*   Known Maximum Trip Count        : 4294967295
+     445                    ;*   Known Max Trip Count Factor     : 1
+     446                    ;* --------------------------------------------------------------------------*
+     447 00000050           ||$C$L6||:    
+     448 00000050           $C$DW$L$FaultISR$2$B:
+     449 00000050 E7FE              B         ||$C$L6||             ; [DPU_3_PIPE] |215|  ; [ORIG 16-BIT INS]
+     450                            ; BRANCH OCCURS {||$C$L6||}      ; [] |215| 
+     451                    $C$DW$L$FaultISR$2$E:
+     452                    ;* --------------------------------------------------------------------------*
+     453                    
+     454                    $C$DW$26        .dwtag  DW_TAG_TI_loop
+     455                            .dwattr $C$DW$26, DW_AT_name("C:\Projects\TI_ARM_Projects\FreeRTOS_LM3S1968\Debug\startup.asm:
+     456                            .dwattr $C$DW$26, DW_AT_TI_begin_file("../startup.c")
+     457                            .dwattr $C$DW$26, DW_AT_TI_begin_line(0xd7)
+     458                            .dwattr $C$DW$26, DW_AT_TI_end_line(0xd9)
+     459                    $C$DW$27        .dwtag  DW_TAG_TI_loop_range
+     460                            .dwattr $C$DW$27, DW_AT_low_pc($C$DW$L$FaultISR$2$B)
+     461                            .dwattr $C$DW$27, DW_AT_high_pc($C$DW$L$FaultISR$2$E)
+     462                            .dwendtag $C$DW$26
+     463                    
+     464                            .dwattr $C$DW$25, DW_AT_TI_end_file("../startup.c")
+     465                            .dwattr $C$DW$25, DW_AT_TI_end_line(0xda)
+     466                            .dwattr $C$DW$25, DW_AT_TI_end_column(0x01)
+     467                            .dwendentry
+     468                            .dwendtag $C$DW$25
+     469                    
+     470 00000052                   .sect   ".text"
+     471                            .clink
+     472                            .thumbfunc IntDefaultHandler
+     473 00000052                   .thumb
+     474                    
+     475                    $C$DW$28        .dwtag  DW_TAG_subprogram, DW_AT_name("IntDefaultHandler")
+     476                            .dwattr $C$DW$28, DW_AT_low_pc(IntDefaultHandler)
+     477                            .dwattr $C$DW$28, DW_AT_high_pc(0x00)
+     478                            .dwattr $C$DW$28, DW_AT_TI_symbol_name("IntDefaultHandler")
+     479                            .dwattr $C$DW$28, DW_AT_TI_begin_file("../startup.c")
+     480                            .dwattr $C$DW$28, DW_AT_TI_begin_line(0xe4)
+     481                            .dwattr $C$DW$28, DW_AT_TI_begin_column(0x01)
+     482                            .dwattr $C$DW$28, DW_AT_decl_file("../startup.c")
+     483                            .dwattr $C$DW$28, DW_AT_decl_line(0xe4)
+     484                            .dwattr $C$DW$28, DW_AT_decl_column(0x01)
+     485                            .dwattr $C$DW$28, DW_AT_TI_max_frame_size(0x00)
+     486                            .dwpsn  file "../startup.c",line 229,column 1,is_stmt,address IntDefaultHandler,isa 1
+     487                    
+     488                            .dwfde $C$DW$CIE, IntDefaultHandler
+     489                    
+     490                    ;*****************************************************************************
+     491                    ;* FUNCTION NAME: IntDefaultHandler                                          *
+     492                    ;*                                                                           *
+     493                    ;*   Regs Modified     :                                                     *
+     494                    ;*   Regs Used         : LR                                                  *
+     495                    ;*   Local Frame Size  : 0 Args + 0 Auto + 0 Save = 0 byte                   *
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE   10
+
+     496                    ;*****************************************************************************
+     497 00000052           IntDefaultHandler:
+     498                    ;* --------------------------------------------------------------------------*
+     499                            .dwcfi  cfa_offset, 0
+     500                            .dwpsn  file "../startup.c",line 233,column 11,is_stmt,isa 1
+     501                    ;* --------------------------------------------------------------------------*
+     502                    ;*   BEGIN LOOP ||$C$L7||
+     503                    ;*
+     504                    ;*   Loop source line                : 233
+     505                    ;*   Loop closing brace source line  : 235
+     506                    ;*   Known Minimum Trip Count        : 1
+     507                    ;*   Known Maximum Trip Count        : 4294967295
+     508                    ;*   Known Max Trip Count Factor     : 1
+     509                    ;* --------------------------------------------------------------------------*
+     510 00000052           ||$C$L7||:    
+     511 00000052           $C$DW$L$IntDefaultHandler$2$B:
+     512 00000052 E7FE              B         ||$C$L7||             ; [DPU_3_PIPE] |233|  ; [ORIG 16-BIT INS]
+     513                            ; BRANCH OCCURS {||$C$L7||}      ; [] |233| 
+     514                    $C$DW$L$IntDefaultHandler$2$E:
+     515                    ;* --------------------------------------------------------------------------*
+     516                    
+     517                    $C$DW$29        .dwtag  DW_TAG_TI_loop
+     518                            .dwattr $C$DW$29, DW_AT_name("C:\Projects\TI_ARM_Projects\FreeRTOS_LM3S1968\Debug\startup.asm:
+     519                            .dwattr $C$DW$29, DW_AT_TI_begin_file("../startup.c")
+     520                            .dwattr $C$DW$29, DW_AT_TI_begin_line(0xe9)
+     521                            .dwattr $C$DW$29, DW_AT_TI_end_line(0xeb)
+     522                    $C$DW$30        .dwtag  DW_TAG_TI_loop_range
+     523                            .dwattr $C$DW$30, DW_AT_low_pc($C$DW$L$IntDefaultHandler$2$B)
+     524                            .dwattr $C$DW$30, DW_AT_high_pc($C$DW$L$IntDefaultHandler$2$E)
+     525                            .dwendtag $C$DW$29
+     526                    
+     527                            .dwattr $C$DW$28, DW_AT_TI_end_file("../startup.c")
+     528                            .dwattr $C$DW$28, DW_AT_TI_end_line(0xec)
+     529                            .dwattr $C$DW$28, DW_AT_TI_end_column(0x01)
+     530                            .dwendentry
+     531                            .dwendtag $C$DW$28
+     532                    
+     533 00000054                   .sect   ".text"
+     534                            .clink
+     535                            .thumbfunc uipprintf
+     536 00000054                   .thumb
+     537                            .global uipprintf
+     538                    
+     539                    $C$DW$31        .dwtag  DW_TAG_subprogram, DW_AT_name("uipprintf")
+     540                            .dwattr $C$DW$31, DW_AT_low_pc(uipprintf)
+     541                            .dwattr $C$DW$31, DW_AT_high_pc(0x00)
+     542                            .dwattr $C$DW$31, DW_AT_TI_symbol_name("uipprintf")
+     543                            .dwattr $C$DW$31, DW_AT_external
+     544                            .dwattr $C$DW$31, DW_AT_type(*$C$DW$T$10)
+     545                            .dwattr $C$DW$31, DW_AT_TI_begin_file("../startup.c")
+     546                            .dwattr $C$DW$31, DW_AT_TI_begin_line(0xf5)
+     547                            .dwattr $C$DW$31, DW_AT_TI_begin_column(0x01)
+     548                            .dwattr $C$DW$31, DW_AT_decl_file("../startup.c")
+     549                            .dwattr $C$DW$31, DW_AT_decl_line(0xf5)
+     550                            .dwattr $C$DW$31, DW_AT_decl_column(0x01)
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE   11
+
+     551                            .dwattr $C$DW$31, DW_AT_TI_max_frame_size(0x10)
+     552                            .dwpsn  file "../startup.c",line 246,column 1,is_stmt,address uipprintf,isa 1
+     553                    
+     554                            .dwfde $C$DW$CIE, uipprintf
+     555                    $C$DW$32        .dwtag  DW_TAG_formal_parameter, DW_AT_name("fmt")
+     556                            .dwattr $C$DW$32, DW_AT_TI_symbol_name("fmt")
+     557                            .dwattr $C$DW$32, DW_AT_type(*$C$DW$T$27)
+     558                            .dwattr $C$DW$32, DW_AT_location[DW_OP_breg13 0]
+     559                    $C$DW$33        .dwtag  DW_TAG_unspecified_parameters
+     560                    
+     561                    ;*****************************************************************************
+     562                    ;* FUNCTION NAME: uipprintf                                                  *
+     563                    ;*                                                                           *
+     564                    ;*   Regs Modified     : A1,SP,SR                                            *
+     565                    ;*   Regs Used         : A1,A2,A3,A4,SP,LR,SR                                *
+     566                    ;*   Local Frame Size  : 0 Args + 0 Auto + 0 Save = 0 byte                   *
+     567                    ;*****************************************************************************
+     568 00000054           uipprintf:
+     569                    ;* --------------------------------------------------------------------------*
+     570 00000054 B40F              PUSH      {A1, A2, A3, A4}      ; [DPU_3_PIPE]  ; [ORIG 16-BIT INS]
+     571                            .dwcfi  cfa_offset, 0
+     572                            .dwcfi  cfa_offset, 16
+     573                            .dwpsn  file "../startup.c",line 247,column 5,is_stmt,isa 1
+     574 00000056 2000              MOVS      A1, #0                ; [DPU_3_PIPE] |247|  ; [ORIG 16-BIT INS]
+     575                            .dwpsn  file "../startup.c",line 248,column 1,is_stmt,isa 1
+     576 00000058 B004              ADD       SP, SP, #16           ; [DPU_3_PIPE]  ; [ORIG 16-BIT INS]
+     577                            .dwcfi  cfa_offset, 0
+     578                    $C$DW$34        .dwtag  DW_TAG_TI_branch
+     579                            .dwattr $C$DW$34, DW_AT_low_pc(0x00)
+     580                            .dwattr $C$DW$34, DW_AT_TI_return
+     581 0000005a 4770              BX        LR                    ; [DPU_3_PIPE]  ; [ORIG 16-BIT INS]
+     582                            ; BRANCH OCCURS                  ; [] 
+     583                            .dwattr $C$DW$31, DW_AT_TI_end_file("../startup.c")
+     584                            .dwattr $C$DW$31, DW_AT_TI_end_line(0xf8)
+     585                            .dwattr $C$DW$31, DW_AT_TI_end_column(0x01)
+     586                            .dwendentry
+     587                            .dwendtag $C$DW$31
+     588                    
+     589                    ;******************************************************************************
+     590                    ;* CONSTANT TABLE                                                             *
+     591                    ;******************************************************************************
+     592 0000005c                   .sect   ".text"
+     593                            .align  4
+     594 0000005c 00000000! ||$C$CON1||:    .field  _etext,32
+     595                            .align  4
+     596 00000060 00000000! ||$C$CON2||:    .field  _data,32
+     597                            .align  4
+     598 00000064 00000000! ||$C$CON3||:    .field  _edata,32
+     599                            .align  4
+     600 00000068 00000000! ||$C$CON4||:    .field  _bss,32
+     601                            .align  4
+     602 0000006c 00000000! ||$C$CON5||:    .field  _ebss,32
+     603                    ;*****************************************************************************
+     604                    ;* UNDEFINED EXTERNAL REFERENCES                                             *
+     605                    ;*****************************************************************************
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE   12
+
+     606                            .global main
+     607                            .global xPortPendSVHandler
+     608                            .global xPortSysTickHandler
+     609                            .global Timer0IntHandler
+     610                            .global vEMAC_ISR
+     611                            .global _etext
+     612                            .global _data
+     613                            .global _edata
+     614                            .global _bss
+     615                            .global _ebss
+     616                    
+     617                    ;******************************************************************************
+     618                    ;* BUILD ATTRIBUTES                                                           *
+     619                    ;******************************************************************************
+     620                            .battr "aeabi", Tag_File, 1, Tag_ABI_PCS_wchar_t(2)
+     621                            .battr "aeabi", Tag_File, 1, Tag_ABI_FP_rounding(0)
+     622                            .battr "aeabi", Tag_File, 1, Tag_ABI_FP_denormal(0)
+     623                            .battr "aeabi", Tag_File, 1, Tag_ABI_FP_exceptions(0)
+     624                            .battr "aeabi", Tag_File, 1, Tag_ABI_FP_number_model(1)
+     625                            .battr "aeabi", Tag_File, 1, Tag_ABI_enum_size(0)
+     626                            .battr "aeabi", Tag_File, 1, Tag_ABI_optimization_goals(5)
+     627                            .battr "aeabi", Tag_File, 1, Tag_ABI_FP_optimization_goals(0)
+     628                            .battr "TI", Tag_File, 1, Tag_Bitfield_layout(2)
+     629                            .battr "TI", Tag_File, 1, Tag_FP_interface(1)
+     630                    
+     631                    ;******************************************************************************
+     632                    ;* TYPE INFORMATION                                                           *
+     633                    ;******************************************************************************
+     634                    $C$DW$T$2       .dwtag  DW_TAG_unspecified_type
+     635                            .dwattr $C$DW$T$2, DW_AT_name("void")
+     636                    
+     637                    $C$DW$T$19      .dwtag  DW_TAG_subroutine_type
+     638                            .dwattr $C$DW$T$19, DW_AT_language(DW_LANG_C)
+     639                    $C$DW$T$20      .dwtag  DW_TAG_pointer_type
+     640                            .dwattr $C$DW$T$20, DW_AT_type(*$C$DW$T$19)
+     641                            .dwattr $C$DW$T$20, DW_AT_address_class(0x20)
+     642                    $C$DW$T$21      .dwtag  DW_TAG_const_type
+     643                            .dwattr $C$DW$T$21, DW_AT_type(*$C$DW$T$20)
+     644                    
+     645                    $C$DW$T$22      .dwtag  DW_TAG_array_type
+     646                            .dwattr $C$DW$T$22, DW_AT_type(*$C$DW$T$21)
+     647                            .dwattr $C$DW$T$22, DW_AT_language(DW_LANG_C)
+     648                            .dwattr $C$DW$T$22, DW_AT_byte_size(0xf0)
+     649                    $C$DW$35        .dwtag  DW_TAG_subrange_type
+     650                            .dwattr $C$DW$35, DW_AT_upper_bound(0x3b)
+     651                            .dwendtag $C$DW$T$22
+     652                    
+     653                    $C$DW$T$4       .dwtag  DW_TAG_base_type
+     654                            .dwattr $C$DW$T$4, DW_AT_encoding(DW_ATE_boolean)
+     655                            .dwattr $C$DW$T$4, DW_AT_name("bool")
+     656                            .dwattr $C$DW$T$4, DW_AT_byte_size(0x01)
+     657                    $C$DW$T$5       .dwtag  DW_TAG_base_type
+     658                            .dwattr $C$DW$T$5, DW_AT_encoding(DW_ATE_signed_char)
+     659                            .dwattr $C$DW$T$5, DW_AT_name("signed char")
+     660                            .dwattr $C$DW$T$5, DW_AT_byte_size(0x01)
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE   13
+
+     661                    $C$DW$T$6       .dwtag  DW_TAG_base_type
+     662                            .dwattr $C$DW$T$6, DW_AT_encoding(DW_ATE_unsigned_char)
+     663                            .dwattr $C$DW$T$6, DW_AT_name("unsigned char")
+     664                            .dwattr $C$DW$T$6, DW_AT_byte_size(0x01)
+     665                    $C$DW$T$7       .dwtag  DW_TAG_base_type
+     666                            .dwattr $C$DW$T$7, DW_AT_encoding(DW_ATE_signed_char)
+     667                            .dwattr $C$DW$T$7, DW_AT_name("wchar_t")
+     668                            .dwattr $C$DW$T$7, DW_AT_byte_size(0x02)
+     669                    $C$DW$T$8       .dwtag  DW_TAG_base_type
+     670                            .dwattr $C$DW$T$8, DW_AT_encoding(DW_ATE_signed)
+     671                            .dwattr $C$DW$T$8, DW_AT_name("short")
+     672                            .dwattr $C$DW$T$8, DW_AT_byte_size(0x02)
+     673                    $C$DW$T$9       .dwtag  DW_TAG_base_type
+     674                            .dwattr $C$DW$T$9, DW_AT_encoding(DW_ATE_unsigned)
+     675                            .dwattr $C$DW$T$9, DW_AT_name("unsigned short")
+     676                            .dwattr $C$DW$T$9, DW_AT_byte_size(0x02)
+     677                    $C$DW$T$10      .dwtag  DW_TAG_base_type
+     678                            .dwattr $C$DW$T$10, DW_AT_encoding(DW_ATE_signed)
+     679                            .dwattr $C$DW$T$10, DW_AT_name("int")
+     680                            .dwattr $C$DW$T$10, DW_AT_byte_size(0x04)
+     681                    $C$DW$T$11      .dwtag  DW_TAG_base_type
+     682                            .dwattr $C$DW$T$11, DW_AT_encoding(DW_ATE_unsigned)
+     683                            .dwattr $C$DW$T$11, DW_AT_name("unsigned int")
+     684                            .dwattr $C$DW$T$11, DW_AT_byte_size(0x04)
+     685                    $C$DW$T$12      .dwtag  DW_TAG_base_type
+     686                            .dwattr $C$DW$T$12, DW_AT_encoding(DW_ATE_signed)
+     687                            .dwattr $C$DW$T$12, DW_AT_name("long")
+     688                            .dwattr $C$DW$T$12, DW_AT_byte_size(0x04)
+     689                    $C$DW$T$13      .dwtag  DW_TAG_base_type
+     690                            .dwattr $C$DW$T$13, DW_AT_encoding(DW_ATE_unsigned)
+     691                            .dwattr $C$DW$T$13, DW_AT_name("unsigned long")
+     692                            .dwattr $C$DW$T$13, DW_AT_byte_size(0x04)
+     693                    
+     694                    $C$DW$T$29      .dwtag  DW_TAG_array_type
+     695                            .dwattr $C$DW$T$29, DW_AT_type(*$C$DW$T$13)
+     696                            .dwattr $C$DW$T$29, DW_AT_language(DW_LANG_C)
+     697                            .dwattr $C$DW$T$29, DW_AT_byte_size(0x100)
+     698                    $C$DW$36        .dwtag  DW_TAG_subrange_type
+     699                            .dwattr $C$DW$36, DW_AT_upper_bound(0x3f)
+     700                            .dwendtag $C$DW$T$29
+     701                    
+     702                    $C$DW$T$31      .dwtag  DW_TAG_pointer_type
+     703                            .dwattr $C$DW$T$31, DW_AT_type(*$C$DW$T$13)
+     704                            .dwattr $C$DW$T$31, DW_AT_address_class(0x20)
+     705                    $C$DW$T$14      .dwtag  DW_TAG_base_type
+     706                            .dwattr $C$DW$T$14, DW_AT_encoding(DW_ATE_signed)
+     707                            .dwattr $C$DW$T$14, DW_AT_name("long long")
+     708                            .dwattr $C$DW$T$14, DW_AT_byte_size(0x08)
+     709                    $C$DW$T$15      .dwtag  DW_TAG_base_type
+     710                            .dwattr $C$DW$T$15, DW_AT_encoding(DW_ATE_unsigned)
+     711                            .dwattr $C$DW$T$15, DW_AT_name("unsigned long long")
+     712                            .dwattr $C$DW$T$15, DW_AT_byte_size(0x08)
+     713                    $C$DW$T$16      .dwtag  DW_TAG_base_type
+     714                            .dwattr $C$DW$T$16, DW_AT_encoding(DW_ATE_float)
+     715                            .dwattr $C$DW$T$16, DW_AT_name("float")
+TI ARM Assembler PC v5.0.1 Thu Apr 11 19:17:32 2013
+
+Tools Copyright (c) 1996-2012 Texas Instruments Incorporated
+startup.asm                                                          PAGE   14
+
+     716                            .dwattr $C$DW$T$16, DW_AT_byte_size(0x04)
+     717                    $C$DW$T$17      .dwtag  DW_TAG_base_type
+     718                            .dwattr $C$DW$T$17, DW_AT_encoding(DW_ATE_float)
+     719                            .dwattr $C$DW$T$17, DW_AT_name("double")
+     720                            .dwattr $C$DW$T$17, DW_AT_byte_size(0x08)
+     721                    $C$DW$T$18      .dwtag  DW_TAG_base_type
+     722                            .dwattr $C$DW$T$18, DW_AT_encoding(DW_ATE_float)
+     723                            .dwattr $C$DW$T$18, DW_AT_name("long double")
+     724                            .dwattr $C$DW$T$18, DW_AT_byte_size(0x08)
+     725                    $C$DW$T$25      .dwtag  DW_TAG_base_type
+     726                            .dwattr $C$DW$T$25, DW_AT_encoding(DW_ATE_unsigned_char)
+     727                            .dwattr $C$DW$T$25, DW_AT_name("unsigned char")
+     728                            .dwattr $C$DW$T$25, DW_AT_byte_size(0x01)
+     729                    $C$DW$T$26      .dwtag  DW_TAG_const_type
+     730                            .dwattr $C$DW$T$26, DW_AT_type(*$C$DW$T$25)
+     731                    $C$DW$T$27      .dwtag  DW_TAG_pointer_type
+     732                            .dwattr $C$DW$T$27, DW_AT_type(*$C$DW$T$26)
+     733                            .dwattr $C$DW$T$27, DW_AT_address_class(0x20)
+     734                            .dwattr $C$DW$CU, DW_AT_language(DW_LANG_C)
+     735                    
+     736                    ;***************************************************************
+     737                    ;* DWARF CIE ENTRIES                                           *
+     738                    ;***************************************************************
+     739                    
+     740                    $C$DW$CIE       .dwcie 14
+     741                            .dwcfi  cfa_register, 13
+     742                            .dwcfi  cfa_offset, 0
+     743                            .dwcfi  undefined, 0
+     744                            .dwcfi  undefined, 1
+     745                            .dwcfi  undefined, 2
+     746                            .dwcfi  undefined, 3
+     747                            .dwcfi  same_value, 4
+     748                            .dwcfi  same_value, 5
+     749                            .dwcfi  same_value, 6
+     750                            .dwcfi  same_value, 7
+     751                            .dwcfi  same_value, 8
+     752                            .dwcfi  same_value, 9
+     753                            .dwcfi  same_value, 10
+     754                            .dwcfi  same_value, 11
+     755                            .dwcfi  undefined, 12
+     756                            .dwcfi  undefined, 13
+     757                            .dwcfi  undefined, 14
+     758                            .dwcfi  undefined, 14
+     759                            .dwcfi  undefined, 7
+     760                            .dwendentry
+     761                            .dwendtag $C$DW$CU
+     762                    
+
+--------------------------
+Thumb2 Statistics
+--------------------------
+Number of Thumb2 ins converted to Thumb = 0 (0%)
+Number of Thumb ins in input = 44 (95%)
+Number of Thumb2 ins encoded as Thumb2 = 2 (100%)
+Number of Thumb2 ins converted to 2 OPND Thumb = 11
+
+
+No Assembly Errors, No Assembly Warnings
