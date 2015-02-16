@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Move 2 elements to &apos;Lammers-2124909-Lab03&apos;&#x0A;- Original project: &apos;Lab3&apos;&#x0A;- Destination element: &apos;Lammers-2124909-Lab03&apos;&#x0A;- Original elements:&#x0A;     Color.java&#x0A;     Tornado.java&#x0A;- Update references to refactored element" description="Move compilation units" element1="/src&lt;{Color.java" element2="/src&lt;{Tornado.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.move" policy="org.eclipse.jdt.ui.moveResources" qualified="false" references="true" stamp="1382372904604" target="src/Lammers-2124909-Lab03" units="2" version="1.0"/>
-</session>
