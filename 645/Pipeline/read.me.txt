@@ -1,0 +1,9 @@
+To run this program, open a terminal window and navigate to the llammers_645 directory. Create or copy the text file containing the initial register & memory contents as well as the instructions to this location. This text file should follow the format described in the assignment description. While in this directory, enter the following command to compile the program:
+
+javac Pipeline/*.java
+
+Once the program has been compiled, enter the following command to run the program:
+
+java Pipeline.Main
+
+The program will ask for the input file. Enter the name of the file with the extension that contains the register values, memory values, and instructions (e.g. Instructions.txt). Next, the program will ask you for the output file names, which the program will create (or overwrite if they already exist). First, enter the name for the file where you would like the timing information to be written. Next enter the name for the file where you would like the final floating point register contents to be written. The program will present a message upon its completion. At this point, files should be created with the names you provided in the llammers_645 directory and those files will contain the timing and floating point register information. 

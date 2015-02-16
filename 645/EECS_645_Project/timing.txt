@@ -1,0 +1,22 @@
+	I#1	I#2	I#3	I#4	I#5	I#6	I#7	I#8	I#9	
+1	IF									
+2	ID	IF								
+3	A1	ID	IF							
+4	A2	M1	ID	IF						
+5	A3	M2	EXE	ID	IF					
+6	A4	M3	MEM	EXE	s					
+7	MEM	M4	WB	MEM	s					
+8	WB	M5		WB	s					
+9		M6			ID	IF				
+10		M7			EXE	ID	IF			
+11		MEM			MEM	M1	s			
+12		WB			WB	M2	s			
+13						M3	s			
+14						M4	ID	IF		
+15						M5	A1	ID	IF	
+16						M6	A2	EXE	s	
+17						M7	A3	MEM	s	
+18						MEM	A4	WB	ID	
+19						WB	MEM		EXE	
+20							WB		MEM	
+21									WB	

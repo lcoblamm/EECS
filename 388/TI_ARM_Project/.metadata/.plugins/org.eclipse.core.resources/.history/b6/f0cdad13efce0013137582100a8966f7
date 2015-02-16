@@ -1,0 +1,67 @@
+//*****************************************************************************
+//
+//	Call assembly language subroutine
+//
+//		Author: 		Lynne Lammers
+//		Organization:	KU/EECS/EECS 388
+//		Date:			2014-04-21
+//		Version:		1.0
+//
+//		Purpose:		Call assembly language subroutine and check result
+//
+//		Notes: Adapted from program by Gary J. Minden
+//
+//*****************************************************************************
+// Edited by Brad Torrence 2014-4-21
+
+#include "Drivers/uartstdio.h"
+
+#include "FreeRTOS.h"
+#include "task.h"
+
+#include "stdio.h"
+
+//
+//	Make the Task and Assembly language subroutines external (global)
+//
+extern void Task_IntTimer( void *pvParameters );
+extern long int TimerCount;
+//
+//	Constants
+//
+#define SYSTICK_FREQUENCY configTICK_RATE_HZ
+#define MaxRange 10
+
+//*****************************************************************************
+//
+//	Task initialization
+//
+//*****************************************************************************
+void IntTimer(void *pvParameters) {
+
+	// enable timer_0
+	SysCtlPeripheralEnable(SYSCTL_PERIPH_TIMER0);
+
+	// configure timer as 16-bit periodic
+	TimerConfigure(TIMER0_BASE, TIMER_CFG_A_PERIODIC);
+
+	// set up timer prescaler to be 160 nS / tick
+	TimerPrescaleSet(TIMER0_BASE, TIMER_A, 7);
+
+	// set load value to 62500 (for 10 ms)
+	TimerLoadSet(TIMER0_BASE, TIMER_A, 62500);
+
+	// enable timer 0A
+	TimerEnable(TIMER0_BASE, TIMER_A);
+    Delay_2000mS = (2000 * SYSTICK_FREQUENCY ) / 1000;
+
+    while ( 1 ) {
+
+    	UARTprintf( "Last CValue, AsmValue: %d, %d\n", CValue, AsmValue );
+    	//
+    	//	Delay for 2 seconds.
+    	//
+    	vTaskDelay( Delay_2000mS );
+    }
+}
+
