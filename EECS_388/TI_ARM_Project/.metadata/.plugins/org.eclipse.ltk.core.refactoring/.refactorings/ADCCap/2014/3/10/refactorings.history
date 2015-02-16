@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;ADCCap/ADCPot.c&apos; to &apos;ADCCap.c&apos;" description="Rename resource &apos;ADCPot.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="ADCPot.c" name="ADCCap.c" stamp="1393861913092" updateReferences="true"/>
-</session>
