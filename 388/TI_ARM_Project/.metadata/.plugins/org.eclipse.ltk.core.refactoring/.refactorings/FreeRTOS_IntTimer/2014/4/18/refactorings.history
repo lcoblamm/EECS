@@ -1,3 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">&#x0A;<refactoring comment="Rename resource &apos;FreeRTOS_IntTimer/Main_AsmCompute.c&apos; to &apos;Main_IntTimer.c&apos;" description="Rename resource &apos;Main_AsmCompute.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Main_AsmCompute.c" name="Main_IntTimer.c" stamp="1398697029915" updateReferences="true"/>&#x0A;<refactoring comment="Rename resource &apos;FreeRTOS_IntTimer/Task_AsmCompute.c&apos; to &apos;Task_IntTimer.c&apos;" description="Rename resource &apos;Task_AsmCompute.c&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="Task_AsmCompute.c" name="Task_IntTimer.c" stamp="1398697044729" updateReferences="true"/>
-</session>
