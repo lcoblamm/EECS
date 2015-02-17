@@ -4,9 +4,9 @@
 
 int main(int argc, char* argv[])
 {
-  std::string cipherText = "HUETNMIXVTMQWZTQMMZUNZXNSSBLNSJVSJQDLKR";
-  int keyLength = 5;
-  int wordLength = 11;
+  std::string cipherText = "VVVLZWWPBWHZDKBTXLDCGOTGTGRWAQWZSDHEMXLBELUMO";
+  int keyLength = 7;
+  int wordLength = 13;
 
   /*
   std::cout << "Please enter the ciphertext to decrypt: \n";
