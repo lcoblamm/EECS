@@ -2,12 +2,14 @@
 
 int func1(int num);
 
-double func2(int num, char letter, double dup);
+int func2(int num1, int num2, char letter);
 
-int func3(char* str, int num1, int num2, double dub1, double dub2);
+double funcDouble(int num, char letter, double dup);
+
+int func3(char* str, int num1, int num2, int num3, int num4);
 
 int func4(char let1, char let2, int num1, int num2, int num3, int num4, 
-          int num5, double dub1, double dub2, double dub3);
+          int num5, int num6, int num7, int num8);
 
 int main(int argc, char* argv[])
 {
@@ -15,14 +17,17 @@ int main(int argc, char* argv[])
   int y = func1(x);
   char letter = 'a';
   double a = 2.5;
-  double b = func2(y, letter, a);
+  double b = funcDouble(y, letter, a);
+  x = func2(x, y, letter);
   char* str = "rock";
-  x = func3(str, x, y, a, b);
-  int t = 4;
-  int u = 10;
-  int v = -2;
-  double c = 3.0;
-  y = func4(letter, letter + 1, t, u, v, x, y, a, b, c);
+  int r = 4;
+  int s = 10;
+  x = func3(str, x, y, r, s);
+  int t = -2;
+  int u = 7;
+  int v = 6;
+  int w = -1;
+  y = func4(letter, letter + 1, r, s, t, u, v, w, x, y);
   printf("y = %d", y);
 }
 
@@ -31,9 +36,17 @@ int func1(int num)
   return num++;
 }
 
-double func2(int num, char letter, double dub)
+int func2(int num1, int num2, char letter)
 {
-  if (letter = 'a') {
+  if (letter == 'z') {
+    return num1;
+  }
+  return num2;
+}
+
+double funcDouble(int num, char letter, double dub)
+{
+  if (letter == 'a') {
     return num + dub;
   }
   else {
@@ -41,9 +54,9 @@ double func2(int num, char letter, double dub)
   }
 }
 
-int func3(char* str, int num1, int num2, double dub1, double dub2)
+int func3(char* str, int num1, int num2, int num3, int num4)
 {
-  if ((dub1 + dub2) > 10) {
+  if ((num3 + num4) > 10) {
     return num1 + num2;
   }
   else if (str[1] == 'a') {
@@ -55,15 +68,15 @@ int func3(char* str, int num1, int num2, double dub1, double dub2)
 }
 
 int func4(char let1, char let2, int num1, int num2, int num3, int num4,
-          int num5, double dub1, double dub2, double dub3)
+          int num5, int num6, int num7, int num8)
 {
   if (let1 == let2) {
     return num1 + num2;
   }
-  else if (dub1 > dub2) {
+  else if (num6 > num7) {
     return num3 + num4;
   }
-  else if (dub1 < dub3) {
+  else if (num6 < num8) {
     return num5;
   }
   else {
