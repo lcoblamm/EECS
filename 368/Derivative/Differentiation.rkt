@@ -8,8 +8,11 @@
 (define (deriv f)
   (λ (x) (/ (- (f (+ x dx)) (f x)) dx)))
 
-(define (symderiv f)
+(define (symderivold f)
   (cons (car f) (cons (cadr f) (list (symderivat (caadr f) (caddr f))))))
+
+(define (symderiv f)
+  (cons (car f) (cons (cadr f) (simplify (simplify (list (symderivat (caadr f) (caddr f))))))))
 
 (define (symderivat var z)
   (cond ((not (pair? z))
@@ -58,6 +61,15 @@
           ; f(x) * f'(x) / abs (f(x))
           ((abs) (list '/ (list '* (cadr z) (symderivat var (cadr z))) z))
           ))))
+
+(define (simplify z)
+  (cond ((not (pair? z)) z)
+        ((case (car z)
+           ((+) (map simplify (remove* '(0) z)))
+           ((*) (if (eq? #f (member 0 z))
+                    (map simplify (remove* '(1) z))
+                    0))
+           (else (map simplify z))))))
 
 (define y 43)
 (define num '(λ (x) 47))
@@ -124,4 +136,7 @@
    archimedes
    mercator))
 
-(map (λ (qf) (list ((deriv (eval qf env)) 1) ((eval (symderiv qf) env) 1) (symderiv qf))) qfs)
+;(map (λ (qf) (list ((deriv (eval qf env)) 1) ((eval (symderiv qf) env) 1) (symderiv qf))) qfs)
+
+(map (λ (qf) (symderiv qf)) qfs)
+
