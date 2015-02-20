@@ -12,7 +12,7 @@
   (cons (car f) (cons (cadr f) (list (symderivat (caadr f) (caddr f))))))
 
 (define (symderiv f)
-  (cons (car f) (cons (cadr f) (simplify (simplify (list (symderivat (caadr f) (caddr f))))))))
+  (cons (car f) (cons (cadr f) (simplify (simplify (simplify (list (symderivat (caadr f) (caddr f)))))))))
 
 (define (symderivat var z)
   (cond ((not (pair? z))
@@ -62,12 +62,40 @@
           ((abs) (list '/ (list '* (cadr z) (symderivat var (cadr z))) z))
           ))))
 
-(define (simplify z)
+(define (simplifyJust z)
   (cond ((not (pair? z)) z)
         ((case (car z)
            ((+) (map simplify (remove* '(0) z)))
            ((*) (if (eq? #f (member 0 z))
                     (map simplify (remove* '(1) z))
+                    0))
+           (else (map simplify z))))))
+
+(define (simplifyRemove+* z)
+  (cond ((not (pair? z)) z)
+        ((case (car z)
+           ((+) (if (null? (cdr z))
+                    0
+                    (map simplify (remove* '(0) z))))
+           ((*) (if (null? (cdr z))
+                    1
+                    (if (eq? #f (member 0 z))
+                        (map simplify (remove* '(1) z))
+                        0)))
+           (else (map simplify z))))))
+
+(define (simplify z)
+  (cond ((not (pair? z)) z)
+        ((case (car z)
+           ((+) (if (eq? 2 (length z))
+                    (simplify (cadr z))
+                    (map simplify (remove* '(0) z))))
+           ((*) (if (eq? #f (member 0 z))
+                    (if (null? (cdr z))
+                        1
+                        (if (eq? 2 (length z))
+                            (simplify (cadr z))
+                            (map simplify (remove* '(1) z))))
                     0))
            (else (map simplify z))))))
 
@@ -139,4 +167,3 @@
 ;(map (λ (qf) (list ((deriv (eval qf env)) 1) ((eval (symderiv qf) env) 1) (symderiv qf))) qfs)
 
 (map (λ (qf) (symderiv qf)) qfs)
-
