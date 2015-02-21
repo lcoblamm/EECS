@@ -1,7 +1,7 @@
 /*
   File: VigenereCipher.h
   Author: Lynne Coblammers
-  Date: 2015.02.08
+  Date: 2015.02.21
  */
 
 #ifndef VIGENERECIPHER_H

@@ -1,7 +1,7 @@
 /*
   File: VigenereCipher.cpp
   Author: Lynne Coblammers
-  Date: 2015.02.08
+  Date: 2015.02.21
  */
 
 #include <cctype>
@@ -101,8 +101,10 @@ std::string VigenereCipher::decrypt(const std::string& ciphertext, const std::st
   @descr: Decrypts provided text using vigenere cipher
   @precondition: ciphertext & key contain no spaces
   @param ciphertext: ciphertext to decrypt
-  @param key: key to use for decryption
-  @return: decrypted text
+  @param key: key as numerical array
+  @param keyLength: size of key array
+  @param plaintext: [out] decrypted plaintext
+  @return: none
  */
 void VigenereCipher::decrypt(const std::string& ciphertext, const int key[],
                              int keyLength, std::string& plaintext)
@@ -157,5 +159,4 @@ void VigenereCipher::getKeyAsNums(const std::string& sKey, int arrKey[])
       arrKey[i] = (currChar - 'a' + 1) % 26;
     }    
   }
-
 }

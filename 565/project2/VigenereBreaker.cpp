@@ -1,3 +1,9 @@
+/*
+  File: VigenereBreaker.cpp
+  Author: Lynne Coblammers
+  Date: 2015.02.21
+ */
+
 #include <fstream>
 #include <cmath>
 #include <iostream>
@@ -32,55 +38,12 @@ VigenereBreaker::~VigenereBreaker()
 }
 
 /*
-  @descr: Carries out brute force attack to determine encryption key and plaintext
-  @param keys: [out] keys corresponding to solutions
-  @return: vector of possible valid solutions based on first word being in dictionary
-*/
-std::vector<std::string> VigenereBreaker::attack(std::vector<std::string>& keys)
+  @descr: Carries out brute force attack on Vigenere cipher encrypted text
+  @return: all possible decrypted plaintexts (first word is valid word)
+ */
+std::vector<std::string> VigenereBreaker::attack()
 {
-  char key[m_keyLength];
-  for (int i = 0; i < m_keyLength; ++i) {
-    key[i] = 'a';
-  }
-
-  std::vector<std::string> plaintexts;
-  bool incrementNext = false;
-  bool allKeysChecked = false;
-  while (!allKeysChecked) {
-    // try decrypting with this key
-    // TODO: maybe pass key in as int array - more efficient
-    // TODO: maybe return decrypted as char array
-    std::string sKey(key, m_keyLength);
-    std::string decrypted = m_crypto.decrypt(m_cipher, sKey);
-    
-    // cross check first word against dictionary
-    char firstWord[m_wordLength];
-    decrypted.copy(firstWord, m_wordLength, 0);
-    std::string sFirstWord(firstWord, m_wordLength);
-    std::unordered_map<std::string, bool>::iterator iter = m_dict.find(sFirstWord);
-    if (iter != m_dict.end()) {
-      // valid word
-      plaintexts.push_back(decrypted);
-      keys.push_back(sKey);
-    }
-
-    // increment key to next possibility
-    int index = 0;
-    do {
-      incrementNext = (key[index] == 'z');
-      key[index] = (key[index] - 'a' + 1) % 26 + 'a';
-      index++;
-      if (incrementNext && index >= m_keyLength) {
-        incrementNext = false;
-        allKeysChecked = true;
-      }
-    } while (incrementNext);
-  }
-  return plaintexts;
-}
-
-std::vector<std::string> VigenereBreaker::attack2()
-{
+  // start key with all zeros
   int key[m_keyLength];
   for (int i = 0; i < m_keyLength; ++i) {
     key[i] = 0;
@@ -93,7 +56,7 @@ std::vector<std::string> VigenereBreaker::attack2()
   bool incrementNext = false;
   bool allKeysChecked = false;
   while (!allKeysChecked) {
-    // try decrypting with this key
+    // try decrypting with current key
     m_crypto.decrypt(m_cipher, key, m_keyLength, decrypted);
     
     // cross check first word against dictionary
