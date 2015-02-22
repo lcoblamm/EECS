@@ -8,11 +8,8 @@
 (define (deriv f)
   (λ (x) (/ (- (f (+ x dx)) (f x)) dx)))
 
-(define (symderivold f)
-  (cons (car f) (cons (cadr f) (list (symderivat (caadr f) (caddr f))))))
-
 (define (symderiv f)
-  (cons (car f) (cons (cadr f) (simplify (simplify (simplify (list (symderivat (caadr f) (caddr f)))))))))
+  (cons (car f) (cons (cadr f) (simplifyloop (list (symderivat (caadr f) (caddr f)))))))
 
 (define (symderivat var z)
   (cond ((not (pair? z))
@@ -22,19 +19,20 @@
                  1
                  0)))
         ((case (car z)
-          ((+) (if (not (pair? (cdr z))) ; + with no arguments (derivative of 0)
-                   0
+          ((+) (if (not (pair? (cdr z))) 
+                   0 ; + with no arguments 
                    (cons '+ (map (λ (y) (symderivat var y)) (cdr z))))) ;add derivatives of each element in list
-          ((*) (if (null? (cdr z)) ; * with no arguments (derivative of 1)
-                   0
-                   (if (null? (cddr z)) ; * with single argument
-                       (symderivat var (cadr z))
+          ((*) (if (null? (cdr z)) 
+                   0 ; deriv of * with no arguments (deriv 1)
+                   (if (null? (cddr z)) 
+                       (symderivat var (cadr z)) ; * with single argument (just derivative of argument)
+                       ; 1st element times deriv of remaining elements + remaining elements times deriv of first element
                        (list '+ (list '* (cadr z) (symderivat var (cons '* (cddr z)))) 
                              (append (cons '* (cddr z)) (list (symderivat var (cadr z))))))))
           ((-) (cons '- (map (λ (y) (symderivat var y)) (cdr z))))
           ; deriv f(x)/g(x) = (f'(x) * g(x) - f(x) * g'(x)) / g(x)^2
-          ((/) (if (null? (cddr z)) ; / with single argument
-                   (symderivat var (cons '/ (cons 1 (cdr z))))
+          ((/) (if (null? (cddr z))
+                   (symderivat var (cons '/ (cons 1 (cdr z)))) ; / with single argument
                    (list '/ (list '- (append (cons '* (cddr z)) (list (symderivat var (cadr z))))
                                   (list '* (cadr z) (symderivat var (cons '* (cddr z)))))
                          (list 'expt (cons '* (cddr z)) 2))))
@@ -62,42 +60,32 @@
           ((abs) (list '/ (list '* (cadr z) (symderivat var (cadr z))) z))
           ))))
 
-(define (simplifyJust z)
-  (cond ((not (pair? z)) z)
-        ((case (car z)
-           ((+) (map simplify (remove* '(0) z)))
-           ((*) (if (eq? #f (member 0 z))
-                    (map simplify (remove* '(1) z))
-                    0))
-           (else (map simplify z))))))
-
-(define (simplifyRemove+* z)
-  (cond ((not (pair? z)) z)
-        ((case (car z)
-           ((+) (if (null? (cdr z))
-                    0
-                    (map simplify (remove* '(0) z))))
-           ((*) (if (null? (cdr z))
-                    1
-                    (if (eq? #f (member 0 z))
-                        (map simplify (remove* '(1) z))
-                        0)))
-           (else (map simplify z))))))
-
 (define (simplify z)
   (cond ((not (pair? z)) z)
         ((case (car z)
-           ((+) (if (eq? 2 (length z))
-                    (simplify (cadr z))
-                    (map simplify (remove* '(0) z))))
-           ((*) (if (eq? #f (member 0 z))
-                    (if (null? (cdr z))
-                        1
-                        (if (eq? 2 (length z))
-                            (simplify (cadr z))
-                            (map simplify (remove* '(1) z))))
-                    0))
+           ((+) (cond ((null? (cdr z)) 0)
+                      ((eq? 2 (length z)) (simplify (cadr z)))
+                      (else (map simplify (remove* '(0) z)))))
+           ((*) (cond ((not (eq? #f (member 0 z))) 0)
+                      ((null? (cdr z)) 1)
+                      ((eq? 2 (length z)) (simplify (cadr z)))
+                      (else (map simplify (remove* '(1) z)))))
+           ((-) (cond ((eq? 3 (length z))
+                       (if (eq? 0 (cadr z))
+                           (map simplify (cons '- (cddr z)))
+                           (map simplify z)))
+                      (else (map simplify z))))
+           ((/) (cond ((eq? 3 (length z))
+                       (if (eq? 1 (cadr z))
+                           (map simplify (cons '/ (cddr z)))
+                           (map simplify z)))
+                      (else (map simplify z))))
            (else (map simplify z))))))
+
+(define (simplifyloop z)
+  (if (equal? z (simplify z))
+      z
+      (simplifyloop (simplify z))))
 
 (define y 43)
 (define num '(λ (x) 47))
@@ -164,6 +152,7 @@
    archimedes
    mercator))
 
-;(map (λ (qf) (list ((deriv (eval qf env)) 1) ((eval (symderiv qf) env) 1) (symderiv qf))) qfs)
+(map (λ (qf) (list ((deriv (eval qf env)) 1) ((eval (symderiv qf) env) 1) (symderiv qf))) qfs)
 
-(map (λ (qf) (symderiv qf)) qfs)
+;(map (λ (qf) (symderiv qf)) qfs)
+

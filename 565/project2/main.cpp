@@ -1,8 +1,10 @@
 /*
-  File: VigenereBreaker.h
-  Author: Lynne Coblammers
-  Date: 2015.02.21
-*/
+  Lynne Coblammers
+  Mini Project 2
+  2015.02.21
+  C++
+  File: main.cpp
+ */
 
 #include <iostream>
 #include <cstring>
