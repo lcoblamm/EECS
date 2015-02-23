@@ -1,0 +1,4 @@
+Possible solutions: 
+INTELLECTUALSSOLVEPROBLEMSGENIUSESPREVENTTHEM
+10558.72user 0.00system 2:55:57elapsed 100%CPU (0avgtext+0avgdata 3416maxresident)k
+568inputs+8outputs (1major+41969minor)pagefaults 0swaps
