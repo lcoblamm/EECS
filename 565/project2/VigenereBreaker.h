@@ -1,3 +1,11 @@
+/*
+  Lynne Coblammers
+  Mini Project 2
+  2015.02.21
+  C++
+  File: VigenereBreaker.h
+ */
+
 #ifndef VIGENEREBREAKER_H
 #define VIGENEREBREAKER_H
 
@@ -12,8 +20,7 @@ public:
   VigenereBreaker(const std::string& ciphertext, int keyLength, int wordLength);
   ~VigenereBreaker();
 
-  std::vector<std::string> attack(std::vector<std::string>& keys);
-  std::vector<std::string> attack2();
+  std::vector<std::string> attack();
 private:
   std::unordered_map<std::string, bool> m_dict;
   std::string m_cipher;

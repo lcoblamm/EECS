@@ -11,4 +11,4 @@ VigenereCipher.o: VigenereCipher.h VigenereCipher.cpp
 	g++ -g -std=c++11 -c VigenereCipher.cpp
 
 clean:
-	rm *.o project1 *~
+	rm *.o project2 *~
