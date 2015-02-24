@@ -9,6 +9,9 @@
   (λ (x) (/ (- (f (+ x dx)) (f x)) dx)))
 
 (define (symderiv f)
+  (cons (car f) (cons (cadr f) (list (symderivat (caadr f) (caddr f))))))
+
+(define (symderivsimple f)
   (cons (car f) (cons (cadr f) (simplifyloop (list (symderivat (caadr f) (caddr f)))))))
 
 (define (symderivat var z)
@@ -70,11 +73,15 @@
                       ((null? (cdr z)) 1)
                       ((eq? 2 (length z)) (simplify (cadr z)))
                       (else (map simplify (remove* '(1) z)))))
+           ; (- 0 x) -> (- x) and (- x 0) -> x
            ((-) (cond ((eq? 3 (length z))
-                       (if (eq? 0 (cadr z))
+                       (if (eq? 0 (cadr z)) 
                            (map simplify (cons '- (cddr z)))
-                           (map simplify z)))
+                           (if (eq? 0 (caddr z))
+                               (cadr z)
+                               (map simplify z))))
                       (else (map simplify z))))
+           ; (/ 1 x) -> (/ x)
            ((/) (cond ((eq? 3 (length z))
                        (if (eq? 1 (cadr z))
                            (map simplify (cons '/ (cddr z)))
@@ -153,6 +160,6 @@
    mercator))
 
 (map (λ (qf) (list ((deriv (eval qf env)) 1) ((eval (symderiv qf) env) 1) (symderiv qf))) qfs)
+(map (λ (qf) (list ((deriv (eval qf env)) 1) ((eval (symderivsimple qf) env) 1) (symderivsimple qf))) qfs)
 
-;(map (λ (qf) (symderiv qf)) qfs)
-
+;(map (λ (qf) (symderivsimple qf)) qfs)
