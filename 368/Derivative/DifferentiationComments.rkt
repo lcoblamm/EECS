@@ -3,16 +3,9 @@
 (define-namespace-anchor a)
 (define env (namespace-anchor->namespace a))
 
-(define dx 1/1000)
-
-(define (deriv f)
-  (λ (x) (/ (- (f (+ x dx)) (f x)) dx)))
-
+; Part A
 (define (symderiv f)
   (cons (car f) (cons (cadr f) (list (symderivat (caadr f) (caddr f))))))
-
-(define (symderivsimple f)
-  (cons (car f) (cons (cadr f) (simplifyloop (list (symderivat (caadr f) (caddr f)))))))
 
 (define (symderivat var z)
   (cond ((not (pair? z))
@@ -63,36 +56,11 @@
           ((abs) (list '/ (list '* (cadr z) (symderivat var (cadr z))) z))
           ))))
 
-(define (simplify z)
-  (cond ((not (pair? z)) z)
-        ((case (car z)
-           ((+) (cond ((null? (cdr z)) 0)
-                      ((eq? 2 (length z)) (simplify (cadr z)))
-                      (else (map simplify (remove* '(0) z)))))
-           ((*) (cond ((not (eq? #f (member 0 z))) 0)
-                      ((null? (cdr z)) 1)
-                      ((eq? 2 (length z)) (simplify (cadr z)))
-                      (else (map simplify (remove* '(1) z)))))
-           ; (- 0 x) -> (- x) and (- x 0) -> x
-           ((-) (cond ((eq? 3 (length z))
-                       (if (eq? 0 (cadr z)) 
-                           (map simplify (cons '- (cddr z)))
-                           (if (eq? 0 (caddr z))
-                               (cadr z)
-                               (map simplify z))))
-                      (else (map simplify z))))
-           ; (/ 1 x) -> (/ x)
-           ((/) (cond ((eq? 3 (length z))
-                       (if (eq? 1 (cadr z))
-                           (map simplify (cons '/ (cddr z)))
-                           (map simplify z)))
-                      (else (map simplify z))))
-           (else (map simplify z))))))
+; Part B
+(define dx 1/1000)
 
-(define (simplifyloop z)
-  (if (equal? z (simplify z))
-      z
-      (simplifyloop (simplify z))))
+(define (deriv f)
+  (λ (x) (/ (- (f (+ x dx)) (f x)) dx)))
 
 (define y 43)
 (define num '(λ (x) 47))
@@ -160,6 +128,43 @@
    mercator))
 
 (map (λ (qf) (list ((deriv (eval qf env)) 1) ((eval (symderiv qf) env) 1) (symderiv qf))) qfs)
+
+; Part C
+(define (symderivsimple f)
+  (cons (car f) (cons (cadr f) (simplifyloop (list (symderivat (caadr f) (caddr f)))))))
+
+(define (simplify z)
+  (cond ((not (pair? z)) z)
+        ((case (car z)
+           ((+) (cond ((null? (cdr z)) 0)
+                      ((eq? 2 (length z)) (simplify (cadr z)))
+                      (else (map simplify (remove* '(0) z)))))
+           ((*) (cond ((not (eq? #f (member 0 z))) 0)
+                      ((null? (cdr z)) 1)
+                      ((eq? 2 (length z)) (simplify (cadr z)))
+                      (else (map simplify (remove* '(1) z)))))
+           ; removes 0 from first or second position of two argument minus
+           ; examples: (- 0 x) -> (- x) and (- x 0) -> x
+           ((-) (cond ((eq? 3 (length z))
+                       (if (eq? 0 (cadr z)) 
+                           (map simplify (cons '- (cddr z)))
+                           (if (eq? 0 (caddr z))
+                               (cadr z)
+                               (map simplify z))))
+                      (else (map simplify z))))
+           ; removes 1 from first argument of two argument division
+           ; example: (/ 1 x) -> (/ x)
+           ((/) (cond ((eq? 3 (length z))
+                       (if (eq? 1 (cadr z))
+                           (map simplify (cons '/ (cddr z)))
+                           (map simplify z)))
+                      (else (map simplify z))))
+           (else (map simplify z))))))
+
+(define (simplifyloop z)
+  (if (equal? z (simplify z))
+      z
+      (simplifyloop (simplify z))))
+
 (map (λ (qf) (list ((deriv (eval qf env)) 1) ((eval (symderivsimple qf) env) 1) (symderivsimple qf))) qfs)
 
-;(map (λ (qf) (symderivsimple qf)) qfs)
