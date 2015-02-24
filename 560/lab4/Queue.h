@@ -9,19 +9,20 @@
 
 #include "QueueNode.h"
 
+template <typename T>
 class Queue
 {
 public:
   Queue();
   ~Queue();
   
-  void enqueue(int num);
-  int dequeue();
+  void enqueue(T item);
+  T dequeue();
   bool isEmpty();
   
 private:
-  QueueNode* m_head;
-  QueueNode* m_tail;
+  QueueNode<T>* m_head;
+  QueueNode<T>* m_tail;
   int m_size;
 };
 

@@ -7,20 +7,21 @@
 #ifndef QUEUENODE_H
 #define QUEUENODE_H
 
+template<typename T>
 class QueueNode 
 {
 public:
-  QueueNode(int value);
+  QueueNode(T value);
   ~QueueNode();
 
-  void setNext(QueueNode* next);
-  QueueNode* getNext();
-  void setValue(int value);
-  int getValue();
+  void setNext(QueueNode<T>* next);
+  QueueNode<T>* getNext();
+  void setValue(T value);
+  T getValue();
 
 private:
-  int m_value;
-  QueueNode* m_next;
+  T m_value;
+  QueueNode<T>* m_next;
 };
 
 #endif

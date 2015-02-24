@@ -11,7 +11,8 @@
 /*
   @descr: Constructor
 */
-Queue::Queue() 
+template<typename T>
+Queue<T>::Queue() 
 {
   m_head = nullptr;
   m_tail = nullptr;
@@ -21,7 +22,8 @@ Queue::Queue()
 /*
   @descr: Destructor
 */
-Queue::~Queue()
+template<typename T>
+Queue<T>::~Queue()
 {
   while (!isEmpty()) {
     dequeue();
@@ -32,9 +34,10 @@ Queue::~Queue()
   @descr: Adds node to back of queue
   @param num: value to add
 */
-void Queue::enqueue(int num) 
+template<typename T>
+void Queue<T>::enqueue(T item) 
 {
-  QueueNode* newNode = new QueueNode(num);
+  QueueNode<T>* newNode = new QueueNode<T>(item);
   if (m_head == nullptr) {
     m_head = newNode;
     m_tail = newNode;
@@ -50,13 +53,14 @@ void Queue::enqueue(int num)
   @descr: Removes node from front of queue
   @return: value at front of queue
 */
-int Queue::dequeue() 
+template<typename T>
+T Queue<T>::dequeue() 
 {
   if (m_head == nullptr) {
     throw std::runtime_error("Tried dequeue on empty queue");
   }
-  QueueNode* temp = m_head;
-  int front = temp->getValue();
+  QueueNode<T>* temp = m_head;
+  T front = temp->getValue();
   m_head = m_head->getNext();
   delete temp;
   temp = nullptr;
@@ -68,7 +72,8 @@ int Queue::dequeue()
   @descr: Checks if the queue is empty
   @return: true if empty, false otherwise
 */
-bool Queue::isEmpty() 
+template<typename T>
+bool Queue<T>::isEmpty() 
 {
   return (m_size == 0);
 }

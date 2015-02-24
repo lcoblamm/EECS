@@ -10,7 +10,8 @@
   @descr: Constructor
   @param value: value to store in node
 */
-QueueNode::QueueNode(int value)
+template<typename T>
+QueueNode<T>::QueueNode(T value)
 {
   m_value = value;
   m_next = nullptr;
@@ -19,7 +20,8 @@ QueueNode::QueueNode(int value)
 /*
   @descr: Destructor
 */
-QueueNode::~QueueNode()
+template<typename T>
+QueueNode<T>::~QueueNode()
 {
 }
 
@@ -28,7 +30,8 @@ QueueNode::~QueueNode()
   @param next: node pointer to set next to
   @return: none
 */
-void QueueNode::setNext(QueueNode* next)
+template<typename T>
+void QueueNode<T>::setNext(QueueNode<T>* next)
 {
   m_next = next;
 }
@@ -37,7 +40,8 @@ void QueueNode::setNext(QueueNode* next)
   @descr: get next pointer
   @return: pointer to next node
 */
-QueueNode* QueueNode::getNext()
+template<typename T>
+QueueNode<T>* QueueNode<T>::getNext()
 {
   return m_next;
 }
@@ -46,7 +50,8 @@ QueueNode* QueueNode::getNext()
   @descr: set value of node
   @param value: value to set node to
 */
-void QueueNode::setValue(int value)
+template<typename T>
+void QueueNode<T>::setValue(T value)
 {
   m_value = value;
 }
@@ -55,7 +60,8 @@ void QueueNode::setValue(int value)
   @descr: get value of node
   @return: value stored in node
 */
-int QueueNode::getValue()
+template<typename T>
+T QueueNode<T>::getValue()
 {
   return m_value;
 }

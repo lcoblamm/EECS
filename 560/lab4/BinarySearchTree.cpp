@@ -49,7 +49,7 @@ void BinarySearchTree::insert(int num)
 */
 void BinarySearchTree::remove(int num)
 {
-
+  
 }
 
 /*
@@ -83,7 +83,7 @@ void BinarySearchTree::deletemax()
 */
 void BinarySearchTree::preorder()
 {
-
+  
 }
 
 /*
@@ -99,7 +99,13 @@ void BinarySearchTree::inorder()
 */
 void BinarySearchTree::levelorder()
 {
-
+  Queue<TreeNode*> levelQueue;
+  if (m_root == nullptr) {
+    std::cout << "Tree is empty.\n";
+  }
+  else {
+    // TODO: add root, then loop while not empty
+  }
 }
 
 /*
