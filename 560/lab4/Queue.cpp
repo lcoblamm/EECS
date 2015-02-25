@@ -7,11 +7,12 @@
 #include <stdexcept>
 
 #include "Queue.h"
+#include "TreeNode.h"
 
 /*
   @descr: Constructor
 */
-template<typename T>
+template <typename T>
 Queue<T>::Queue() 
 {
   m_head = nullptr;
@@ -22,7 +23,7 @@ Queue<T>::Queue()
 /*
   @descr: Destructor
 */
-template<typename T>
+template <typename T>
 Queue<T>::~Queue()
 {
   while (!isEmpty()) {
@@ -34,7 +35,7 @@ Queue<T>::~Queue()
   @descr: Adds node to back of queue
   @param num: value to add
 */
-template<typename T>
+template <typename T>
 void Queue<T>::enqueue(T item) 
 {
   QueueNode<T>* newNode = new QueueNode<T>(item);
@@ -53,7 +54,7 @@ void Queue<T>::enqueue(T item)
   @descr: Removes node from front of queue
   @return: value at front of queue
 */
-template<typename T>
+template <typename T>
 T Queue<T>::dequeue() 
 {
   if (m_head == nullptr) {
@@ -72,8 +73,10 @@ T Queue<T>::dequeue()
   @descr: Checks if the queue is empty
   @return: true if empty, false otherwise
 */
-template<typename T>
+template <typename T>
 bool Queue<T>::isEmpty() 
 {
   return (m_size == 0);
 }
+
+template class Queue<TreeNode *>;

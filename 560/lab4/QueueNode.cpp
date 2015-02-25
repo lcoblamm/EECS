@@ -5,6 +5,7 @@
 */
 
 #include "QueueNode.h"
+#include "TreeNode.h"
 
 /*
   @descr: Constructor
@@ -65,3 +66,5 @@ T QueueNode<T>::getValue()
 {
   return m_value;
 }
+
+template class QueueNode<TreeNode *>;

@@ -25,8 +25,17 @@ public:
   void levelorder();
 
 private:
+  void deleteTree(TreeNode* root);
   void insert(int num, TreeNode* root);
   TreeNode* search(int num, TreeNode* root);
+  TreeNode* search(int num, TreeNode* root, TreeNode*& parent);
+  void deletemin(TreeNode* root);
+  void deletemax(TreeNode* root);
+  TreeNode* findMinParent(TreeNode* root);
+  TreeNode* findMaxParent(TreeNode* root);
+  void preorder(TreeNode* root);
+  void inorder(TreeNode* root);
+
   TreeNode* m_root;
 };
 
