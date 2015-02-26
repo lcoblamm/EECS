@@ -106,8 +106,9 @@ void BinarySearchTree::remove(int num)
     // not in tree
     return;
   }
+
   if (toRemove->getRight() == nullptr) {
-    // need to replace with left child
+    // no right child, need to replace node with left child
     if (parent == nullptr) {
       // root is value to remove
       TreeNode* temp = toRemove;
@@ -115,12 +116,14 @@ void BinarySearchTree::remove(int num)
       delete toRemove;
     }
     else {
+      // root has parent
       if (parent->getRight() == toRemove) {
+        // toRemove is right child of parent
         parent->setRight(toRemove->getLeft());
         delete toRemove;
       }
       else {
-        // left child
+        // toRemove is left child of parent
         parent->setLeft(toRemove->getLeft());
         delete toRemove;
       }
@@ -128,11 +131,12 @@ void BinarySearchTree::remove(int num)
       return;
     }
   }
+
   // node to remove has right child
   TreeNode* minRight = findMinParent(toRemove->getRight())->getLeft();
-  // replace value with min
+  // replace value with min of right child
   toRemove->setValue(minRight->getValue());
-  //delete min
+  // delete min of right child
   deletemin(toRemove->getRight());
 }
 
@@ -185,9 +189,9 @@ TreeNode* BinarySearchTree::search(int num, TreeNode* root)
 }
 
 /*
-  @descr: searches for value recursively
+  @descr: searches for value & its parent
   @param num: value to search for
-  @param root: current node to check
+  @param root: root of tree to search
   @param parent: [out] parent of node returned, nullptr if not found or if root contains value
   @return: pointer to node if found, nullptr otherwise
 */
