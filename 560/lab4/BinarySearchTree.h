@@ -27,7 +27,7 @@ public:
 private:
   void deleteTree(TreeNode* root);
   void insert(int num, TreeNode* root);
-  TreeNode* search(int num, TreeNode* root);
+  //TreeNode* search(int num, TreeNode* root);
   TreeNode* search(int num, TreeNode* root, TreeNode*& parent);
   void deletemin(TreeNode* root);
   void deletemax(TreeNode* root);
