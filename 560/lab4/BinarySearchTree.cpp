@@ -322,6 +322,7 @@ if (m_root == nullptr) {
   }
   else {
     preorder(m_root);
+    std::cout << std::endl;
   }
 }
 
@@ -352,6 +353,7 @@ void BinarySearchTree::inorder()
   }
   else {
     inorder(m_root);
+    std::cout << std::endl;
   }
 }
 

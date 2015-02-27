@@ -56,11 +56,9 @@ int main(int argc, char* argv[])
     }
     case 3:
       tree.deletemin();
-      std::cout << std::endl;
       break;
     case 4:
       tree.deletemax();
-      std::cout << std::endl;
       break;
     case 5:
       tree.preorder();
