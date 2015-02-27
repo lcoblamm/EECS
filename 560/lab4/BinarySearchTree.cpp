@@ -167,38 +167,6 @@ TreeNode* BinarySearchTree::search(int num)
 }
 
 /*
-  @descr: searches for value recursively
-  @param num: value to search for
-  @param root: current node to check
-  @return: pointer to node if found, nullptr otherwise
-*/
-/*TreeNode* BinarySearchTree::search(int num, TreeNode* root)
-{
-  int currVal = root->getValue();
-  if (currVal == num) {
-    // found it!
-    return root;
-  }
-  else if (num < currVal) {
-    if (root->getLeft() == nullptr) {
-      // not in tree
-      return nullptr;
-    }
-    // search left subtree
-    return search(num, root->getLeft());
-  }
-  else {
-    // num > currVal
-    if (root->getRight() == nullptr) {
-      // not in tree
-      return nullptr;
-    }
-    // search right subtree
-    return search(num, root->getRight());
-  }
-}*/
-
-/*
   @descr: searches for value & its parent
   @param num: value to search for
   @param root: root of tree to search
@@ -250,31 +218,32 @@ TreeNode* BinarySearchTree::search(int num, TreeNode* root, TreeNode*& parent)
 */
 void BinarySearchTree::deletemin()
 {
-  deletemin(m_root);
+  if (m_root == nullptr) {
+    // tree is empty, nothing to delete
+    return;
+  }
+  if (m_root->getLeft() == nullptr) {
+    // root is min
+    TreeNode* temp = m_root;
+    m_root = m_root->getRight();
+    delete temp;
+  }
+  else {
+    deletemin(m_root);
+  }
 }
 
 /*
   @descr: removes min value from tree 
+  @pre: root is not min
   @param root: root of tree to remove min from
-  @note: if root has parent & root is min, parent won't be linked up
 */
 void BinarySearchTree::deletemin(TreeNode* root)
 {
-  if (root == nullptr) {
-    return;
-  }
-  if (root->getLeft() == nullptr) {
-    // root is min
-    TreeNode* temp = root;
-    root = root->getRight();
-    delete temp;
-  }
-  else {
-    TreeNode* minParent = findMinParent(root);
-    TreeNode* min = minParent->getLeft();
-    minParent->setLeft(min->getRight());
-    delete min;
-  }
+  TreeNode* minParent = findMinParent(root);
+  TreeNode* min = minParent->getLeft();
+  minParent->setLeft(min->getRight());
+  delete min;
 }
 
 /*
@@ -299,7 +268,19 @@ TreeNode* BinarySearchTree::findMinParent(TreeNode* root)
 */
 void BinarySearchTree::deletemax()
 {
-  deletemax(m_root);
+  if (m_root == nullptr) {
+    // tree is empty, nothing to delete
+    return;
+  }
+  if (m_root->getRight() == nullptr) {
+    // root is max
+    TreeNode* temp = m_root;
+    m_root = m_root->getLeft();
+    delete temp;
+  }
+  else {
+    deletemax(m_root);
+  }
 }
 
 /*
@@ -308,21 +289,10 @@ void BinarySearchTree::deletemax()
 */
 void BinarySearchTree::deletemax(TreeNode* root)
 {
-  if (root == nullptr) {
-    return;
-  }
-  if (root->getRight() == nullptr) {
-    // root is max
-    TreeNode* temp = root;
-    root = root->getLeft();
-    delete temp;
-  }
-  else {
-    TreeNode* maxParent = findMaxParent(root);
-    TreeNode* max = maxParent->getRight();
-    maxParent->setRight(max->getLeft());
-    delete max;
-  }
+  TreeNode* maxParent = findMaxParent(root);
+  TreeNode* max = maxParent->getRight();
+  maxParent->setRight(max->getLeft());
+  delete max;
 }
 
 /*
