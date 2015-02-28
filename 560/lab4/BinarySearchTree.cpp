@@ -99,8 +99,10 @@ void BinarySearchTree::insert(int num, TreeNode* root)
 void BinarySearchTree::remove(int num)
 {
   if (m_root == nullptr) {
+    // tree is empty
     return;
   }
+
   TreeNode* parent = nullptr;
   TreeNode* toRemove = search(num, m_root, parent);
   if (toRemove == nullptr) {
@@ -111,13 +113,13 @@ void BinarySearchTree::remove(int num)
   if (toRemove->getRight() == nullptr) {
     // no right child, need to replace node with left child
     if (parent == nullptr) {
-      // root is value to remove
+      // m_root is value to remove
       TreeNode* temp = toRemove;
       toRemove = toRemove->getLeft();
       delete toRemove;
     }
     else {
-      // root has parent
+      // toRemove has parent
       if (parent->getRight() == toRemove) {
         // toRemove is right child of parent
         parent->setRight(toRemove->getLeft());
@@ -162,7 +164,7 @@ TreeNode* BinarySearchTree::search(int num)
   }
   else {
     TreeNode* parent;
-    return search(num, m_root, parent);
+    return search(num, m_root, parent); // can ignore parent here
   }
 }
 
@@ -285,6 +287,7 @@ void BinarySearchTree::deletemax()
 
 /*
   @descr: removes max value from tree
+  @pre: root is not max
   @param root: root of tree to remove max from
 */
 void BinarySearchTree::deletemax(TreeNode* root)
