@@ -45,7 +45,7 @@ int main(int argc, char* argv[])
         open.insert(rands[k]);
       }
       double result = timer.stop();
-      fout << "\tOpen hashing: " << std::setprecision(6) << result << "seconds\n";
+      fout << "\tOpen hashing: " << std::setprecision(6) << result << " seconds\n";
 
       // time insert on closed hash
       ClosedHash closed(tableSize);
@@ -54,7 +54,7 @@ int main(int argc, char* argv[])
         closed.insert(rands[k]);
       }
       result = timer.stop();
-      fout << "\tClosed hashing: " << std::setprecision(6) << result << "seconds\n";
+      fout << "\tClosed hashing: " << std::setprecision(6) << result << " seconds\n";
 
       seed++;
     }

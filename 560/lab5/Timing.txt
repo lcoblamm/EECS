@@ -2,89 +2,89 @@
 Timing for load 0.2
 -------------------------------------------
 Seed: 1
-	Open hashing: 0.022044seconds
-	Closed hashing: 0.005021seconds
+	Open hashing: 0.022246 seconds
+	Closed hashing: 0.004772 seconds
 Seed: 2
-	Open hashing: 0.021108seconds
-	Closed hashing: 0.005115seconds
+	Open hashing: 0.020798 seconds
+	Closed hashing: 0.004988 seconds
 Seed: 3
-	Open hashing: 0.020843seconds
-	Closed hashing: 0.00456seconds
+	Open hashing: 0.020852 seconds
+	Closed hashing: 0.004578 seconds
 Seed: 4
-	Open hashing: 0.020677seconds
-	Closed hashing: 0.004572seconds
+	Open hashing: 0.020557 seconds
+	Closed hashing: 0.004607 seconds
 Seed: 5
-	Open hashing: 0.020842seconds
-	Closed hashing: 0.004563seconds
+	Open hashing: 0.020653 seconds
+	Closed hashing: 0.004567 seconds
 
 Timing for load 0.3
 -------------------------------------------
 Seed: 6
-	Open hashing: 0.031979seconds
-	Closed hashing: 0.007334seconds
+	Open hashing: 0.032207 seconds
+	Closed hashing: 0.007358 seconds
 Seed: 7
-	Open hashing: 0.032022seconds
-	Closed hashing: 0.007375seconds
+	Open hashing: 0.032337 seconds
+	Closed hashing: 0.00743 seconds
 Seed: 8
-	Open hashing: 0.032496seconds
-	Closed hashing: 0.007554seconds
+	Open hashing: 0.032223 seconds
+	Closed hashing: 0.007352 seconds
 Seed: 9
-	Open hashing: 0.032145seconds
-	Closed hashing: 0.007375seconds
+	Open hashing: 0.032179 seconds
+	Closed hashing: 0.007368 seconds
 Seed: 10
-	Open hashing: 0.032442seconds
-	Closed hashing: 0.007776seconds
+	Open hashing: 0.034618 seconds
+	Closed hashing: 0.008289 seconds
 
 Timing for load 0.4
 -------------------------------------------
 Seed: 11
-	Open hashing: 0.044322seconds
-	Closed hashing: 0.010697seconds
+	Open hashing: 0.044936 seconds
+	Closed hashing: 0.010899 seconds
 Seed: 12
-	Open hashing: 0.043941seconds
-	Closed hashing: 0.011363seconds
+	Open hashing: 0.04492 seconds
+	Closed hashing: 0.011771 seconds
 Seed: 13
-	Open hashing: 0.045114seconds
-	Closed hashing: 0.011077seconds
+	Open hashing: 0.046437 seconds
+	Closed hashing: 0.01089 seconds
 Seed: 14
-	Open hashing: 0.044347seconds
-	Closed hashing: 0.010739seconds
+	Open hashing: 0.045343 seconds
+	Closed hashing: 0.010791 seconds
 Seed: 15
-	Open hashing: 0.044601seconds
-	Closed hashing: 0.010617seconds
+	Open hashing: 0.044132 seconds
+	Closed hashing: 0.010647 seconds
 
 Timing for load 0.5
 -------------------------------------------
 Seed: 16
-	Open hashing: 0.057055seconds
-	Closed hashing: 0.014962seconds
+	Open hashing: 0.057518 seconds
+	Closed hashing: 0.014913 seconds
 Seed: 17
-	Open hashing: 0.057147seconds
-	Closed hashing: 0.014548seconds
+	Open hashing: 0.05778 seconds
+	Closed hashing: 0.014538 seconds
 Seed: 18
-	Open hashing: 0.058171seconds
-	Closed hashing: 0.014592seconds
+	Open hashing: 0.058659 seconds
+	Closed hashing: 0.014673 seconds
 Seed: 19
-	Open hashing: 0.05703seconds
-	Closed hashing: 0.014539seconds
+	Open hashing: 0.057693 seconds
+	Closed hashing: 0.014564 seconds
 Seed: 20
-	Open hashing: 0.058122seconds
-	Closed hashing: 0.015276seconds
+	Open hashing: 0.057347 seconds
+	Closed hashing: 0.014578 seconds
 
 Timing for load 0.6
 -------------------------------------------
 Seed: 21
-	Open hashing: 0.072182seconds
-	Closed hashing: 0.02008seconds
+	Open hashing: 0.070696 seconds
+	Closed hashing: 0.01911 seconds
 Seed: 22
-	Open hashing: 0.070436seconds
-	Closed hashing: 0.019599seconds
+	Open hashing: 0.071095 seconds
+	Closed hashing: 0.019656 seconds
 Seed: 23
-	Open hashing: 0.070589seconds
-	Closed hashing: 0.019118seconds
+	Open hashing: 0.070581 seconds
+	Closed hashing: 0.019091 seconds
 Seed: 24
-	Open hashing: 0.070536seconds
-	Closed hashing: 0.021209seconds
+	Open hashing: 0.072701 seconds
+	Closed hashing: 0.020115 seconds
 Seed: 25
-	Open hashing: 0.073093seconds
-	Closed hashing: 0.020331seconds
+	Open hashing: 0.071118 seconds
+	Closed hashing: 0.019401 seconds
