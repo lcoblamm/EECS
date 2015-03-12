@@ -10,6 +10,7 @@ struct myStruct2 {
 	double d;
 	int i;
 	char c;
+  char c2;
 };
 
 int main(int argc, char* argv[])
@@ -23,6 +24,7 @@ int main(int argc, char* argv[])
 	b.d = 1.5;
 	b.i = 10;
 	b.c = 'C';
+  b.c2 = 'M';
 
 	printf("Initials: %c %c\n", a.c, b.c);
 }

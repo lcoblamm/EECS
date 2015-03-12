@@ -38,7 +38,7 @@
 main:
 .LFB0:
 	.file 1 "structs.c"
-	.loc 1 16 0
+	.loc 1 17 0
 	.cfi_startproc
 	pushq	%rbp	#
 	.cfi_def_cfa_offset 16
@@ -48,30 +48,32 @@ main:
 	subq	$48, %rsp	#,
 	movl	%edi, -36(%rbp)	# argc, argc
 	movq	%rsi, -48(%rbp)	# argv, argv
-	.loc 1 18 0
-	movb	$76, -16(%rbp)	#, a.c
 	.loc 1 19 0
-	movl	$2, -12(%rbp)	#, a.i
+	movb	$76, -16(%rbp)	#, a.c
 	.loc 1 20 0
+	movl	$2, -12(%rbp)	#, a.i
+	.loc 1 21 0
 	movabsq	$4612811918334230528, %rax	#, tmp64
 	movq	%rax, -8(%rbp)	# tmp64, a.d
-	.loc 1 23 0
+	.loc 1 24 0
 	movabsq	$4609434218613702656, %rax	#, tmp65
 	movq	%rax, -32(%rbp)	# tmp65, b.d
-	.loc 1 24 0
-	movl	$10, -24(%rbp)	#, b.i
 	.loc 1 25 0
+	movl	$10, -24(%rbp)	#, b.i
+	.loc 1 26 0
 	movb	$67, -20(%rbp)	#, b.c
 	.loc 1 27 0
-	movzbl	-20(%rbp), %eax	# b.c, D.2196
-	movsbl	%al, %edx	# D.2196, D.2197
-	movzbl	-16(%rbp), %eax	# a.c, D.2196
-	movsbl	%al, %eax	# D.2196, D.2197
-	movl	%eax, %esi	# D.2197,
+	movb	$77, -19(%rbp)	#, b.c2
+	.loc 1 29 0
+	movzbl	-20(%rbp), %eax	# b.c, D.2197
+	movsbl	%al, %edx	# D.2197, D.2198
+	movzbl	-16(%rbp), %eax	# a.c, D.2197
+	movsbl	%al, %eax	# D.2197, D.2198
+	movl	%eax, %esi	# D.2198,
 	movl	$.LC2, %edi	#,
 	movl	$0, %eax	#,
 	call	printf	#
-	.loc 1 28 0
+	.loc 1 30 0
 	leave
 	.cfi_def_cfa 7, 8
 	ret
@@ -81,7 +83,7 @@ main:
 .Letext0:
 	.section	.debug_info,"",@progbits
 .Ldebug_info0:
-	.long	0x12f
+	.long	0x13a
 	.value	0x4
 	.long	.Ldebug_abbrev0
 	.byte	0x8
@@ -170,7 +172,7 @@ main:
 	.byte	0x10
 	.byte	0x1
 	.byte	0x9
-	.long	0xd6
+	.long	0xe1
 	.uleb128 0x6
 	.string	"d"
 	.byte	0x1
@@ -189,21 +191,27 @@ main:
 	.byte	0xc
 	.long	0x72
 	.byte	0xc
+	.uleb128 0x6
+	.string	"c2"
+	.byte	0x1
+	.byte	0xd
+	.long	0x72
+	.byte	0xd
 	.byte	0
 	.uleb128 0x7
 	.long	.LASF17
 	.byte	0x1
-	.byte	0xf
+	.byte	0x10
 	.long	0x57
 	.quad	.LFB0
 	.quad	.LFE0-.LFB0
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x12c
+	.long	0x137
 	.uleb128 0x8
 	.long	.LASF12
 	.byte	0x1
-	.byte	0xf
+	.byte	0x10
 	.long	0x57
 	.uleb128 0x2
 	.byte	0x91
@@ -211,15 +219,15 @@ main:
 	.uleb128 0x8
 	.long	.LASF13
 	.byte	0x1
-	.byte	0xf
-	.long	0x12c
+	.byte	0x10
+	.long	0x137
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -64
 	.uleb128 0x9
 	.string	"a"
 	.byte	0x1
-	.byte	0x11
+	.byte	0x12
 	.long	0x79
 	.uleb128 0x2
 	.byte	0x91
@@ -227,7 +235,7 @@ main:
 	.uleb128 0x9
 	.string	"b"
 	.byte	0x1
-	.byte	0x16
+	.byte	0x17
 	.long	0xab
 	.uleb128 0x2
 	.byte	0x91

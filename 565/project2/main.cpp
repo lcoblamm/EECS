@@ -12,16 +12,18 @@
 
 int main(int argc, char* argv[])
 {
-  std::string cipherText;
-  int keyLength = 0;
-  int wordLength = 0;
+  std::string cipherText = "HUETNMIXVTMQWZTQMMZUNZXNSSBLNSJVSJQDLKR";
+  int keyLength = 5;
+  int wordLength = 11;
 
+/*
   std::cout << "Please enter the ciphertext to decrypt: \n";
   std::cin >> cipherText;
   std::cout << "Please enter the length of the key: \n";
   std::cin >> keyLength;
   std::cout << "Please enter the length of the first word: \n";
   std::cin >> wordLength;
+*/
 
   VigenereBreaker codeBreaker(cipherText, keyLength, wordLength);
   std::vector<std::string> plaintexts;
