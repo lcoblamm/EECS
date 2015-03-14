@@ -19,121 +19,122 @@ TwoThreeTree::~TwoThreeTree()
     // delete whole tree
 }
 
-void TwoThreeTree::insert(int num)
+void TwoThreeTree::insert(int key)
 {
     if (m_root == nullptr) {
-        m_root = new TwoThreeNode(num);
+        m_root = new TwoThreeNode(key);
+        return;
     }
-    else if (search(num) != nullptr) {
+
+    if (search(key) != nullptr) {
         // already in tree
         return;
     }
-    else if (m_root->getTag() == 1) {
+
+    if (m_root->getTag() == 1) {
         // only one leaf in tree
-        TwoThreeNode* newLeaf = new TwoThreeNode(num);
-        TwoThreeNode* max = num < m_root->getKey() ? m_root : newLeaf;
-        TwoThreeNode* min = num < m_root->getKey() ? newLeaf : m_root;
+        TwoThreeNode* newLeaf = new TwoThreeNode(key);
+        TwoThreeNode* max = key < m_root->getKey() ? m_root : newLeaf;
+        TwoThreeNode* min = key < m_root->getKey() ? newLeaf : m_root;
         TwoThreeNode* newInterior = new TwoThreeNode(nullptr, max->getKey(), min, max);
         m_root = newInterior;
         max->setParent(m_root);
         min->setParent(m_root);
+        return;
+    }
+
+    // get parent where it should be inserted
+    TwoThreeNode* parent = findParent(key, m_root);
+
+    if (parent->getMinThird() == -1) {
+        // parent has two leaves
+        TwoThreeNode* newLeaf = new TwoThreeNode(key, parent);
+        if (key < parent->getMinSecond()) {
+            if (key < parent->getFirst()->getKey()) {
+                // insert into first spot 
+                parent->setThird(parent->getSecond());
+                parent->setMinThird(parent->getThird()->getKey());
+                parent->setSecond(parent->getFirst());
+                parent->setMinSecond(parent->getSecond()->getKey());
+                parent->setFirst(newLeaf);
+                // inserted new minimum node, so we need to ripple it up
+                rippleMin(key, parent);
+                return;
+            }
+            // insert into second spot
+            parent->setThird(parent->getSecond());
+            parent->setMinThird(parent->getThird()->getKey());
+            parent->setSecond(newLeaf);
+            parent->setMinSecond(key);
+            return;
+        }
+        // insert into third spot
+        parent->setThird(newLeaf);
+        parent->setMinThird(key);
+        return;
+    }
+
+    // parent has three leaves, need to split into two nodes
+    TwoThreeNode* newLeaf = new TwoThreeNode(key);
+    TwoThreeNode* newInterior = new TwoThreeNode();
+    bool newLeafIsMin = false;
+    if (key < parent->getMinSecond()) {
+        // move second and third children to new parent
+        newInterior->setFirst(parent->getSecond());
+        newInterior->setSecond(parent->getThird());
+        newInterior->setMinSecond(parent->getMinThird());
+
+        if (key < parent->getFirst()->getKey()) {
+            // insert new node into first position of parent
+            parent->setSecond(parent->getFirst());
+            parent->setMinSecond(parent->getSecond()->getKey());
+            parent->setThird(nullptr);
+            parent->setMinThird(-1);
+            parent->setFirst(newLeaf);
+            newLeafIsMin = true;
+        }
+        else {
+            // insert new node into second position of parent
+            parent->setThird(nullptr);
+            parent->setMinThird(-1);
+            parent->setSecond(newLeaf);
+            parent->setMinSecond(key);
+        }
+        newLeaf->setParent(parent);
+    }
+    else if (key < parent->getMinThird()) {
+        // need to insert new leaf as first child of new interior
+        newInterior->setSecond(parent->getThird());
+        newInterior->setMinSecond(parent->getMinThird());
+        newInterior->setFirst(newLeaf);
+        newLeaf->setParent(newInterior);
+        parent->setMinThird(-1);
+        parent->setThird(nullptr);
     }
     else {
-        // get parent where it should be inserted
-        TwoThreeNode* parent = findParent(num, m_root);
-
-        if (parent->getMinThird() == -1) {
-            // parent has two leaves
-            TwoThreeNode* newLeaf = new TwoThreeNode(num, parent);
-            if (num < parent->getMinSecond()) {
-                if (num < parent->getFirst()->getKey()) {
-                    // insert into first spot 
-                    parent->setThird(parent->getSecond());
-                    parent->setMinThird(parent->getThird()->getKey());
-                    parent->setSecond(parent->getFirst());
-                    parent->setMinSecond(parent->getSecond()->getKey());
-                    parent->setFirst(newLeaf);
-                    // inserted new minimum node, so we need to ripple it up
-                    rippleMin(num, parent);
-                }
-                else {
-                    // insert into second spot
-                    parent->setThird(parent->getSecond());
-                    parent->setMinThird(parent->getThird()->getKey());
-                    parent->setSecond(newLeaf);
-                    parent->setMinSecond(num);
-                }
-            }
-            else {
-                // insert into third spot
-                parent->setThird(newLeaf);
-                parent->setMinThird(num);
-            }
-        }
-        else  {
-            // parent has three leaves, need to split into two nodes
-            TwoThreeNode* newLeaf = new TwoThreeNode(num);
-            TwoThreeNode* newInterior = new TwoThreeNode();
-            bool newLeafIsMin = false;
-            if (num < parent->getMinSecond()) {
-                // move second and third children to new parent
-                newInterior->setFirst(parent->getSecond());
-                newInterior->setSecond(parent->getThird());
-                newInterior->setMinSecond(parent->getMinThird());
-                
-                if (num < parent->getFirst()->getKey()) {
-                    // insert new node into first position of parent
-                    parent->setSecond(parent->getFirst());
-                    parent->setMinSecond(parent->getSecond()->getKey());
-                    parent->setThird(nullptr);
-                    parent->setMinThird(-1);
-                    parent->setFirst(newLeaf);
-                    newLeafIsMin = true;
-                }
-                else {
-                    // insert new node into second position of parent
-                    parent->setThird(nullptr);
-                    parent->setMinThird(-1);
-                    parent->setSecond(newLeaf);
-                    parent->setMinSecond(num);
-                }
-                newLeaf->setParent(parent);
-            }
-            else if (num < parent->getMinThird()) {
-                // need to insert new leaf as first child of new interior
-                newInterior->setSecond(parent->getThird());
-                newInterior->setMinSecond(parent->getMinThird());
-                newInterior->setFirst(newLeaf);
-                newLeaf->setParent(newInterior);
-                parent->setMinThird(-1);
-                parent->setThird(nullptr);
-            }
-            else {
-                // need to insert new leaf as second child of new interior
-                newInterior->setSecond(newLeaf);
-                newInterior->setMinSecond(num);
-                newLeaf->setParent(newInterior);
-                newInterior->setFirst(parent->getThird());
-                parent->setMinThird(-1);
-                parent->setThird(nullptr);
-            }
-            // set parent of new interior node with split
-            int minNewInterior = newInterior->getFirst()->getKey();
-            rippleSplit(parent, newInterior, minNewInterior);
-            // ripple min of new leaf if needed
-            if (newLeafIsMin) {
-                rippleMin(num, parent);
-            }
-        }
+        // need to insert new leaf as second child of new interior
+        newInterior->setSecond(newLeaf);
+        newInterior->setMinSecond(key);
+        newLeaf->setParent(newInterior);
+        newInterior->setFirst(parent->getThird());
+        parent->setMinThird(-1);
+        parent->setThird(nullptr);
+    }
+    // set parent of new interior node with split
+    int minNewInterior = newInterior->getFirst()->getKey();
+    rippleSplit(parent, newInterior, minNewInterior);
+    // ripple min of new leaf if needed
+    if (newLeafIsMin) {
+        rippleMin(key, parent);
     }
 }
 
-void TwoThreeTree::remove(int num)
+void TwoThreeTree::remove(int key)
 {
 
 }
 
-TwoThreeNode* TwoThreeTree::search(int num)
+TwoThreeNode* TwoThreeTree::search(int key)
 {
     return nullptr;
 }
@@ -238,55 +239,53 @@ void TwoThreeTree::rippleSplit(TwoThreeNode* origChild, TwoThreeNode* newChild, 
         newChild->setParent(parent);
         return;
     }
-    else {
-        // need to split parent
-        TwoThreeNode* newParent = new TwoThreeNode();
-        int minNewParent;
-        if (parent->getFirst() == origChild) {
-            // set up new parent
-            newParent->setSecond(parent->getThird());
-            newParent->setMinSecond(parent->getMinThird());
-            newParent->getSecond()->setParent(newParent);
-            newParent->setFirst(parent->getSecond());
-            newParent->getFirst()->setParent(newParent);
-            minNewParent = parent->getMinSecond();
-            // update current parent inserting newChild as second 
-            parent->setThird(nullptr);
-            parent->setMinThird(-1);
-            parent->setSecond(newChild);
-            parent->setMinSecond(minNewChild);
-            newChild->setParent(parent);
-        }
-        else if (parent->getSecond() == origChild) {
-            // set up new parent, with new child as first 
-            newParent->setSecond(parent->getThird());
-            newParent->setMinSecond(parent->getMinThird());
-            newParent->getSecond()->setParent(newParent);
-            newParent->setFirst(newChild);
-            newChild->setParent(newParent);
-            minNewParent = minNewChild;
-            // update current parent
-            parent->setThird(nullptr);
-            parent->setMinThird(-1);
-        }
-        else {
-            // set up new parent, with new child as second
-            newParent->setSecond(newChild);
-            newParent->setMinSecond(minNewChild);
-            newChild->setParent(newParent);
-            newParent->setFirst(parent->getThird());
-            newParent->getFirst()->setParent(newParent);
-            minNewParent = parent->getMinThird();
-            // update current parent
-            parent->setThird(nullptr);
-            parent->setMinThird(-1);
-        }
-        // ripple split up if needed
-        rippleSplit(parent, newParent, minNewParent);
+    // need to split parent
+    TwoThreeNode* newParent = new TwoThreeNode();
+    int minNewParent;
+    if (parent->getFirst() == origChild) {
+        // set up new parent
+        newParent->setSecond(parent->getThird());
+        newParent->setMinSecond(parent->getMinThird());
+        newParent->getSecond()->setParent(newParent);
+        newParent->setFirst(parent->getSecond());
+        newParent->getFirst()->setParent(newParent);
+        minNewParent = parent->getMinSecond();
+        // update current parent inserting newChild as second 
+        parent->setThird(nullptr);
+        parent->setMinThird(-1);
+        parent->setSecond(newChild);
+        parent->setMinSecond(minNewChild);
+        newChild->setParent(parent);
     }
+    else if (parent->getSecond() == origChild) {
+        // set up new parent, with new child as first 
+        newParent->setSecond(parent->getThird());
+        newParent->setMinSecond(parent->getMinThird());
+        newParent->getSecond()->setParent(newParent);
+        newParent->setFirst(newChild);
+        newChild->setParent(newParent);
+        minNewParent = minNewChild;
+        // update current parent
+        parent->setThird(nullptr);
+        parent->setMinThird(-1);
+    }
+    else {
+        // set up new parent, with new child as second
+        newParent->setSecond(newChild);
+        newParent->setMinSecond(minNewChild);
+        newChild->setParent(newParent);
+        newParent->setFirst(parent->getThird());
+        newParent->getFirst()->setParent(newParent);
+        minNewParent = parent->getMinThird();
+        // update current parent
+        parent->setThird(nullptr);
+        parent->setMinThird(-1);
+    }
+    // ripple split up if needed
+    rippleSplit(parent, newParent, minNewParent);
 }
 
-TwoThreeNode* TwoThreeTree::findParent(int num, TwoThreeNode* root)
+TwoThreeNode* TwoThreeTree::findParent(int key, TwoThreeNode* root)
 {
     // check if children of root are exterior
     if (root->getFirst()->getTag() == 1)
@@ -295,15 +294,13 @@ TwoThreeNode* TwoThreeTree::findParent(int num, TwoThreeNode* root)
     }
 
     // keep looking
-    if (num < root->getMinSecond()) {
-        return findParent(num, root->getFirst());
+    if (key < root->getMinSecond()) {
+        return findParent(key, root->getFirst());
     }
-    else if ((root->getMinThird() != -1) && (num >= root->getMinThird())) {
-        return findParent(num, root->getThird());
+    if ((root->getMinThird() != -1) && (key >= root->getMinThird())) {
+        return findParent(key, root->getThird());
     }
-    else {
-        return findParent(num, root->getSecond());
-    }
+    return findParent(key, root->getSecond());
 }
 
 void TwoThreeTree::rippleMin(int min, TwoThreeNode* node)
@@ -320,7 +317,7 @@ void TwoThreeTree::rippleMin(int min, TwoThreeNode* node)
         parent->setMinSecond(min);
         return;
     }
-    else if (parent->getThird() == node) {
+    if (parent->getThird() == node) {
         parent->setMinThird(min);
         return;
     }

@@ -15,9 +15,9 @@ public:
     TwoThreeTree();
     ~TwoThreeTree();
 
-    void insert(int num);
-    void remove(int num);
-    TwoThreeNode* search(int num);
+    void insert(int key);
+    void remove(int key);
+    TwoThreeNode* search(int key);
     void deletemin();
     void deletemax();
     void levelorder();
@@ -25,7 +25,7 @@ public:
 private:
     void rippleSplit(TwoThreeNode* origChild, TwoThreeNode* newChild, int minNewChild);
     void rippleMin(int min, TwoThreeNode* node);
-    TwoThreeNode* findParent(int num, TwoThreeNode* root);
+    TwoThreeNode* findParent(int key, TwoThreeNode* root);
 
     TwoThreeNode* m_root;
 };
