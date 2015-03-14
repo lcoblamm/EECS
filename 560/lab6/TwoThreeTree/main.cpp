@@ -7,19 +7,21 @@
 #include <iostream>
 #include <fstream>
 
+#include "TwoThreeTree.h"
+
 int main(int argc, char* argv[])
 {
-  //TwoThreeTree tree;
+  TwoThreeTree tree;
   // read in data.txt
   std::ifstream fin("data.txt");
   int num;
   while (fin >> num) {
-    //tree.insert(num);
+    tree.insert(num);
   }
   
   // print menu
   int choice = 0;
-  while (choice != 8) {
+  while (choice != 6) {
     std::cout << "....................................." << std::endl;
     std::cout << "Please choose one of the following commands \n\n";
     std::cout << "1 - insert\n\n";
@@ -39,7 +41,7 @@ int main(int argc, char* argv[])
       std::cout << "What number do you want to insert into the tree?\n\n";
       std::cin >> num; 
       std::cout << std::endl;
-      //tree.insert(num);
+      tree.insert(num);
       break;
     }
     case 2: {
@@ -47,17 +49,17 @@ int main(int argc, char* argv[])
       std::cout << "What number do you want to remove from the tree?\n\n";
       std::cin >> num;
       std::cout << std::endl;
-      //tree.remove(num);
+      tree.remove(num);
       break;  
     }
     case 3:
-      //tree.deletemin();
+      tree.deletemin();
       break;
     case 4:
-      //tree.deletemax();
+      tree.deletemax();
       break;
     case 5:
-      //tree.levelorder();
+      tree.levelorder();
       std::cout << std::endl;
       break;
     case 6:

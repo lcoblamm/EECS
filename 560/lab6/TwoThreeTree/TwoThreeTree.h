@@ -23,7 +23,8 @@ public:
     void levelorder();
 
 private:
-    void insertSplit(int num, TwoThreeNode* root);
+    void rippleSplit(TwoThreeNode* origChild, TwoThreeNode* newChild, int minNewChild);
+    void rippleMin(int min, TwoThreeNode* node);
     TwoThreeNode* findParent(int num, TwoThreeNode* root);
 
     TwoThreeNode* m_root;
