@@ -1,0 +1,112 @@
+
+Timing for 50000 values
+------------------------------------------------
+Seed: 1
+	Binary Search Tree Insert: 0.042696 seconds
+	 Binary Search Tree Random Op: 0.00106 seconds
+	Two Three Tree Insert: 0.047446 seconds
+	 Two Three Tree Random Op: 0.006172 seconds
+Seed: 2
+	Binary Search Tree Insert: 0.039885 seconds
+	 Binary Search Tree Random Op: 0.001091 seconds
+	Two Three Tree Insert: 0.050537 seconds
+	 Two Three Tree Random Op: 0.004313 seconds
+Seed: 3
+	Binary Search Tree Insert: 0.041036 seconds
+	 Binary Search Tree Random Op: 0.001099 seconds
+	Two Three Tree Insert: 0.051186 seconds
+	 Two Three Tree Random Op: 0.00427 seconds
+Seed: 4
+	Binary Search Tree Insert: 0.046127 seconds
+	 Binary Search Tree Random Op: 0.001879 seconds
+	Two Three Tree Insert: 0.045991 seconds
+	 Two Three Tree Random Op: 0.004197 seconds
+Seed: 5
+	Binary Search Tree Insert: 0.048503 seconds
+	 Binary Search Tree Random Op: 0.001102 seconds
+	Two Three Tree Insert: 0.051042 seconds
+	 Two Three Tree Random Op: 0.004338 seconds
+
+Timing for 100000 values
+------------------------------------------------
+Seed: 6
+	Binary Search Tree Insert: 0.094685 seconds
+	 Binary Search Tree Random Op: 0.002421 seconds
+	Two Three Tree Insert: 0.113322 seconds
+	 Two Three Tree Random Op: 0.015441 seconds
+Seed: 7
+	Binary Search Tree Insert: 0.100234 seconds
+	 Binary Search Tree Random Op: 0.002501 seconds
+	Two Three Tree Insert: 0.111599 seconds
+	 Two Three Tree Random Op: 0.011977 seconds
+Seed: 8
+	Binary Search Tree Insert: 0.100753 seconds
+	 Binary Search Tree Random Op: 0.002586 seconds
+	Two Three Tree Insert: 0.105549 seconds
+	 Two Three Tree Random Op: 0.009317 seconds
+Seed: 9
+	Binary Search Tree Insert: 0.11418 seconds
+	 Binary Search Tree Random Op: 0.003819 seconds
+	Two Three Tree Insert: 0.115004 seconds
+	 Two Three Tree Random Op: 0.00908 seconds
+Seed: 10
+	Binary Search Tree Insert: 0.099913 seconds
+	 Binary Search Tree Random Op: 0.002478 seconds
+	Two Three Tree Insert: 0.125118 seconds
+	 Two Three Tree Random Op: 0.00953 seconds
+
+Timing for 200000 values
+------------------------------------------------
+Seed: 11
+	Binary Search Tree Insert: 0.271623 seconds
+	 Binary Search Tree Random Op: 0.006141 seconds
+	Two Three Tree Insert: 0.322554 seconds
+	 Two Three Tree Random Op: 0.024781 seconds
+Seed: 12
+	Binary Search Tree Insert: 0.249273 seconds
+	 Binary Search Tree Random Op: 0.006396 seconds
+	Two Three Tree Insert: 0.338068 seconds
+	 Two Three Tree Random Op: 0.027328 seconds
+Seed: 13
+	Binary Search Tree Insert: 0.249098 seconds
+	 Binary Search Tree Random Op: 0.009279 seconds
+	Two Three Tree Insert: 0.309497 seconds
+	 Two Three Tree Random Op: 0.024708 seconds
+Seed: 14
+	Binary Search Tree Insert: 0.248035 seconds
+	 Binary Search Tree Random Op: 0.006009 seconds
+	Two Three Tree Insert: 0.302498 seconds
+	 Two Three Tree Random Op: 0.02105 seconds
+Seed: 15
+	Binary Search Tree Insert: 0.263042 seconds
+	 Binary Search Tree Random Op: 0.00607 seconds
+	Two Three Tree Insert: 0.317389 seconds
+	 Two Three Tree Random Op: 0.022079 seconds
+
+Timing for 400000 values
+------------------------------------------------
+Seed: 16
+	Binary Search Tree Insert: 0.594218 seconds
+	 Binary Search Tree Random Op: 0.014351 seconds
+	Two Three Tree Insert: 0.677251 seconds
+	 Two Three Tree Random Op: 0.051251 seconds
+Seed: 17
+	Binary Search Tree Insert: 0.629891 seconds
+	 Binary Search Tree Random Op: 0.016486 seconds
+	Two Three Tree Insert: 0.889238 seconds
+	 Two Three Tree Random Op: 0.057392 seconds
+Seed: 18
+	Binary Search Tree Insert: 0.5982 seconds
+	 Binary Search Tree Random Op: 0.01966 seconds
+	Two Three Tree Insert: 0.809737 seconds
+	 Two Three Tree Random Op: 0.056647 seconds
+Seed: 19
+	Binary Search Tree Insert: 0.744497 seconds
+	 Binary Search Tree Random Op: 0.022445 seconds
+	Two Three Tree Insert: 0.978747 seconds
+	 Two Three Tree Random Op: 0.067125 seconds
+Seed: 20
+	Binary Search Tree Insert: 0.845724 seconds
+	 Binary Search Tree Random Op: 0.019777 seconds
+	Two Three Tree Insert: 0.703082 seconds
+	 Two Three Tree Random Op: 0.050057 seconds
