@@ -16,7 +16,21 @@ TwoThreeTree::TwoThreeTree(): m_root(nullptr)
 
 TwoThreeTree::~TwoThreeTree()
 {
-    // delete whole tree
+    deleteTree(m_root);
+}
+
+void TwoThreeTree::deleteTree(TwoThreeNode* root)
+{
+  if (root->getFirst() != nullptr) {
+    deleteTree(root->getFirst());
+  }
+  if (root->getSecond() != nullptr) {
+    deleteTree(root->getSecond());
+  }
+  if (root->getThird() != nullptr) {
+    deleteTree(root->getThird());
+  }
+  delete root;
 }
 
 void TwoThreeTree::insert(int key)
@@ -83,6 +97,8 @@ void TwoThreeTree::insert(int key)
         newInterior->setFirst(parent->getSecond());
         newInterior->setSecond(parent->getThird());
         newInterior->setMinSecond(parent->getMinThird());
+        newInterior->getFirst()->setParent(newInterior);
+        newInterior->getSecond()->setParent(newInterior);
 
         if (key < parent->getFirst()->getKey()) {
             // insert new node into first position of parent
@@ -106,6 +122,7 @@ void TwoThreeTree::insert(int key)
         // need to insert new leaf as first child of new interior
         newInterior->setSecond(parent->getThird());
         newInterior->setMinSecond(parent->getMinThird());
+        newInterior->getSecond()->setParent(newInterior);
         newInterior->setFirst(newLeaf);
         newLeaf->setParent(newInterior);
         parent->setMinThird(-1);
@@ -117,6 +134,7 @@ void TwoThreeTree::insert(int key)
         newInterior->setMinSecond(key);
         newLeaf->setParent(newInterior);
         newInterior->setFirst(parent->getThird());
+        newInterior->getFirst()->setParent(newInterior);
         parent->setMinThird(-1);
         parent->setThird(nullptr);
     }
@@ -131,12 +149,117 @@ void TwoThreeTree::insert(int key)
 
 void TwoThreeTree::remove(int key)
 {
+    if (m_root == nullptr) {
+        // tree is empty
+        return;
+    }
+    TwoThreeNode* toRemove = search(key);
+    if (toRemove == nullptr) {
+        // not in tree
+        return;
+    }
+    if (m_root == toRemove) {
+        // only one node in tree
+        delete toRemove;
+        m_root = nullptr;
+    }
+    TwoThreeNode* parent = toRemove->getParent();
+    bool isFirstChild = (parent->getFirst() == toRemove);
+    bool isSecondChild = (parent->getSecond() == toRemove);
+    delete toRemove;
+    if (parent->getThird() != nullptr) {
+        // parent has three children, can delete node & update parent
+        if (isFirstChild) {
+            // remove first node and move others over
+            parent->setFirst(parent->getSecond());
+            int newMin = parent->getMinSecond();
+            parent->setSecond(parent->getThird());
+            parent->setMinSecond(parent->getMinThird());
+            parent->setThird(nullptr);
+            parent->setMinThird(-1);
+            rippleMin(newMin, parent);
+            return;
+        }
+        if (isSecondChild) {
+            // remove second node and update parent
+            parent->setSecond(parent->getThird());
+            parent->setMinSecond(parent->getMinThird());
+            parent->setThird(nullptr);
+            parent->setMinThird(-1);
+            return;
+        }
+        // remove third node 
+        parent->setThird(nullptr);
+        parent->setMinThird(-1);
+        return;
+    }
 
+    // parent has two children, need to adopt or recombine
+    if (parent == m_root) {
+        // set m_root to remaining leaf
+        if (isFirstChild) {
+            m_root = parent->getSecond();
+            m_root->setParent(nullptr);
+            delete parent;
+            return;
+        }
+        m_root = parent->getFirst();
+        m_root->setParent(nullptr);
+        delete parent;
+        return;
+    }
+
+    TwoThreeNode* grandparent = parent->getParent();
+    TwoThreeNode* rightSibling;
+    TwoThreeNode* leftSibling;
+    // find parent's sibling(s)
+    if (parent == grandparent->getFirst()) {
+        rightSibling = grandparent->getSecond();
+        if (rightSibling->getThird() != nullptr) {
+            // sibling has child to adopt
+            adoptFromRight(parent, rightSibling, isFirstChild);
+            return;
+        }
+        // sibling does not have child to adopt
+        comboRightSibling(parent, rightSibling, isFirstChild);
+        return;
+    }
+    if (parent == grandparent->getSecond()) {
+        leftSibling = grandparent->getFirst();
+        rightSibling = grandparent->getThird();
+        if (leftSibling->getThird() != nullptr) {
+            // left sibling has child to adopt
+            adoptFromLeft(parent, leftSibling, isFirstChild);
+            return;
+        }
+        if ((rightSibling != nullptr) && (rightSibling->getThird() != nullptr)) {
+            // right sibling has child to adopt
+            adoptFromRight(parent, rightSibling, isFirstChild);
+            return;
+        }
+        // siblings do not have child to adopt
+        comboLeftSibling(parent, leftSibling, isFirstChild);
+        return;
+    }
+    // parent is third child of grandparent
+    leftSibling = grandparent->getSecond();
+    if (leftSibling->getThird() != nullptr) {
+        // left sibling has child to adopt
+        adoptFromLeft(parent, leftSibling, isFirstChild);
+        return;
+    }
+    // sibling does not have child to adopt
+    comboLeftSibling(parent, leftSibling, isFirstChild);
+    return;
 }
 
 TwoThreeNode* TwoThreeTree::search(int key)
 {
-    return nullptr;
+    if (m_root == nullptr) {
+        return nullptr;
+    }
+    return search(key, m_root);
+    
 }
 
 void TwoThreeTree::deletemin()
@@ -207,6 +330,24 @@ void TwoThreeTree::levelorder()
         std::cout << curr->getKey() << " ";
     }
     std::cout << std::endl << std::endl;
+}
+
+TwoThreeNode* TwoThreeTree::findParent(int key, TwoThreeNode* root)
+{
+    // check if children of root are exterior
+    if (root->getFirst()->getTag() == 1)
+    {
+        return root;
+    }
+
+    // keep looking
+    if (key < root->getMinSecond()) {
+        return findParent(key, root->getFirst());
+    }
+    if ((root->getMinThird() != -1) && (key >= root->getMinThird())) {
+        return findParent(key, root->getThird());
+    }
+    return findParent(key, root->getSecond());
 }
 
 void TwoThreeTree::rippleSplit(TwoThreeNode* origChild, TwoThreeNode* newChild, int minNewChild)
@@ -285,41 +426,236 @@ void TwoThreeTree::rippleSplit(TwoThreeNode* origChild, TwoThreeNode* newChild, 
     rippleSplit(parent, newParent, minNewParent);
 }
 
-TwoThreeNode* TwoThreeTree::findParent(int key, TwoThreeNode* root)
+void TwoThreeTree::rippleMin(int min, TwoThreeNode* newMinsParent)
 {
-    // check if children of root are exterior
-    if (root->getFirst()->getTag() == 1)
-    {
-        return root;
-    }
-
-    // keep looking
-    if (key < root->getMinSecond()) {
-        return findParent(key, root->getFirst());
-    }
-    if ((root->getMinThird() != -1) && (key >= root->getMinThird())) {
-        return findParent(key, root->getThird());
-    }
-    return findParent(key, root->getSecond());
-}
-
-void TwoThreeTree::rippleMin(int min, TwoThreeNode* node)
-{
-    if (node == nullptr) {
+    if (newMinsParent == nullptr) {
         // rippled to root, no further to go
         return;
     }
-    TwoThreeNode* parent = node->getParent();
+    TwoThreeNode* parent = newMinsParent->getParent();
     if (parent == nullptr) {
         return;
     }
-    if (parent->getSecond() == node) {
+    if (parent->getSecond() == newMinsParent) {
         parent->setMinSecond(min);
         return;
     }
-    if (parent->getThird() == node) {
+    if (parent->getThird() == newMinsParent) {
         parent->setMinThird(min);
         return;
     }
     rippleMin(min, parent);
+}
+
+void TwoThreeTree::rippleCombo(TwoThreeNode* toRemove)
+{
+    TwoThreeNode* parent = toRemove->getParent();
+    bool isFirstChild = (toRemove == parent->getFirst());
+    bool isSecondChild = (toRemove == parent->getSecond());
+    delete toRemove;
+
+    if (parent->getThird() != nullptr) {
+        // don't need to combo further, set up parent as needed
+        if (isFirstChild) {
+            // remove first node and move others over
+            parent->setFirst(parent->getSecond());
+            int newMin = parent->getMinSecond();
+            parent->setSecond(parent->getThird());
+            parent->setMinSecond(parent->getMinThird());
+            parent->setThird(nullptr);
+            parent->setMinThird(-1);
+            rippleMin(newMin, parent);
+            return;
+        }
+        if (isSecondChild) {
+            parent->setSecond(parent->getThird());
+            parent->setMinSecond(parent->getMinThird());
+            parent->setThird(nullptr);
+            parent->setMinThird(-1);
+            return;
+        }
+        parent->setThird(nullptr);
+        parent->setMinThird(-1);
+        return;
+    }
+
+    // parent has two children, need to adopt or recombine
+    if (parent == m_root) {
+        // set m_root to remaining leaf
+        if (isFirstChild) {
+            m_root = parent->getSecond();
+            m_root->setParent(nullptr);
+            delete parent;
+            return;
+        }
+        m_root = parent->getFirst();
+        m_root->setParent(nullptr);
+        delete parent;
+        return;
+    }
+
+    TwoThreeNode* grandparent = parent->getParent();
+    TwoThreeNode* rightSibling;
+    TwoThreeNode* leftSibling;
+    // find parent's sibling(s)
+    if (parent == grandparent->getFirst()) {
+        rightSibling = grandparent->getSecond();
+        if (rightSibling->getThird() != nullptr) {
+            // sibling has child to adopt
+            adoptFromRight(parent, rightSibling, isFirstChild);
+            return;
+        }
+        // sibling does not have child to adopt
+        comboRightSibling(parent, rightSibling, isFirstChild);
+        return;
+    }
+    if (parent == grandparent->getSecond()) {
+        leftSibling = grandparent->getFirst();
+        rightSibling = grandparent->getThird();
+        if (leftSibling->getThird() != nullptr) {
+            // left sibling has child to adopt
+            adoptFromLeft(parent, leftSibling, isFirstChild);
+            return;
+        }
+        if ((rightSibling != nullptr) && (rightSibling->getThird() != nullptr)) {
+            // right sibling has child to adopt
+            adoptFromRight(parent, rightSibling, isFirstChild);
+            return;
+        }
+        // siblings do not have child to adopt
+        comboLeftSibling(parent, leftSibling, isFirstChild);
+        return;
+    }
+    // parent is third child of grandparent
+    leftSibling = grandparent->getSecond();
+    if (leftSibling->getThird() != nullptr) {
+        // left sibling has child to adopt
+        adoptFromLeft(parent, leftSibling, isFirstChild);
+        return;
+    }
+    // sibling does not have child to adopt
+    comboLeftSibling(parent, leftSibling, isFirstChild);
+    return;
+}
+
+void TwoThreeTree::comboLeftSibling(TwoThreeNode* parent, TwoThreeNode* leftSibling, bool isFirstChild)
+{
+    if (isFirstChild) {
+        leftSibling->setThird(parent->getSecond());
+    }
+    else {
+        leftSibling->setThird(parent->getFirst());
+    }
+    leftSibling->setMinThird(findMin(leftSibling->getThird())->getKey());
+    leftSibling->getThird()->setParent(leftSibling);
+    int minLeft = leftSibling->getFirst()->getKey();
+    rippleCombo(parent);
+}
+
+void TwoThreeTree::comboRightSibling(TwoThreeNode* parent, TwoThreeNode* rightSibling, bool isFirstChild)
+{
+    // sibling does not have child to adopt
+    int newMinSibling;
+    rightSibling->setThird(rightSibling->getSecond());
+    rightSibling->setMinThird(rightSibling->getMinSecond());
+    rightSibling->setSecond(rightSibling->getFirst());
+    rightSibling->setMinSecond(findMin(rightSibling->getSecond())->getKey());
+    if (isFirstChild) {
+        rightSibling->setFirst(parent->getSecond());
+    }
+    else {
+        rightSibling->setFirst(parent->getFirst());
+    }
+    newMinSibling = findMin(rightSibling->getFirst())->getKey();
+    rightSibling->getFirst()->setParent(rightSibling);
+    rippleCombo(parent);
+    rippleMin(newMinSibling, rightSibling);
+}
+
+void TwoThreeTree::adoptFromLeft(TwoThreeNode* parent, TwoThreeNode* leftSibling, bool isFirstChild)
+{
+    if (!isFirstChild) {
+        parent->setSecond(parent->getFirst());
+        parent->setMinSecond(findMin(parent->getSecond())->getKey());
+    }
+    parent->setFirst(leftSibling->getThird());
+    int newMinParent = leftSibling->getMinThird();
+    parent->getFirst()->setParent(parent);
+    leftSibling->setThird(nullptr);
+    leftSibling->setMinThird(-1);
+    rippleMin(newMinParent, parent);
+}
+
+void TwoThreeTree::adoptFromRight(TwoThreeNode* parent, TwoThreeNode* rightSibling, bool isFirstChild)
+{
+    int newMinParent;
+    if (isFirstChild) {
+        parent->setFirst(parent->getSecond());
+        newMinParent = parent->getMinSecond();
+    }
+    parent->setSecond(rightSibling->getFirst());
+    parent->setMinSecond(findMin(rightSibling->getFirst())->getKey());
+    parent->getSecond()->setParent(parent);
+    rightSibling->setFirst(rightSibling->getSecond()); 
+    int newMinSibling = rightSibling->getMinSecond();
+    rightSibling->setSecond(rightSibling->getThird());
+    rightSibling->setMinSecond(rightSibling->getMinThird());
+    rightSibling->setThird(nullptr);
+    rightSibling->setMinThird(-1);
+    if (isFirstChild) {
+        rippleMin(newMinParent, parent);
+    }
+    rippleMin(newMinSibling, rightSibling);
+}
+
+TwoThreeNode* TwoThreeTree::findMin(TwoThreeNode* root)
+{
+    if (m_root == nullptr) {
+        return nullptr;
+    }
+    if (root->getTag() == 1) {
+        return root;
+    }
+    if (root->getFirst()->getTag() == 1) {
+        return root->getFirst();
+    }
+    return findMin(root->getFirst());
+}
+
+TwoThreeNode* TwoThreeTree::findMax(TwoThreeNode* root)
+{
+    if (m_root == nullptr) {
+        return nullptr;
+    }
+    if (root->getTag() == 1) {
+        return root;
+    }
+    if (root->getThird() != nullptr) {
+        if (root->getThird()->getTag() == 1) {
+            return root->getThird();
+        }
+        return findMin(root->getThird());
+    }
+    if (root->getSecond()->getTag() == 1) {
+        return root->getSecond();
+    }
+    return findMin(root->getSecond());
+}
+
+TwoThreeNode* TwoThreeTree::search(int key, TwoThreeNode* root)
+{
+    if (root->getTag() == 1) {
+        if (key == root->getKey()) {
+            return root;
+        }
+        return nullptr;
+    }
+
+    if (key < root->getMinSecond()) {
+        return search(key, root->getFirst());
+    }
+    if ((root->getThird() == nullptr) || (key < root->getMinThird())) {
+        return search(key, root->getSecond());
+    }
+    return search(key, root->getThird());
 }

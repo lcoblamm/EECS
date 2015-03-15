@@ -23,9 +23,18 @@ public:
     void levelorder();
 
 private:
-    void rippleSplit(TwoThreeNode* origChild, TwoThreeNode* newChild, int minNewChild);
-    void rippleMin(int min, TwoThreeNode* node);
     TwoThreeNode* findParent(int key, TwoThreeNode* root);
+    void deleteTree(TwoThreeNode* root);
+    void rippleSplit(TwoThreeNode* origChild, TwoThreeNode* newChild, int minNewChild);
+    void rippleMin(int min, TwoThreeNode* newMinsParent);
+    void rippleCombo(TwoThreeNode* toRemove);
+    void comboLeftSibling(TwoThreeNode* parent, TwoThreeNode* leftSibling, bool isFirstChild);
+    void comboRightSibling(TwoThreeNode* parent, TwoThreeNode* rightSibling, bool isFirstChild);
+    void adoptFromLeft(TwoThreeNode* parent, TwoThreeNode* leftSibling, bool isFirstChild);
+    void adoptFromRight(TwoThreeNode* parent, TwoThreeNode* rightSibling, bool isFirstChild);
+    TwoThreeNode* findMin(TwoThreeNode* root);
+    TwoThreeNode* findMax(TwoThreeNode* root);
+    TwoThreeNode* search(int key, TwoThreeNode* root);
 
     TwoThreeNode* m_root;
 };
