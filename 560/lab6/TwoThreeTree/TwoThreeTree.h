@@ -27,7 +27,6 @@ private:
     void deleteTree(TwoThreeNode* root);
     void rippleSplit(TwoThreeNode* origChild, TwoThreeNode* newChild, int minNewChild);
     void rippleMin(int min, TwoThreeNode* newMinsParent);
-    void rippleCombo(TwoThreeNode* toRemove);
     void comboLeftSibling(TwoThreeNode* parent, TwoThreeNode* leftSibling, bool isFirstChild);
     void comboRightSibling(TwoThreeNode* parent, TwoThreeNode* rightSibling, bool isFirstChild);
     void adoptFromLeft(TwoThreeNode* parent, TwoThreeNode* leftSibling, bool isFirstChild);
@@ -35,6 +34,7 @@ private:
     TwoThreeNode* findMin(TwoThreeNode* root);
     TwoThreeNode* findMax(TwoThreeNode* root);
     TwoThreeNode* search(int key, TwoThreeNode* root);
+    void remove(TwoThreeNode* toRemove);
 
     TwoThreeNode* m_root;
 };
