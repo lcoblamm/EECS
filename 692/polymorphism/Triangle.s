@@ -49,11 +49,11 @@ _ZN8TriangleC2Eii:
 	movl	%edx, -16(%rbp)	# height, height
 .LBB2:
 	.loc 1 3 0
-	movq	-8(%rbp), %rax	# this, D.2323
-	movq	%rax, %rdi	# D.2323,
+	movq	-8(%rbp), %rax	# this, D.2325
+	movq	%rax, %rdi	# D.2325,
 	call	_ZN5ShapeC2Ev	#
 	movq	-8(%rbp), %rax	# this, tmp60
-	movq	$_ZTV8Triangle+16, (%rax)	#, this_1(D)->D.2257._vptr.Shape
+	movq	$_ZTV8Triangle+16, (%rax)	#, this_1(D)->D.2259._vptr.Shape
 	movq	-8(%rbp), %rax	# this, tmp61
 	movl	-12(%rbp), %edx	# base, tmp62
 	movl	%edx, 8(%rax)	# tmp62, this_1(D)->m_base
@@ -87,14 +87,14 @@ _ZN8TriangleD2Ev:
 .LBB3:
 	.loc 1 7 0
 	movq	-8(%rbp), %rax	# this, tmp61
-	movq	$_ZTV8Triangle+16, (%rax)	#, this_1(D)->D.2257._vptr.Shape
-	movq	-8(%rbp), %rax	# this, D.2324
-	movq	%rax, %rdi	# D.2324,
+	movq	$_ZTV8Triangle+16, (%rax)	#, this_1(D)->D.2259._vptr.Shape
+	movq	-8(%rbp), %rax	# this, D.2326
+	movq	%rax, %rdi	# D.2326,
 	call	_ZN5ShapeD2Ev	#
 .LBE3:
 	.loc 1 9 0
-	movl	$0, %eax	#, D.2325
-	testl	%eax, %eax	# D.2325
+	movl	$0, %eax	#, D.2327
+	testl	%eax, %eax	# D.2327
 	je	.L2	#,
 	.loc 1 9 0 is_stmt 0 discriminator 1
 	movq	-8(%rbp), %rax	# this, tmp62
@@ -152,11 +152,11 @@ _ZN8Triangle4areaEv:
 	movq	%rdi, -8(%rbp)	# this, this
 	.loc 1 13 0
 	movq	-8(%rbp), %rax	# this, tmp64
-	movl	8(%rax), %edx	# this_1(D)->m_base, D.2326
+	movl	8(%rax), %edx	# this_1(D)->m_base, D.2328
 	movq	-8(%rbp), %rax	# this, tmp65
-	movl	12(%rax), %eax	# this_1(D)->m_height, D.2326
-	imull	%edx, %eax	# D.2326, D.2326
-	movl	%eax, %edx	# D.2326, tmp66
+	movl	12(%rax), %eax	# this_1(D)->m_height, D.2328
+	imull	%edx, %eax	# D.2328, D.2328
+	movl	%eax, %edx	# D.2328, tmp66
 	shrl	$31, %edx	#, tmp66
 	addl	%edx, %eax	# tmp66, tmp67
 	sarl	%eax	# tmp68

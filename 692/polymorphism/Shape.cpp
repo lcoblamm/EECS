@@ -12,3 +12,8 @@ int Shape::area()
 {
   return 0;
 }
+
+int Shape::perimeter()
+{
+  return 0;
+}

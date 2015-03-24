@@ -45,7 +45,7 @@
 main:
 .LFB971:
 	.file 1 "main.cpp"
-	.loc 1 10 0
+	.loc 1 11 0
 	.cfi_startproc
 	.cfi_personality 0x3,__gxx_personality_v0
 	.cfi_lsda 0x3,.LLSDA971
@@ -62,176 +62,187 @@ main:
 	movl	%edi, -100(%rbp)	# argc, argc
 	movq	%rsi, -112(%rbp)	# argv, argv
 .LBB2:
-	.loc 1 11 0
+	.loc 1 12 0
 	movl	$16, %edi	#,
 .LEHB0:
 	call	_Znwm	#
 .LEHE0:
-	movq	%rax, %rbx	# D.21117, rect.0
+	movq	%rax, %rbx	# D.21132, rect.0
 	movl	$5, %edx	#,
 	movl	$10, %esi	#,
 	movq	%rbx, %rdi	# rect.0,
 .LEHB1:
 	call	_ZN9RectangleC1Eii	#
 .LEHE1:
-	.loc 1 11 0 is_stmt 0 discriminator 2
+	.loc 1 12 0 is_stmt 0 discriminator 2
 	movq	%rbx, -24(%rbp)	# rect.0, rect
-	.loc 1 12 0 is_stmt 1 discriminator 2
-	movq	-24(%rbp), %rax	# rect, tmp84
-	movq	(%rax), %rax	# rect_3->_vptr.Shape, D.21118
-	addq	$16, %rax	#, D.21118
-	movq	(%rax), %rax	# *_5, D.21119
-	movq	-24(%rbp), %rdx	# rect, tmp85
-	movq	%rdx, %rdi	# tmp85,
+	.loc 1 13 0 is_stmt 1 discriminator 2
+	movq	-24(%rbp), %rax	# rect, tmp86
+	movq	(%rax), %rax	# rect_3->_vptr.Shape, D.21133
+	addq	$16, %rax	#, D.21133
+	movq	(%rax), %rax	# *_5, D.21134
+	movq	-24(%rbp), %rdx	# rect, tmp87
+	movq	%rdx, %rdi	# tmp87,
 .LEHB2:
-	call	*%rax	# D.21119
-	movl	%eax, -28(%rbp)	# D.21120, areaRect
+	call	*%rax	# D.21134
+	movl	%eax, -28(%rbp)	# D.21135, areaRect
 	.loc 1 14 0 discriminator 2
+	movq	-24(%rbp), %rax	# rect, tmp88
+	movq	%rax, %rdi	# tmp88,
+	call	_ZN5Shape9perimeterEv	#
+	movl	%eax, -32(%rbp)	# D.21135, perimRect
+	.loc 1 16 0 discriminator 2
 	movl	$8, %edi	#,
 	call	_Znwm	#
 .LEHE2:
-	movq	%rax, %rbx	# D.21117, shape.1
+	movq	%rax, %rbx	# D.21132, shape.1
 	movq	%rbx, %rdi	# shape.1,
 .LEHB3:
 	call	_ZN5ShapeC1Ev	#
 .LEHE3:
-	.loc 1 14 0 is_stmt 0
+	.loc 1 16 0 is_stmt 0
 	movq	%rbx, -40(%rbp)	# shape.1, shape
-	.loc 1 15 0 is_stmt 1
-	movq	-40(%rbp), %rax	# shape, tmp86
-	movq	(%rax), %rax	# shape_11->_vptr.Shape, D.21118
-	addq	$16, %rax	#, D.21118
-	movq	(%rax), %rax	# *_13, D.21119
-	movq	-40(%rbp), %rdx	# shape, tmp87
-	movq	%rdx, %rdi	# tmp87,
+	.loc 1 17 0 is_stmt 1
+	movq	-40(%rbp), %rax	# shape, tmp89
+	movq	(%rax), %rax	# shape_13->_vptr.Shape, D.21133
+	addq	$16, %rax	#, D.21133
+	movq	(%rax), %rax	# *_15, D.21134
+	movq	-40(%rbp), %rdx	# shape, tmp90
+	movq	%rdx, %rdi	# tmp90,
 .LEHB4:
-	call	*%rax	# D.21119
-	movl	%eax, -44(%rbp)	# D.21120, areaShape
-	.loc 1 17 0
-	leaq	-80(%rbp), %rax	#, tmp88
+	call	*%rax	# D.21134
+	movl	%eax, -44(%rbp)	# D.21135, areaShape
+	.loc 1 19 0
+	leaq	-80(%rbp), %rax	#, tmp91
 	movl	$10, %edx	#,
 	movl	$10, %esi	#,
-	movq	%rax, %rdi	# tmp88,
+	movq	%rax, %rdi	# tmp91,
 	call	_ZN8TriangleC1Eii	#
 .LEHE4:
-	.loc 1 18 0
-	leaq	-80(%rbp), %rax	#, tmp89
-	movq	%rax, %rdi	# tmp89,
+	.loc 1 20 0
+	leaq	-80(%rbp), %rax	#, tmp92
+	movq	%rax, %rdi	# tmp92,
 .LEHB5:
 	call	_Z7getAreaR5Shape	#
-	movl	%eax, -48(%rbp)	# D.21120, areaTri
-	.loc 1 20 0
-	leaq	-96(%rbp), %rax	#, tmp90
-	movq	%rax, %rdi	# tmp90,
+	movl	%eax, -48(%rbp)	# D.21135, areaTri
+	.loc 1 22 0
+	leaq	-96(%rbp), %rax	#, tmp93
+	movq	%rax, %rdi	# tmp93,
 	call	_ZN5ShapeC1Ev	#
 .LEHE5:
-	.loc 1 21 0
-	leaq	-96(%rbp), %rax	#, tmp91
-	movq	%rax, %rdi	# tmp91,
+	.loc 1 23 0
+	leaq	-96(%rbp), %rax	#, tmp94
+	movq	%rax, %rdi	# tmp94,
 .LEHB6:
 	call	_Z7getAreaR5Shape	#
-	movl	%eax, -52(%rbp)	# D.21120, areaPoly
-	.loc 1 22 0
-	movl	-48(%rbp), %eax	# areaTri, tmp92
-	cmpl	-28(%rbp), %eax	# areaRect, tmp92
+	movl	%eax, -52(%rbp)	# D.21135, areaPoly
+	.loc 1 24 0
+	leaq	-96(%rbp), %rax	#, tmp95
+	movq	%rax, %rdi	# tmp95,
+	call	_Z12getPerimeterR5Shape	#
+	.loc 1 24 0 is_stmt 0 discriminator 1
+	movl	%eax, -56(%rbp)	# D.21135, perimPoly
+	.loc 1 26 0 is_stmt 1 discriminator 1
+	movl	-48(%rbp), %eax	# areaTri, tmp96
+	cmpl	-28(%rbp), %eax	# areaRect, tmp96
 	jle	.L2	#,
-	.loc 1 23 0
+	.loc 1 27 0
 	movl	$.LC0, %esi	#,
 	movl	$_ZSt4cout, %edi	#,
 	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc	#
 	movl	$_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_, %esi	#,
-	movq	%rax, %rdi	# D.21121,
+	movq	%rax, %rdi	# D.21136,
 	call	_ZNSolsEPFRSoS_E	#
 	jmp	.L3	#
 .L2:
-	.loc 1 25 0
-	movl	-28(%rbp), %eax	# areaRect, tmp93
-	cmpl	-48(%rbp), %eax	# areaTri, tmp93
+	.loc 1 29 0
+	movl	-28(%rbp), %eax	# areaRect, tmp97
+	cmpl	-48(%rbp), %eax	# areaTri, tmp97
 	jle	.L4	#,
-	.loc 1 26 0
+	.loc 1 30 0
 	movl	$.LC1, %esi	#,
 	movl	$_ZSt4cout, %edi	#,
 	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc	#
 	movl	$_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_, %esi	#,
-	movq	%rax, %rdi	# D.21121,
+	movq	%rax, %rdi	# D.21136,
 	call	_ZNSolsEPFRSoS_E	#
 	jmp	.L3	#
 .L4:
-	.loc 1 29 0
+	.loc 1 33 0
 	movl	$.LC2, %esi	#,
 	movl	$_ZSt4cout, %edi	#,
 	call	_ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc	#
 	movl	$_ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_, %esi	#,
-	movq	%rax, %rdi	# D.21121,
+	movq	%rax, %rdi	# D.21136,
 	call	_ZNSolsEPFRSoS_E	#
 .L3:
-	.loc 1 32 0
+	.loc 1 36 0
 	cmpq	$0, -24(%rbp)	#, rect
 	je	.L5	#,
-	.loc 1 32 0 is_stmt 0 discriminator 1
-	movq	-24(%rbp), %rax	# rect, tmp94
-	movq	(%rax), %rax	# rect_3->_vptr.Shape, D.21118
-	addq	$8, %rax	#, D.21118
-	movq	(%rax), %rax	# *_28, D.21119
-	movq	-24(%rbp), %rdx	# rect, tmp95
-	movq	%rdx, %rdi	# tmp95,
-	call	*%rax	# D.21119
+	.loc 1 36 0 is_stmt 0 discriminator 1
+	movq	-24(%rbp), %rax	# rect, tmp98
+	movq	(%rax), %rax	# rect_3->_vptr.Shape, D.21133
+	addq	$8, %rax	#, D.21133
+	movq	(%rax), %rax	# *_32, D.21134
+	movq	-24(%rbp), %rdx	# rect, tmp99
+	movq	%rdx, %rdi	# tmp99,
+	call	*%rax	# D.21134
 .LEHE6:
 .L5:
-	.loc 1 33 0 is_stmt 1
-	movl	$0, %ebx	#, D.21120
-	.loc 1 20 0
-	leaq	-96(%rbp), %rax	#, tmp96
-	movq	%rax, %rdi	# tmp96,
+	.loc 1 37 0 is_stmt 1
+	movl	$0, %ebx	#, D.21135
+	.loc 1 22 0
+	leaq	-96(%rbp), %rax	#, tmp100
+	movq	%rax, %rdi	# tmp100,
 .LEHB7:
 	call	_ZN5ShapeD1Ev	#
 .LEHE7:
-	.loc 1 33 0
-	leaq	-80(%rbp), %rax	#, tmp97
-	movq	%rax, %rdi	# tmp97,
+	.loc 1 37 0
+	leaq	-80(%rbp), %rax	#, tmp101
+	movq	%rax, %rdi	# tmp101,
 .LEHB8:
 	call	_ZN8TriangleD1Ev	#
-	movl	%ebx, %eax	# D.21120, <retval>
+	movl	%ebx, %eax	# D.21135, <retval>
 	jmp	.L15	#
 .L11:
-	movq	%rax, %r12	#, tmp99
-	.loc 1 11 0
+	movq	%rax, %r12	#, tmp103
+	.loc 1 12 0
 	movq	%rbx, %rdi	# rect.0,
 	call	_ZdlPv	#
-	movq	%r12, %rax	# tmp99, D.21114
-	movq	%rax, %rdi	# D.21114,
+	movq	%r12, %rax	# tmp103, D.21129
+	movq	%rax, %rdi	# D.21129,
 	call	_Unwind_Resume	#
 .L12:
-	movq	%rax, %r12	#, tmp100
-	.loc 1 14 0
+	movq	%rax, %r12	#, tmp104
+	.loc 1 16 0
 	movq	%rbx, %rdi	# shape.1,
 	call	_ZdlPv	#
-	movq	%r12, %rax	# tmp100, D.21115
-	movq	%rax, %rdi	# D.21115,
+	movq	%r12, %rax	# tmp104, D.21130
+	movq	%rax, %rdi	# D.21130,
 	call	_Unwind_Resume	#
 .LEHE8:
 .L14:
-	movq	%rax, %rbx	#, tmp103
-	.loc 1 20 0
-	leaq	-96(%rbp), %rax	#, tmp101
-	movq	%rax, %rdi	# tmp101,
+	movq	%rax, %rbx	#, tmp107
+	.loc 1 22 0
+	leaq	-96(%rbp), %rax	#, tmp105
+	movq	%rax, %rdi	# tmp105,
 	call	_ZN5ShapeD1Ev	#
 	jmp	.L10	#
 .L13:
-	movq	%rax, %rbx	#, tmp102
+	movq	%rax, %rbx	#, tmp106
 .L10:
-	.loc 1 33 0
-	leaq	-80(%rbp), %rax	#, tmp106
-	movq	%rax, %rdi	# tmp106,
+	.loc 1 37 0
+	leaq	-80(%rbp), %rax	#, tmp110
+	movq	%rax, %rdi	# tmp110,
 	call	_ZN8TriangleD1Ev	#
-	movq	%rbx, %rax	# tmp102, D.21116
-	movq	%rax, %rdi	# D.21116,
+	movq	%rbx, %rax	# tmp106, D.21131
+	movq	%rax, %rdi	# D.21131,
 .LEHB9:
 	call	_Unwind_Resume	#
 .LEHE9:
 .L15:
 .LBE2:
-	.loc 1 34 0
+	.loc 1 38 0
 	addq	$96, %rsp	#,
 	popq	%rbx	#
 	popq	%r12	#
@@ -295,7 +306,7 @@ main:
 	.type	_Z7getAreaR5Shape, @function
 _Z7getAreaR5Shape:
 .LFB972:
-	.loc 1 37 0
+	.loc 1 41 0
 	.cfi_startproc
 	pushq	%rbp	#
 	.cfi_def_cfa_offset 16
@@ -304,25 +315,49 @@ _Z7getAreaR5Shape:
 	.cfi_def_cfa_register 6
 	subq	$16, %rsp	#,
 	movq	%rdi, -8(%rbp)	# poly, poly
-	.loc 1 38 0
+	.loc 1 42 0
 	movq	-8(%rbp), %rax	# poly, tmp64
-	movq	(%rax), %rax	# poly_1(D)->_vptr.Shape, D.21125
-	addq	$16, %rax	#, D.21125
-	movq	(%rax), %rax	# *_3, D.21126
+	movq	(%rax), %rax	# poly_1(D)->_vptr.Shape, D.21140
+	addq	$16, %rax	#, D.21140
+	movq	(%rax), %rax	# *_3, D.21141
 	movq	-8(%rbp), %rdx	# poly, tmp65
 	movq	%rdx, %rdi	# tmp65,
-	call	*%rax	# D.21126
-	.loc 1 39 0
+	call	*%rax	# D.21141
+	.loc 1 43 0
 	leave
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
 .LFE972:
 	.size	_Z7getAreaR5Shape, .-_Z7getAreaR5Shape
+	.globl	_Z12getPerimeterR5Shape
+	.type	_Z12getPerimeterR5Shape, @function
+_Z12getPerimeterR5Shape:
+.LFB973:
+	.loc 1 46 0
+	.cfi_startproc
+	pushq	%rbp	#
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp	#,
+	.cfi_def_cfa_register 6
+	subq	$16, %rsp	#,
+	movq	%rdi, -8(%rbp)	# poly, poly
+	.loc 1 47 0
+	movq	-8(%rbp), %rax	# poly, tmp61
+	movq	%rax, %rdi	# tmp61,
+	call	_ZN5Shape9perimeterEv	#
+	.loc 1 48 0
+	leave
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE973:
+	.size	_Z12getPerimeterR5Shape, .-_Z12getPerimeterR5Shape
 	.type	_Z41__static_initialization_and_destruction_0ii, @function
 _Z41__static_initialization_and_destruction_0ii:
-.LFB981:
-	.loc 1 39 0
+.LFB982:
+	.loc 1 48 0
 	.cfi_startproc
 	pushq	%rbp	#
 	.cfi_def_cfa_offset 16
@@ -332,12 +367,12 @@ _Z41__static_initialization_and_destruction_0ii:
 	subq	$16, %rsp	#,
 	movl	%edi, -4(%rbp)	# __initialize_p, __initialize_p
 	movl	%esi, -8(%rbp)	# __priority, __priority
-	.loc 1 39 0
+	.loc 1 48 0
 	cmpl	$1, -4(%rbp)	#, __initialize_p
-	jne	.L18	#,
-	.loc 1 39 0 is_stmt 0 discriminator 1
+	jne	.L20	#,
+	.loc 1 48 0 is_stmt 0 discriminator 1
 	cmpl	$65535, -8(%rbp)	#, __priority
-	jne	.L18	#,
+	jne	.L20	#,
 	.file 2 "/usr/include/c++/4.8.3/iostream"
 	.loc 2 74 0 is_stmt 1
 	movl	$_ZStL8__ioinit, %edi	#,
@@ -346,25 +381,25 @@ _Z41__static_initialization_and_destruction_0ii:
 	movl	$_ZStL8__ioinit, %esi	#,
 	movl	$_ZNSt8ios_base4InitD1Ev, %edi	#,
 	call	__cxa_atexit	#
-.L18:
-	.loc 1 39 0
+.L20:
+	.loc 1 48 0
 	leave
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-.LFE981:
+.LFE982:
 	.size	_Z41__static_initialization_and_destruction_0ii, .-_Z41__static_initialization_and_destruction_0ii
 	.type	_GLOBAL__sub_I_main, @function
 _GLOBAL__sub_I_main:
-.LFB982:
-	.loc 1 39 0
+.LFB983:
+	.loc 1 48 0
 	.cfi_startproc
 	pushq	%rbp	#
 	.cfi_def_cfa_offset 16
 	.cfi_offset 6, -16
 	movq	%rsp, %rbp	#,
 	.cfi_def_cfa_register 6
-	.loc 1 39 0
+	.loc 1 48 0
 	movl	$65535, %esi	#,
 	movl	$1, %edi	#,
 	call	_Z41__static_initialization_and_destruction_0ii	#
@@ -372,7 +407,7 @@ _GLOBAL__sub_I_main:
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
-.LFE982:
+.LFE983:
 	.size	_GLOBAL__sub_I_main, .-_GLOBAL__sub_I_main
 	.section	.init_array,"aw"
 	.align 8
@@ -400,20 +435,20 @@ _GLOBAL__sub_I_main:
 	.file 21 "/usr/include/wctype.h"
 	.section	.debug_info,"",@progbits
 .Ldebug_info0:
-	.long	0x15f2
+	.long	0x1648
 	.value	0x4
 	.long	.Ldebug_abbrev0
 	.byte	0x8
 	.uleb128 0x1
-	.long	.LASF265
+	.long	.LASF271
 	.byte	0x4
-	.long	.LASF266
-	.long	.LASF267
+	.long	.LASF272
+	.long	.LASF273
 	.quad	.Ltext0
 	.quad	.Letext0-.Ltext0
 	.long	.Ldebug_line0
 	.uleb128 0x2
-	.long	.LASF268
+	.long	.LASF274
 	.uleb128 0x3
 	.long	.LASF6
 	.byte	0x4
@@ -478,7 +513,7 @@ _GLOBAL__sub_I_main:
 	.byte	0x8
 	.byte	0x6
 	.byte	0x53
-	.long	.LASF269
+	.long	.LASF275
 	.long	0xec
 	.uleb128 0xa
 	.byte	0x4
@@ -795,7 +830,7 @@ _GLOBAL__sub_I_main:
 	.value	0x10a
 	.long	0x118f
 	.uleb128 0x14
-	.long	.LASF270
+	.long	.LASF276
 	.byte	0x11
 	.byte	0x30
 	.uleb128 0x5
@@ -818,7 +853,7 @@ _GLOBAL__sub_I_main:
 	.long	.LASF33
 	.byte	0x8
 	.byte	0xf2
-	.long	.LASF271
+	.long	.LASF277
 	.long	0x333
 	.uleb128 0x16
 	.long	0x11de
@@ -969,13 +1004,13 @@ _GLOBAL__sub_I_main:
 	.string	"eof"
 	.byte	0x8
 	.value	0x124
-	.long	.LASF272
+	.long	.LASF278
 	.long	0x30e
 	.uleb128 0x1b
 	.long	.LASF41
 	.byte	0x8
 	.value	0x128
-	.long	.LASF273
+	.long	.LASF279
 	.long	0x30e
 	.uleb128 0x16
 	.long	0x11fd
@@ -1430,10 +1465,10 @@ _GLOBAL__sub_I_main:
 	.byte	0x88
 	.long	0x844
 	.uleb128 0x2a
-	.long	.LASF274
+	.long	.LASF280
 	.byte	0x2
 	.byte	0x3d
-	.long	.LASF275
+	.long	.LASF281
 	.long	0x860
 	.uleb128 0x2b
 	.long	.LASF244
@@ -2376,7 +2411,7 @@ _GLOBAL__sub_I_main:
 	.long	0x11c4
 	.byte	0
 	.uleb128 0x33
-	.long	.LASF276
+	.long	.LASF282
 	.byte	0x1
 	.byte	0x10
 	.byte	0x37
@@ -2745,19 +2780,19 @@ _GLOBAL__sub_I_main:
 	.uleb128 0xf
 	.long	0xe27
 	.uleb128 0x37
-	.long	.LASF277
+	.long	.LASF283
 	.byte	0x1
-	.byte	0x9
+	.byte	0xa
 	.long	0x103
 	.quad	.LFB971
 	.quad	.LFE971-.LFB971
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x14d5
+	.long	0x14f2
 	.uleb128 0x38
 	.long	.LASF242
 	.byte	0x1
-	.byte	0x9
+	.byte	0xa
 	.long	0x103
 	.uleb128 0x3
 	.byte	0x91
@@ -2765,7 +2800,7 @@ _GLOBAL__sub_I_main:
 	.uleb128 0x38
 	.long	.LASF243
 	.byte	0x1
-	.byte	0x9
+	.byte	0xa
 	.long	0x1376
 	.uleb128 0x3
 	.byte	0x91
@@ -2776,15 +2811,15 @@ _GLOBAL__sub_I_main:
 	.uleb128 0x3a
 	.long	.LASF245
 	.byte	0x1
-	.byte	0xb
-	.long	0x14da
+	.byte	0xc
+	.long	0x14f7
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -40
 	.uleb128 0x3a
 	.long	.LASF246
 	.byte	0x1
-	.byte	0xc
+	.byte	0xd
 	.long	0x103
 	.uleb128 0x2
 	.byte	0x91
@@ -2793,14 +2828,22 @@ _GLOBAL__sub_I_main:
 	.long	.LASF247
 	.byte	0x1
 	.byte	0xe
-	.long	0x14da
+	.long	0x103
+	.uleb128 0x2
+	.byte	0x91
+	.sleb128 -48
+	.uleb128 0x3a
+	.long	.LASF248
+	.byte	0x1
+	.byte	0x10
+	.long	0x14f7
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -56
 	.uleb128 0x3a
-	.long	.LASF248
+	.long	.LASF249
 	.byte	0x1
-	.byte	0xf
+	.byte	0x11
 	.long	0x103
 	.uleb128 0x2
 	.byte	0x91
@@ -2808,101 +2851,131 @@ _GLOBAL__sub_I_main:
 	.uleb128 0x3b
 	.string	"tri"
 	.byte	0x1
-	.byte	0x11
-	.long	0x14e0
+	.byte	0x13
+	.long	0x14fd
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -96
 	.uleb128 0x3a
-	.long	.LASF249
+	.long	.LASF250
 	.byte	0x1
-	.byte	0x12
+	.byte	0x14
 	.long	0x103
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -64
 	.uleb128 0x3a
-	.long	.LASF250
+	.long	.LASF251
 	.byte	0x1
-	.byte	0x14
-	.long	0x14d5
+	.byte	0x16
+	.long	0x14f2
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -112
 	.uleb128 0x3a
-	.long	.LASF251
+	.long	.LASF252
 	.byte	0x1
-	.byte	0x15
+	.byte	0x17
 	.long	0x103
 	.uleb128 0x3
 	.byte	0x91
 	.sleb128 -68
+	.uleb128 0x3a
+	.long	.LASF253
+	.byte	0x1
+	.byte	0x18
+	.long	0x103
+	.uleb128 0x3
+	.byte	0x91
+	.sleb128 -72
 	.byte	0
 	.byte	0
 	.uleb128 0x3c
-	.long	.LASF252
+	.long	.LASF254
 	.uleb128 0x10
 	.byte	0x8
-	.long	0x14d5
+	.long	0x14f2
 	.uleb128 0x3c
-	.long	.LASF253
+	.long	.LASF255
 	.uleb128 0x3d
-	.long	.LASF278
+	.long	.LASF256
 	.byte	0x1
-	.byte	0x24
-	.long	.LASF279
+	.byte	0x28
+	.long	.LASF258
 	.long	0x103
 	.quad	.LFB972
 	.quad	.LFE972-.LFB972
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x1519
+	.long	0x1536
 	.uleb128 0x38
-	.long	.LASF250
+	.long	.LASF251
 	.byte	0x1
-	.byte	0x24
-	.long	0x1519
+	.byte	0x28
+	.long	0x1536
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
 	.byte	0
 	.uleb128 0xf
-	.long	0x151e
+	.long	0x153b
 	.uleb128 0x35
 	.byte	0x8
-	.long	0x14d5
-	.uleb128 0x3e
-	.long	.LASF280
-	.quad	.LFB981
-	.quad	.LFE981-.LFB981
+	.long	0x14f2
+	.uleb128 0x3d
+	.long	.LASF257
+	.byte	0x1
+	.byte	0x2d
+	.long	.LASF259
+	.long	0x103
+	.quad	.LFB973
+	.quad	.LFE973-.LFB973
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x155c
+	.long	0x1575
 	.uleb128 0x38
-	.long	.LASF254
+	.long	.LASF251
 	.byte	0x1
-	.byte	0x27
+	.byte	0x2d
+	.long	0x1575
+	.uleb128 0x2
+	.byte	0x91
+	.sleb128 -24
+	.byte	0
+	.uleb128 0xf
+	.long	0x153b
+	.uleb128 0x3e
+	.long	.LASF284
+	.quad	.LFB982
+	.quad	.LFE982-.LFB982
+	.uleb128 0x1
+	.byte	0x9c
+	.long	0x15b2
+	.uleb128 0x38
+	.long	.LASF260
+	.byte	0x1
+	.byte	0x30
 	.long	0x103
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -20
 	.uleb128 0x38
-	.long	.LASF255
+	.long	.LASF261
 	.byte	0x1
-	.byte	0x27
+	.byte	0x30
 	.long	0x103
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
 	.byte	0
 	.uleb128 0x3f
-	.long	.LASF281
-	.quad	.LFB982
-	.quad	.LFE982-.LFB982
+	.long	.LASF285
+	.quad	.LFB983
+	.quad	.LFE983-.LFB983
 	.uleb128 0x1
 	.byte	0x9c
 	.uleb128 0x40
-	.long	.LASF256
+	.long	.LASF262
 	.long	0x88
 	.uleb128 0x41
 	.long	0x87a
@@ -2911,35 +2984,35 @@ _GLOBAL__sub_I_main:
 	.quad	_ZStL8__ioinit
 	.uleb128 0x42
 	.long	0x100b
-	.long	.LASF257
+	.long	.LASF263
 	.sleb128 -2147483648
 	.uleb128 0x43
 	.long	0x1016
-	.long	.LASF258
+	.long	.LASF264
 	.long	0x7fffffff
 	.uleb128 0x44
 	.long	0x106e
-	.long	.LASF259
+	.long	.LASF265
 	.byte	0x40
 	.uleb128 0x44
 	.long	0x109a
-	.long	.LASF260
+	.long	.LASF266
 	.byte	0x7f
 	.uleb128 0x42
 	.long	0x10d1
-	.long	.LASF261
+	.long	.LASF267
 	.sleb128 -32768
 	.uleb128 0x45
 	.long	0x10dc
-	.long	.LASF262
+	.long	.LASF268
 	.value	0x7fff
 	.uleb128 0x42
 	.long	0x110f
-	.long	.LASF263
+	.long	.LASF269
 	.sleb128 -9223372036854775808
 	.uleb128 0x46
 	.long	0x111a
-	.long	.LASF264
+	.long	.LASF270
 	.quad	0x7fffffffffffffff
 	.byte	0
 	.section	.debug_abbrev,"",@progbits
@@ -3960,7 +4033,7 @@ _GLOBAL__sub_I_main:
 	.section	.debug_line,"",@progbits
 .Ldebug_line0:
 	.section	.debug_str,"MS",@progbits,1
-.LASF281:
+.LASF285:
 	.string	"_GLOBAL__sub_I_main"
 .LASF80:
 	.string	"_S_end"
@@ -3974,7 +4047,7 @@ _GLOBAL__sub_I_main:
 	.string	"__value"
 .LASF186:
 	.string	"__numeric_traits_integer<int>"
-.LASF258:
+.LASF264:
 	.string	"_ZN9__gnu_cxx24__numeric_traits_integerIiE5__maxE"
 .LASF86:
 	.string	"boolalpha"
@@ -3982,12 +4055,14 @@ _GLOBAL__sub_I_main:
 	.string	"scientific"
 .LASF188:
 	.string	"__max"
-.LASF267:
+.LASF273:
 	.string	"/home/llammers/EECS/692/polymorphism"
 .LASF144:
 	.string	"wcscspn"
 .LASF233:
 	.string	"localeconv"
+.LASF247:
+	.string	"perimRect"
 .LASF218:
 	.string	"frac_digits"
 .LASF210:
@@ -4038,7 +4113,7 @@ _GLOBAL__sub_I_main:
 	.string	"_Ios_Openmode"
 .LASF21:
 	.string	"int_type"
-.LASF277:
+.LASF283:
 	.string	"main"
 .LASF227:
 	.string	"int_n_cs_precedes"
@@ -4056,13 +4131,13 @@ _GLOBAL__sub_I_main:
 	.string	"_Value"
 .LASF74:
 	.string	"_S_eofbit"
-.LASF266:
+.LASF272:
 	.string	"main.cpp"
 .LASF153:
 	.string	"tm_yday"
 .LASF202:
 	.string	"signed char"
-.LASF268:
+.LASF274:
 	.string	"_IO_FILE"
 .LASF110:
 	.string	"basic_ostream<char, std::char_traits<char> >"
@@ -4086,9 +4161,9 @@ _GLOBAL__sub_I_main:
 	.string	"wmemchr"
 .LASF72:
 	.string	"_S_goodbit"
-.LASF265:
+.LASF271:
 	.string	"GNU C++ 4.8.3 20140911 (Red Hat 4.8.3-7) -mtune=generic -march=x86-64 -g -O0"
-.LASF262:
+.LASF268:
 	.string	"_ZN9__gnu_cxx24__numeric_traits_integerIsE5__maxE"
 .LASF66:
 	.string	"_S_bin"
@@ -4100,7 +4175,7 @@ _GLOBAL__sub_I_main:
 	.string	"swprintf"
 .LASF181:
 	.string	"wcspbrk"
-.LASF264:
+.LASF270:
 	.string	"_ZN9__gnu_cxx24__numeric_traits_integerIlE5__maxE"
 .LASF189:
 	.string	"__is_signed"
@@ -4108,6 +4183,8 @@ _GLOBAL__sub_I_main:
 	.string	"_S_out"
 .LASF14:
 	.string	"char"
+.LASF259:
+	.string	"_Z12getPerimeterR5Shape"
 .LASF64:
 	.string	"_S_app"
 .LASF241:
@@ -4136,7 +4213,7 @@ _GLOBAL__sub_I_main:
 	.string	"fp_offset"
 .LASF42:
 	.string	"ptrdiff_t"
-.LASF257:
+.LASF263:
 	.string	"_ZN9__gnu_cxx24__numeric_traits_integerIiE5__minE"
 .LASF237:
 	.string	"wctrans_t"
@@ -4150,7 +4227,7 @@ _GLOBAL__sub_I_main:
 	.string	"int_p_cs_precedes"
 .LASF121:
 	.string	"fwprintf"
-.LASF274:
+.LASF280:
 	.string	"cout"
 .LASF199:
 	.string	"wcstoull"
@@ -4172,8 +4249,10 @@ _GLOBAL__sub_I_main:
 	.string	"fixed"
 .LASF135:
 	.string	"vswprintf"
-.LASF279:
+.LASF258:
 	.string	"_Z7getAreaR5Shape"
+.LASF253:
+	.string	"perimPoly"
 .LASF176:
 	.string	"wmemset"
 .LASF108:
@@ -4192,6 +4271,8 @@ _GLOBAL__sub_I_main:
 	.string	"putwchar"
 .LASF173:
 	.string	"wmemcmp"
+.LASF257:
+	.string	"getPerimeter"
 .LASF65:
 	.string	"_S_ate"
 .LASF32:
@@ -4202,7 +4283,7 @@ _GLOBAL__sub_I_main:
 	.string	"_S_fixed"
 .LASF228:
 	.string	"int_n_sep_by_space"
-.LASF255:
+.LASF261:
 	.string	"__priority"
 .LASF29:
 	.string	"move"
@@ -4222,7 +4303,7 @@ _GLOBAL__sub_I_main:
 	.string	"p_sep_by_space"
 .LASF39:
 	.string	"eq_int_type"
-.LASF249:
+.LASF250:
 	.string	"areaTri"
 .LASF242:
 	.string	"argc"
@@ -4246,7 +4327,7 @@ _GLOBAL__sub_I_main:
 	.string	"wmemcpy"
 .LASF150:
 	.string	"tm_mon"
-.LASF253:
+.LASF255:
 	.string	"Triangle"
 .LASF44:
 	.string	"_S_dec"
@@ -4256,9 +4337,9 @@ _GLOBAL__sub_I_main:
 	.string	"double"
 .LASF28:
 	.string	"_ZNSt11char_traitsIcE4findEPKcmRS1_"
-.LASF252:
+.LASF254:
 	.string	"Shape"
-.LASF261:
+.LASF267:
 	.string	"_ZN9__gnu_cxx24__numeric_traits_integerIsE5__minE"
 .LASF172:
 	.string	"wctob"
@@ -4270,15 +4351,15 @@ _GLOBAL__sub_I_main:
 	.string	"gp_offset"
 .LASF58:
 	.string	"_S_adjustfield"
-.LASF259:
+.LASF265:
 	.string	"_ZN9__gnu_cxx24__numeric_traits_integerImE8__digitsE"
 .LASF166:
 	.string	"float"
-.LASF248:
+.LASF249:
 	.string	"areaShape"
 .LASF88:
 	.string	"internal"
-.LASF275:
+.LASF281:
 	.string	"_ZSt4cout"
 .LASF147:
 	.string	"tm_min"
@@ -4286,7 +4367,7 @@ _GLOBAL__sub_I_main:
 	.string	"_S_left"
 .LASF5:
 	.string	"unsigned int"
-.LASF263:
+.LASF269:
 	.string	"_ZN9__gnu_cxx24__numeric_traits_integerIlE5__minE"
 .LASF19:
 	.string	"char_traits<char>"
@@ -4300,7 +4381,7 @@ _GLOBAL__sub_I_main:
 	.string	"p_sign_posn"
 .LASF40:
 	.string	"_ZNSt11char_traitsIcE11eq_int_typeERKiS2_"
-.LASF278:
+.LASF256:
 	.string	"getArea"
 .LASF57:
 	.string	"_S_uppercase"
@@ -4314,7 +4395,7 @@ _GLOBAL__sub_I_main:
 	.string	"_S_ios_fmtflags_end"
 .LASF84:
 	.string	"Init"
-.LASF250:
+.LASF251:
 	.string	"poly"
 .LASF113:
 	.string	"ostream"
@@ -4328,7 +4409,7 @@ _GLOBAL__sub_I_main:
 	.string	"rect"
 .LASF205:
 	.string	"bool"
-.LASF251:
+.LASF252:
 	.string	"areaPoly"
 .LASF34:
 	.string	"_ZNSt11char_traitsIcE6assignEPcmc"
@@ -4336,7 +4417,7 @@ _GLOBAL__sub_I_main:
 	.string	"long double"
 .LASF128:
 	.string	"putwc"
-.LASF276:
+.LASF282:
 	.string	"__numeric_traits_integer<long int>"
 .LASF94:
 	.string	"showpos"
@@ -4346,7 +4427,7 @@ _GLOBAL__sub_I_main:
 	.string	"_S_oct"
 .LASF11:
 	.string	"__wchb"
-.LASF280:
+.LASF284:
 	.string	"__static_initialization_and_destruction_0"
 .LASF180:
 	.string	"_ZNSt11char_traitsIcE7compareEPKcS2_m"
@@ -4368,7 +4449,7 @@ _GLOBAL__sub_I_main:
 	.string	"wcsstr"
 .LASF71:
 	.string	"_Ios_Iostate"
-.LASF260:
+.LASF266:
 	.string	"_ZN9__gnu_cxx24__numeric_traits_integerIcE5__maxE"
 .LASF161:
 	.string	"wcsrtombs"
@@ -4384,7 +4465,7 @@ _GLOBAL__sub_I_main:
 	.string	"floatfield"
 .LASF131:
 	.string	"swscanf"
-.LASF254:
+.LASF260:
 	.string	"__initialize_p"
 .LASF190:
 	.string	"__digits"
@@ -4426,7 +4507,7 @@ _GLOBAL__sub_I_main:
 	.string	"to_int_type"
 .LASF35:
 	.string	"to_char_type"
-.LASF270:
+.LASF276:
 	.string	"__debug"
 .LASF155:
 	.string	"tm_gmtoff"
@@ -4442,17 +4523,17 @@ _GLOBAL__sub_I_main:
 	.string	"mon_grouping"
 .LASF79:
 	.string	"_S_cur"
-.LASF271:
+.LASF277:
 	.string	"_ZNSt11char_traitsIcE6assignERcRKc"
 .LASF140:
 	.string	"wcscat"
-.LASF269:
+.LASF275:
 	.string	"11__mbstate_t"
 .LASF229:
 	.string	"int_p_sign_posn"
 .LASF156:
 	.string	"tm_zone"
-.LASF247:
+.LASF248:
 	.string	"shape"
 .LASF138:
 	.string	"vwscanf"
@@ -4464,13 +4545,13 @@ _GLOBAL__sub_I_main:
 	.string	"lconv"
 .LASF96:
 	.string	"unitbuf"
-.LASF272:
+.LASF278:
 	.string	"_ZNSt11char_traitsIcE3eofEv"
 .LASF158:
 	.string	"wcsncat"
 .LASF194:
 	.string	"__numeric_traits_integer<short int>"
-.LASF256:
+.LASF262:
 	.string	"__dso_handle"
 .LASF198:
 	.string	"long long int"
@@ -4514,7 +4595,7 @@ _GLOBAL__sub_I_main:
 	.string	"grouping"
 .LASF177:
 	.string	"wprintf"
-.LASF273:
+.LASF279:
 	.string	"_ZNSt11char_traitsIcE7not_eofERKi"
 .LASF51:
 	.string	"_S_scientific"

@@ -49,11 +49,11 @@ _ZN9RectangleC2Eii:
 	movl	%edx, -16(%rbp)	# width, width
 .LBB2:
 	.loc 1 3 0
-	movq	-8(%rbp), %rax	# this, D.2333
-	movq	%rax, %rdi	# D.2333,
+	movq	-8(%rbp), %rax	# this, D.2335
+	movq	%rax, %rdi	# D.2335,
 	call	_ZN5ShapeC2Ev	#
 	movq	-8(%rbp), %rax	# this, tmp60
-	movq	$_ZTV9Rectangle+16, (%rax)	#, this_1(D)->D.2259._vptr.Shape
+	movq	$_ZTV9Rectangle+16, (%rax)	#, this_1(D)->D.2261._vptr.Shape
 	movq	-8(%rbp), %rax	# this, tmp61
 	movl	-12(%rbp), %edx	# height, tmp62
 	movl	%edx, 8(%rax)	# tmp62, this_1(D)->m_height
@@ -87,14 +87,14 @@ _ZN9RectangleD2Ev:
 .LBB3:
 	.loc 1 7 0
 	movq	-8(%rbp), %rax	# this, tmp61
-	movq	$_ZTV9Rectangle+16, (%rax)	#, this_1(D)->D.2259._vptr.Shape
-	movq	-8(%rbp), %rax	# this, D.2334
-	movq	%rax, %rdi	# D.2334,
+	movq	$_ZTV9Rectangle+16, (%rax)	#, this_1(D)->D.2261._vptr.Shape
+	movq	-8(%rbp), %rax	# this, D.2336
+	movq	%rax, %rdi	# D.2336,
 	call	_ZN5ShapeD2Ev	#
 .LBE3:
 	.loc 1 9 0
-	movl	$0, %eax	#, D.2335
-	testl	%eax, %eax	# D.2335
+	movl	$0, %eax	#, D.2337
+	testl	%eax, %eax	# D.2337
 	je	.L2	#,
 	.loc 1 9 0 is_stmt 0 discriminator 1
 	movq	-8(%rbp), %rax	# this, tmp62
@@ -152,11 +152,11 @@ _ZN9Rectangle9perimeterEv:
 	movq	%rdi, -8(%rbp)	# this, this
 	.loc 1 13 0
 	movq	-8(%rbp), %rax	# this, tmp64
-	movl	8(%rax), %edx	# this_1(D)->m_height, D.2336
+	movl	8(%rax), %edx	# this_1(D)->m_height, D.2338
 	movq	-8(%rbp), %rax	# this, tmp65
-	movl	12(%rax), %eax	# this_1(D)->m_width, D.2336
-	addl	%edx, %eax	# D.2336, D.2336
-	addl	%eax, %eax	# D.2336
+	movl	12(%rax), %eax	# this_1(D)->m_width, D.2338
+	addl	%edx, %eax	# D.2338, D.2338
+	addl	%eax, %eax	# D.2338
 	.loc 1 14 0
 	popq	%rbp	#
 	.cfi_def_cfa 7, 8
@@ -179,10 +179,10 @@ _ZN9Rectangle4areaEv:
 	movq	%rdi, -8(%rbp)	# this, this
 	.loc 1 18 0
 	movq	-8(%rbp), %rax	# this, tmp63
-	movl	12(%rax), %edx	# this_1(D)->m_width, D.2337
+	movl	12(%rax), %edx	# this_1(D)->m_width, D.2339
 	movq	-8(%rbp), %rax	# this, tmp64
-	movl	8(%rax), %eax	# this_1(D)->m_height, D.2337
-	imull	%edx, %eax	# D.2337, D.2337
+	movl	8(%rax), %eax	# this_1(D)->m_height, D.2339
+	imull	%edx, %eax	# D.2339, D.2339
 	.loc 1 19 0
 	popq	%rbp	#
 	.cfi_def_cfa 7, 8

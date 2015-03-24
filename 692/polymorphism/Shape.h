@@ -8,6 +8,7 @@ public:
   virtual ~Shape();
 
   virtual int area();
+  int perimeter();
 };
 
 #endif
