@@ -31,9 +31,9 @@
 	.text
 .Ltext0:
 	.align 2
-	.globl	_ZN9RectangleC2Edd
-	.type	_ZN9RectangleC2Edd, @function
-_ZN9RectangleC2Edd:
+	.globl	_ZN9RectangleC2Eii
+	.type	_ZN9RectangleC2Eii, @function
+_ZN9RectangleC2Eii:
 .LFB1:
 	.file 1 "Rectangle.cpp"
 	.loc 1 3 0
@@ -43,23 +43,23 @@ _ZN9RectangleC2Edd:
 	.cfi_offset 6, -16
 	movq	%rsp, %rbp	#,
 	.cfi_def_cfa_register 6
-	subq	$32, %rsp	#,
+	subq	$16, %rsp	#,
 	movq	%rdi, -8(%rbp)	# this, this
-	movsd	%xmm0, -16(%rbp)	# height, height
-	movsd	%xmm1, -24(%rbp)	# width, width
+	movl	%esi, -12(%rbp)	# height, height
+	movl	%edx, -16(%rbp)	# width, width
 .LBB2:
 	.loc 1 3 0
-	movq	-8(%rbp), %rax	# this, D.2322
-	movq	%rax, %rdi	# D.2322,
+	movq	-8(%rbp), %rax	# this, D.2333
+	movq	%rax, %rdi	# D.2333,
 	call	_ZN5ShapeC2Ev	#
 	movq	-8(%rbp), %rax	# this, tmp60
-	movq	$_ZTV9Rectangle+16, (%rax)	#, this_1(D)->D.2257._vptr.Shape
-	movq	-8(%rbp), %rdx	# this, tmp61
-	movq	-16(%rbp), %rax	# height, tmp62
-	movq	%rax, 8(%rdx)	# tmp62, this_1(D)->m_height
-	movq	-8(%rbp), %rdx	# this, tmp63
-	movq	-24(%rbp), %rax	# width, tmp64
-	movq	%rax, 16(%rdx)	# tmp64, this_1(D)->m_width
+	movq	$_ZTV9Rectangle+16, (%rax)	#, this_1(D)->D.2259._vptr.Shape
+	movq	-8(%rbp), %rax	# this, tmp61
+	movl	-12(%rbp), %edx	# height, tmp62
+	movl	%edx, 8(%rax)	# tmp62, this_1(D)->m_height
+	movq	-8(%rbp), %rax	# this, tmp63
+	movl	-16(%rbp), %edx	# width, tmp64
+	movl	%edx, 12(%rax)	# tmp64, this_1(D)->m_width
 .LBE2:
 	.loc 1 5 0
 	leave
@@ -67,9 +67,9 @@ _ZN9RectangleC2Edd:
 	ret
 	.cfi_endproc
 .LFE1:
-	.size	_ZN9RectangleC2Edd, .-_ZN9RectangleC2Edd
-	.globl	_ZN9RectangleC1Edd
-	.set	_ZN9RectangleC1Edd,_ZN9RectangleC2Edd
+	.size	_ZN9RectangleC2Eii, .-_ZN9RectangleC2Eii
+	.globl	_ZN9RectangleC1Eii
+	.set	_ZN9RectangleC1Eii,_ZN9RectangleC2Eii
 	.align 2
 	.globl	_ZN9RectangleD2Ev
 	.type	_ZN9RectangleD2Ev, @function
@@ -87,14 +87,14 @@ _ZN9RectangleD2Ev:
 .LBB3:
 	.loc 1 7 0
 	movq	-8(%rbp), %rax	# this, tmp61
-	movq	$_ZTV9Rectangle+16, (%rax)	#, this_1(D)->D.2257._vptr.Shape
-	movq	-8(%rbp), %rax	# this, D.2323
-	movq	%rax, %rdi	# D.2323,
+	movq	$_ZTV9Rectangle+16, (%rax)	#, this_1(D)->D.2259._vptr.Shape
+	movq	-8(%rbp), %rax	# this, D.2334
+	movq	%rax, %rdi	# D.2334,
 	call	_ZN5ShapeD2Ev	#
 .LBE3:
 	.loc 1 9 0
-	movl	$0, %eax	#, D.2324
-	testl	%eax, %eax	# D.2324
+	movl	$0, %eax	#, D.2335
+	testl	%eax, %eax	# D.2335
 	je	.L2	#,
 	.loc 1 9 0 is_stmt 0 discriminator 1
 	movq	-8(%rbp), %rax	# this, tmp62
@@ -138,9 +138,9 @@ _ZN9RectangleD0Ev:
 .LFE6:
 	.size	_ZN9RectangleD0Ev, .-_ZN9RectangleD0Ev
 	.align 2
-	.globl	_ZN9Rectangle4areaEv
-	.type	_ZN9Rectangle4areaEv, @function
-_ZN9Rectangle4areaEv:
+	.globl	_ZN9Rectangle9perimeterEv
+	.type	_ZN9Rectangle9perimeterEv, @function
+_ZN9Rectangle9perimeterEv:
 .LFB7:
 	.loc 1 12 0
 	.cfi_startproc
@@ -151,21 +151,44 @@ _ZN9Rectangle4areaEv:
 	.cfi_def_cfa_register 6
 	movq	%rdi, -8(%rbp)	# this, this
 	.loc 1 13 0
-	movq	-8(%rbp), %rax	# this, tmp63
-	movsd	16(%rax), %xmm1	# this_1(D)->m_width, D.2325
 	movq	-8(%rbp), %rax	# this, tmp64
-	movsd	8(%rax), %xmm0	# this_1(D)->m_height, D.2325
-	mulsd	%xmm1, %xmm0	# D.2325, D.2325
-	movsd	%xmm0, -16(%rbp)	# D.2325, %sfp
-	movq	-16(%rbp), %rax	# %sfp, <retval>
+	movl	8(%rax), %edx	# this_1(D)->m_height, D.2336
+	movq	-8(%rbp), %rax	# this, tmp65
+	movl	12(%rax), %eax	# this_1(D)->m_width, D.2336
+	addl	%edx, %eax	# D.2336, D.2336
+	addl	%eax, %eax	# D.2336
 	.loc 1 14 0
-	movq	%rax, -16(%rbp)	# <retval>, %sfp
-	movsd	-16(%rbp), %xmm0	# %sfp,
 	popq	%rbp	#
 	.cfi_def_cfa 7, 8
 	ret
 	.cfi_endproc
 .LFE7:
+	.size	_ZN9Rectangle9perimeterEv, .-_ZN9Rectangle9perimeterEv
+	.align 2
+	.globl	_ZN9Rectangle4areaEv
+	.type	_ZN9Rectangle4areaEv, @function
+_ZN9Rectangle4areaEv:
+.LFB8:
+	.loc 1 17 0
+	.cfi_startproc
+	pushq	%rbp	#
+	.cfi_def_cfa_offset 16
+	.cfi_offset 6, -16
+	movq	%rsp, %rbp	#,
+	.cfi_def_cfa_register 6
+	movq	%rdi, -8(%rbp)	# this, this
+	.loc 1 18 0
+	movq	-8(%rbp), %rax	# this, tmp63
+	movl	12(%rax), %edx	# this_1(D)->m_width, D.2337
+	movq	-8(%rbp), %rax	# this, tmp64
+	movl	8(%rax), %eax	# this_1(D)->m_height, D.2337
+	imull	%edx, %eax	# D.2337, D.2337
+	.loc 1 19 0
+	popq	%rbp	#
+	.cfi_def_cfa 7, 8
+	ret
+	.cfi_endproc
+.LFE8:
 	.size	_ZN9Rectangle4areaEv, .-_ZN9Rectangle4areaEv
 	.weak	_ZTV9Rectangle
 	.section	.rodata._ZTV9Rectangle,"aG",@progbits,_ZTV9Rectangle,comdat
@@ -202,67 +225,67 @@ _ZTS9Rectangle:
 	.file 2 "Rectangle.h"
 	.section	.debug_info,"",@progbits
 .Ldebug_info0:
-	.long	0x20e
+	.long	0x251
 	.value	0x4
 	.long	.Ldebug_abbrev0
 	.byte	0x8
 	.uleb128 0x1
-	.long	.LASF10
-	.byte	0x4
 	.long	.LASF11
+	.byte	0x4
 	.long	.LASF12
+	.long	.LASF13
 	.quad	.Ltext0
 	.quad	.Letext0-.Ltext0
 	.long	.Ldebug_line0
 	.uleb128 0x2
-	.long	.LASF13
-	.byte	0x18
+	.long	.LASF14
+	.byte	0x10
 	.byte	0x2
 	.byte	0x6
-	.long	0xd8
-	.long	0xd8
+	.long	0xf6
+	.long	0xf6
 	.uleb128 0x3
-	.long	0xd8
+	.long	0xf6
 	.byte	0
 	.byte	0x1
 	.uleb128 0x4
 	.long	.LASF0
 	.byte	0x2
-	.byte	0xe
-	.long	0xdd
+	.byte	0xf
+	.long	0xfb
 	.byte	0x8
 	.uleb128 0x4
 	.long	.LASF1
 	.byte	0x2
-	.byte	0xf
-	.long	0xdd
 	.byte	0x10
+	.long	0xfb
+	.byte	0xc
 	.uleb128 0x5
-	.long	.LASF13
+	.long	.LASF14
 	.byte	0x1
 	.long	0x6a
 	.long	0x75
 	.uleb128 0x6
-	.long	0xe4
+	.long	0x102
 	.uleb128 0x7
-	.long	0xea
+	.long	0x108
 	.byte	0
 	.uleb128 0x8
-	.long	.LASF13
+	.long	.LASF14
 	.byte	0x1
 	.byte	0x3
 	.byte	0x1
 	.long	0x85
 	.long	0x95
 	.uleb128 0x6
-	.long	0xe4
+	.long	0x102
 	.uleb128 0x7
-	.long	0xdd
+	.long	0xfb
 	.uleb128 0x7
-	.long	0xdd
+	.long	0xfb
 	.byte	0
 	.uleb128 0x9
-	.long	.LASF14
+	.long	.LASF2
 	.byte	0x1
 	.byte	0x7
 	.byte	0x1
@@ -271,131 +294,139 @@ _ZTS9Rectangle:
 	.long	0xaa
 	.long	0xb5
 	.uleb128 0x6
-	.long	0xe4
+	.long	0x102
 	.uleb128 0x6
-	.long	0xf5
+	.long	0xfb
 	.byte	0
 	.uleb128 0xa
-	.long	.LASF15
+	.long	.LASF3
 	.byte	0x1
 	.byte	0xb
+	.long	.LASF15
+	.long	0xfb
+	.byte	0x1
+	.long	0xcd
+	.long	0xd3
+	.uleb128 0x6
+	.long	0x102
+	.byte	0
+	.uleb128 0xb
 	.long	.LASF16
-	.long	0xdd
+	.byte	0x1
+	.byte	0x10
+	.long	.LASF17
+	.long	0xfb
 	.byte	0x1
 	.uleb128 0x2
 	.byte	0x10
 	.uleb128 0x2
 	.long	0x2d
 	.byte	0x1
-	.long	0xd1
+	.long	0xef
 	.uleb128 0x6
-	.long	0xe4
+	.long	0x102
 	.byte	0
 	.byte	0
-	.uleb128 0xb
-	.long	.LASF17
 	.uleb128 0xc
-	.byte	0x8
-	.byte	0x4
-	.long	.LASF2
+	.long	.LASF18
 	.uleb128 0xd
-	.byte	0x8
-	.long	0x2d
-	.uleb128 0xe
-	.byte	0x8
-	.long	0xf0
-	.uleb128 0xf
-	.long	0x2d
-	.uleb128 0x10
 	.byte	0x4
 	.byte	0x5
 	.string	"int"
+	.uleb128 0xe
+	.byte	0x8
+	.long	0x2d
+	.uleb128 0xf
+	.byte	0x8
+	.long	0x10e
+	.uleb128 0x10
+	.long	0x2d
 	.uleb128 0x11
 	.long	0x75
 	.byte	0
-	.long	0x10a
-	.long	0x12a
+	.long	0x121
+	.long	0x141
 	.uleb128 0x12
-	.long	.LASF5
-	.long	0x12a
-	.uleb128 0x13
-	.long	.LASF3
-	.byte	0x1
-	.byte	0x3
-	.long	0xdd
+	.long	.LASF6
+	.long	0x141
 	.uleb128 0x13
 	.long	.LASF4
 	.byte	0x1
 	.byte	0x3
-	.long	0xdd
+	.long	0xfb
+	.uleb128 0x13
+	.long	.LASF5
+	.byte	0x1
+	.byte	0x3
+	.long	0xfb
 	.byte	0
-	.uleb128 0xf
-	.long	0xe4
+	.uleb128 0x10
+	.long	0x102
 	.uleb128 0x14
-	.long	0xfc
-	.long	.LASF7
+	.long	0x113
+	.long	.LASF8
 	.quad	.LFB1
 	.quad	.LFE1-.LFB1
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x152
-	.long	0x16b
+	.long	0x169
+	.long	0x182
 	.uleb128 0x15
-	.long	0x10a
+	.long	0x121
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
 	.uleb128 0x15
-	.long	0x113
+	.long	0x12a
+	.uleb128 0x2
+	.byte	0x91
+	.sleb128 -28
+	.uleb128 0x15
+	.long	0x135
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -32
-	.uleb128 0x15
-	.long	0x11e
-	.uleb128 0x2
-	.byte	0x91
-	.sleb128 -40
 	.byte	0
 	.uleb128 0x11
 	.long	0x95
 	.byte	0
-	.long	0x179
-	.long	0x18c
-	.uleb128 0x12
-	.long	.LASF5
-	.long	0x12a
+	.long	0x190
+	.long	0x1a3
 	.uleb128 0x12
 	.long	.LASF6
-	.long	0x18c
+	.long	0x141
+	.uleb128 0x12
+	.long	.LASF7
+	.long	0x1a3
 	.byte	0
-	.uleb128 0xf
-	.long	0xf5
+	.uleb128 0x10
+	.long	0xfb
 	.uleb128 0x14
-	.long	0x16b
-	.long	.LASF8
+	.long	0x182
+	.long	.LASF9
 	.quad	.LFB4
 	.quad	.LFE4-.LFB4
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x1b4
-	.long	0x1bd
+	.long	0x1cb
+	.long	0x1d4
 	.uleb128 0x15
-	.long	0x179
+	.long	0x190
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
 	.byte	0
 	.uleb128 0x14
-	.long	0x16b
-	.long	.LASF9
+	.long	0x182
+	.long	.LASF10
 	.quad	.LFB6
 	.quad	.LFE6-.LFB6
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x1e0
-	.long	0x1e9
+	.long	0x1f7
+	.long	0x200
 	.uleb128 0x15
-	.long	0x179
+	.long	0x190
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
@@ -406,10 +437,25 @@ _ZTS9Rectangle:
 	.quad	.LFE7-.LFB7
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x204
+	.long	0x21f
+	.long	0x22c
 	.uleb128 0x17
-	.long	.LASF5
-	.long	0x12a
+	.long	.LASF6
+	.long	0x141
+	.uleb128 0x2
+	.byte	0x91
+	.sleb128 -24
+	.byte	0
+	.uleb128 0x18
+	.long	0xd3
+	.quad	.LFB8
+	.quad	.LFE8-.LFB8
+	.uleb128 0x1
+	.byte	0x9c
+	.long	0x247
+	.uleb128 0x17
+	.long	.LASF6
+	.long	0x141
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
@@ -575,6 +621,31 @@ _ZTS9Rectangle:
 	.uleb128 0xe
 	.uleb128 0x49
 	.uleb128 0x13
+	.uleb128 0x32
+	.uleb128 0xb
+	.uleb128 0x3c
+	.uleb128 0x19
+	.uleb128 0x64
+	.uleb128 0x13
+	.uleb128 0x1
+	.uleb128 0x13
+	.byte	0
+	.byte	0
+	.uleb128 0xb
+	.uleb128 0x2e
+	.byte	0x1
+	.uleb128 0x3f
+	.uleb128 0x19
+	.uleb128 0x3
+	.uleb128 0xe
+	.uleb128 0x3a
+	.uleb128 0xb
+	.uleb128 0x3b
+	.uleb128 0xb
+	.uleb128 0x6e
+	.uleb128 0xe
+	.uleb128 0x49
+	.uleb128 0x13
 	.uleb128 0x4c
 	.uleb128 0xb
 	.uleb128 0x4d
@@ -589,7 +660,7 @@ _ZTS9Rectangle:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0xb
+	.uleb128 0xc
 	.uleb128 0x2
 	.byte	0
 	.uleb128 0x3
@@ -598,43 +669,7 @@ _ZTS9Rectangle:
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0xc
-	.uleb128 0x24
-	.byte	0
-	.uleb128 0xb
-	.uleb128 0xb
-	.uleb128 0x3e
-	.uleb128 0xb
-	.uleb128 0x3
-	.uleb128 0xe
-	.byte	0
-	.byte	0
 	.uleb128 0xd
-	.uleb128 0xf
-	.byte	0
-	.uleb128 0xb
-	.uleb128 0xb
-	.uleb128 0x49
-	.uleb128 0x13
-	.byte	0
-	.byte	0
-	.uleb128 0xe
-	.uleb128 0x10
-	.byte	0
-	.uleb128 0xb
-	.uleb128 0xb
-	.uleb128 0x49
-	.uleb128 0x13
-	.byte	0
-	.byte	0
-	.uleb128 0xf
-	.uleb128 0x26
-	.byte	0
-	.uleb128 0x49
-	.uleb128 0x13
-	.byte	0
-	.byte	0
-	.uleb128 0x10
 	.uleb128 0x24
 	.byte	0
 	.uleb128 0xb
@@ -643,6 +678,31 @@ _ZTS9Rectangle:
 	.uleb128 0xb
 	.uleb128 0x3
 	.uleb128 0x8
+	.byte	0
+	.byte	0
+	.uleb128 0xe
+	.uleb128 0xf
+	.byte	0
+	.uleb128 0xb
+	.uleb128 0xb
+	.uleb128 0x49
+	.uleb128 0x13
+	.byte	0
+	.byte	0
+	.uleb128 0xf
+	.uleb128 0x10
+	.byte	0
+	.uleb128 0xb
+	.uleb128 0xb
+	.uleb128 0x49
+	.uleb128 0x13
+	.byte	0
+	.byte	0
+	.uleb128 0x10
+	.uleb128 0x26
+	.byte	0
+	.uleb128 0x49
+	.uleb128 0x13
 	.byte	0
 	.byte	0
 	.uleb128 0x11
@@ -727,6 +787,8 @@ _ZTS9Rectangle:
 	.uleb128 0x13
 	.uleb128 0x2117
 	.uleb128 0x19
+	.uleb128 0x1
+	.uleb128 0x13
 	.byte	0
 	.byte	0
 	.uleb128 0x17
@@ -740,6 +802,23 @@ _ZTS9Rectangle:
 	.uleb128 0x19
 	.uleb128 0x2
 	.uleb128 0x18
+	.byte	0
+	.byte	0
+	.uleb128 0x18
+	.uleb128 0x2e
+	.byte	0x1
+	.uleb128 0x47
+	.uleb128 0x13
+	.uleb128 0x11
+	.uleb128 0x1
+	.uleb128 0x12
+	.uleb128 0x7
+	.uleb128 0x40
+	.uleb128 0x18
+	.uleb128 0x64
+	.uleb128 0x13
+	.uleb128 0x2117
+	.uleb128 0x19
 	.byte	0
 	.byte	0
 	.byte	0
@@ -758,41 +837,43 @@ _ZTS9Rectangle:
 	.section	.debug_line,"",@progbits
 .Ldebug_line0:
 	.section	.debug_str,"MS",@progbits,1
-.LASF13:
+.LASF8:
+	.string	"_ZN9RectangleC2Eii"
+.LASF14:
 	.string	"Rectangle"
-.LASF9:
+.LASF10:
 	.string	"_ZN9RectangleD0Ev"
-.LASF6:
+.LASF7:
 	.string	"__in_chrg"
-.LASF17:
+.LASF18:
 	.string	"Shape"
-.LASF11:
+.LASF12:
 	.string	"Rectangle.cpp"
+.LASF3:
+	.string	"perimeter"
+.LASF5:
+	.string	"width"
 .LASF1:
 	.string	"m_width"
-.LASF10:
+.LASF11:
 	.string	"GNU C++ 4.8.3 20140911 (Red Hat 4.8.3-7) -mtune=generic -march=x86-64 -g -O0"
-.LASF16:
+.LASF17:
 	.string	"_ZN9Rectangle4areaEv"
-.LASF7:
-	.string	"_ZN9RectangleC2Edd"
-.LASF3:
-	.string	"height"
-.LASF14:
-	.string	"~Rectangle"
-.LASF12:
-	.string	"/home/llammers/EECS/692/polymorphism"
-.LASF5:
-	.string	"this"
-.LASF2:
-	.string	"double"
 .LASF4:
-	.string	"width"
-.LASF8:
+	.string	"height"
+.LASF2:
+	.string	"~Rectangle"
+.LASF13:
+	.string	"/home/llammers/EECS/692/polymorphism"
+.LASF6:
+	.string	"this"
+.LASF15:
+	.string	"_ZN9Rectangle9perimeterEv"
+.LASF9:
 	.string	"_ZN9RectangleD2Ev"
 .LASF0:
 	.string	"m_height"
-.LASF15:
+.LASF16:
 	.string	"area"
 	.ident	"GCC: (GNU) 4.8.3 20140911 (Red Hat 4.8.3-7)"
 	.section	.note.GNU-stack,"",@progbits

@@ -6,13 +6,13 @@
 class Triangle : public Shape
 {
 public:
-  Triangle(double base, double height);
+  Triangle(int base, int height);
   ~Triangle();
 
-  double area();
+  int area();
 private:
-  double m_base;
-  double m_height;
+  int m_base;
+  int m_height;
 };
 
 #endif

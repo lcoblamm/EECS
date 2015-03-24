@@ -6,13 +6,14 @@
 class Rectangle : public Shape
 {
 public:
-  Rectangle(double height, double width);
+  Rectangle(int height, int width);
   virtual ~Rectangle();
 
-  double area();
+  int perimeter();
+  int area();
 private:
-  double m_height;
-  double m_width;
+  int m_height;
+  int m_width;
 };
 
 #endif

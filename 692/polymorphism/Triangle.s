@@ -31,9 +31,9 @@
 	.text
 .Ltext0:
 	.align 2
-	.globl	_ZN8TriangleC2Edd
-	.type	_ZN8TriangleC2Edd, @function
-_ZN8TriangleC2Edd:
+	.globl	_ZN8TriangleC2Eii
+	.type	_ZN8TriangleC2Eii, @function
+_ZN8TriangleC2Eii:
 .LFB1:
 	.file 1 "Triangle.cpp"
 	.loc 1 3 0
@@ -43,10 +43,10 @@ _ZN8TriangleC2Edd:
 	.cfi_offset 6, -16
 	movq	%rsp, %rbp	#,
 	.cfi_def_cfa_register 6
-	subq	$32, %rsp	#,
+	subq	$16, %rsp	#,
 	movq	%rdi, -8(%rbp)	# this, this
-	movsd	%xmm0, -16(%rbp)	# base, base
-	movsd	%xmm1, -24(%rbp)	# height, height
+	movl	%esi, -12(%rbp)	# base, base
+	movl	%edx, -16(%rbp)	# height, height
 .LBB2:
 	.loc 1 3 0
 	movq	-8(%rbp), %rax	# this, D.2323
@@ -54,12 +54,12 @@ _ZN8TriangleC2Edd:
 	call	_ZN5ShapeC2Ev	#
 	movq	-8(%rbp), %rax	# this, tmp60
 	movq	$_ZTV8Triangle+16, (%rax)	#, this_1(D)->D.2257._vptr.Shape
-	movq	-8(%rbp), %rdx	# this, tmp61
-	movq	-16(%rbp), %rax	# base, tmp62
-	movq	%rax, 8(%rdx)	# tmp62, this_1(D)->m_base
-	movq	-8(%rbp), %rdx	# this, tmp63
-	movq	-24(%rbp), %rax	# height, tmp64
-	movq	%rax, 16(%rdx)	# tmp64, this_1(D)->m_height
+	movq	-8(%rbp), %rax	# this, tmp61
+	movl	-12(%rbp), %edx	# base, tmp62
+	movl	%edx, 8(%rax)	# tmp62, this_1(D)->m_base
+	movq	-8(%rbp), %rax	# this, tmp63
+	movl	-16(%rbp), %edx	# height, tmp64
+	movl	%edx, 12(%rax)	# tmp64, this_1(D)->m_height
 .LBE2:
 	.loc 1 5 0
 	leave
@@ -67,9 +67,9 @@ _ZN8TriangleC2Edd:
 	ret
 	.cfi_endproc
 .LFE1:
-	.size	_ZN8TriangleC2Edd, .-_ZN8TriangleC2Edd
-	.globl	_ZN8TriangleC1Edd
-	.set	_ZN8TriangleC1Edd,_ZN8TriangleC2Edd
+	.size	_ZN8TriangleC2Eii, .-_ZN8TriangleC2Eii
+	.globl	_ZN8TriangleC1Eii
+	.set	_ZN8TriangleC1Eii,_ZN8TriangleC2Eii
 	.align 2
 	.globl	_ZN8TriangleD2Ev
 	.type	_ZN8TriangleD2Ev, @function
@@ -152,17 +152,15 @@ _ZN8Triangle4areaEv:
 	movq	%rdi, -8(%rbp)	# this, this
 	.loc 1 13 0
 	movq	-8(%rbp), %rax	# this, tmp64
-	movsd	8(%rax), %xmm1	# this_1(D)->m_base, D.2326
+	movl	8(%rax), %edx	# this_1(D)->m_base, D.2326
 	movq	-8(%rbp), %rax	# this, tmp65
-	movsd	16(%rax), %xmm0	# this_1(D)->m_height, D.2326
-	mulsd	%xmm1, %xmm0	# D.2326, D.2326
-	movsd	.LC0(%rip), %xmm1	#, tmp66
-	divsd	%xmm1, %xmm0	# tmp66, D.2326
-	movsd	%xmm0, -16(%rbp)	# D.2326, %sfp
-	movq	-16(%rbp), %rax	# %sfp, <retval>
+	movl	12(%rax), %eax	# this_1(D)->m_height, D.2326
+	imull	%edx, %eax	# D.2326, D.2326
+	movl	%eax, %edx	# D.2326, tmp66
+	shrl	$31, %edx	#, tmp66
+	addl	%edx, %eax	# tmp66, tmp67
+	sarl	%eax	# tmp68
 	.loc 1 14 0
-	movq	%rax, -16(%rbp)	# <retval>, %sfp
-	movsd	-16(%rbp), %xmm0	# %sfp,
 	popq	%rbp	#
 	.cfi_def_cfa 7, 8
 	ret
@@ -199,31 +197,26 @@ _ZTI8Triangle:
 	.size	_ZTS8Triangle, 10
 _ZTS8Triangle:
 	.string	"8Triangle"
-	.section	.rodata
-	.align 8
-.LC0:
-	.long	0
-	.long	1073741824
 	.text
 .Letext0:
 	.file 2 "Triangle.h"
 	.section	.debug_info,"",@progbits
 .Ldebug_info0:
-	.long	0x20e
+	.long	0x207
 	.value	0x4
 	.long	.Ldebug_abbrev0
 	.byte	0x8
 	.uleb128 0x1
-	.long	.LASF10
+	.long	.LASF9
 	.byte	0x4
+	.long	.LASF10
 	.long	.LASF11
-	.long	.LASF12
 	.quad	.Ltext0
 	.quad	.Letext0-.Ltext0
 	.long	.Ldebug_line0
 	.uleb128 0x2
-	.long	.LASF13
-	.byte	0x18
+	.long	.LASF12
+	.byte	0x10
 	.byte	0x2
 	.byte	0x6
 	.long	0xd8
@@ -243,9 +236,9 @@ _ZTS8Triangle:
 	.byte	0x2
 	.byte	0xf
 	.long	0xdd
-	.byte	0x10
+	.byte	0xc
 	.uleb128 0x5
-	.long	.LASF13
+	.long	.LASF12
 	.byte	0x1
 	.long	0x6a
 	.long	0x75
@@ -255,7 +248,7 @@ _ZTS8Triangle:
 	.long	0xea
 	.byte	0
 	.uleb128 0x8
-	.long	.LASF13
+	.long	.LASF12
 	.byte	0x1
 	.byte	0x3
 	.byte	0x1
@@ -269,7 +262,7 @@ _ZTS8Triangle:
 	.long	0xdd
 	.byte	0
 	.uleb128 0x9
-	.long	.LASF14
+	.long	.LASF13
 	.byte	0x1
 	.byte	0x7
 	.byte	0x1
@@ -280,13 +273,13 @@ _ZTS8Triangle:
 	.uleb128 0x6
 	.long	0xe4
 	.uleb128 0x6
-	.long	0xf5
+	.long	0xdd
 	.byte	0
 	.uleb128 0xa
-	.long	.LASF15
+	.long	.LASF14
 	.byte	0x1
 	.byte	0xb
-	.long	.LASF16
+	.long	.LASF15
 	.long	0xdd
 	.byte	0x1
 	.uleb128 0x2
@@ -300,11 +293,11 @@ _ZTS8Triangle:
 	.byte	0
 	.byte	0
 	.uleb128 0xb
-	.long	.LASF17
+	.long	.LASF16
 	.uleb128 0xc
-	.byte	0x8
 	.byte	0x4
-	.long	.LASF2
+	.byte	0x5
+	.string	"int"
 	.uleb128 0xd
 	.byte	0x8
 	.long	0x2d
@@ -314,109 +307,105 @@ _ZTS8Triangle:
 	.uleb128 0xf
 	.long	0x2d
 	.uleb128 0x10
-	.byte	0x4
-	.byte	0x5
-	.string	"int"
-	.uleb128 0x11
 	.long	0x75
 	.byte	0
-	.long	0x10a
-	.long	0x12a
+	.long	0x103
+	.long	0x123
+	.uleb128 0x11
+	.long	.LASF4
+	.long	0x123
 	.uleb128 0x12
-	.long	.LASF5
-	.long	0x12a
-	.uleb128 0x13
-	.long	.LASF3
+	.long	.LASF2
 	.byte	0x1
 	.byte	0x3
 	.long	0xdd
-	.uleb128 0x13
-	.long	.LASF4
+	.uleb128 0x12
+	.long	.LASF3
 	.byte	0x1
 	.byte	0x3
 	.long	0xdd
 	.byte	0
 	.uleb128 0xf
 	.long	0xe4
-	.uleb128 0x14
-	.long	0xfc
-	.long	.LASF7
+	.uleb128 0x13
+	.long	0xf5
+	.long	.LASF6
 	.quad	.LFB1
 	.quad	.LFE1-.LFB1
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x152
-	.long	0x16b
-	.uleb128 0x15
-	.long	0x10a
+	.long	0x14b
+	.long	0x164
+	.uleb128 0x14
+	.long	0x103
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
-	.uleb128 0x15
-	.long	0x113
+	.uleb128 0x14
+	.long	0x10c
+	.uleb128 0x2
+	.byte	0x91
+	.sleb128 -28
+	.uleb128 0x14
+	.long	0x117
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -32
-	.uleb128 0x15
-	.long	0x11e
-	.uleb128 0x2
-	.byte	0x91
-	.sleb128 -40
 	.byte	0
-	.uleb128 0x11
+	.uleb128 0x10
 	.long	0x95
 	.byte	0
-	.long	0x179
-	.long	0x18c
-	.uleb128 0x12
+	.long	0x172
+	.long	0x185
+	.uleb128 0x11
+	.long	.LASF4
+	.long	0x123
+	.uleb128 0x11
 	.long	.LASF5
-	.long	0x12a
-	.uleb128 0x12
-	.long	.LASF6
-	.long	0x18c
+	.long	0x185
 	.byte	0
 	.uleb128 0xf
-	.long	0xf5
-	.uleb128 0x14
-	.long	0x16b
-	.long	.LASF8
+	.long	0xdd
+	.uleb128 0x13
+	.long	0x164
+	.long	.LASF7
 	.quad	.LFB4
 	.quad	.LFE4-.LFB4
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x1b4
-	.long	0x1bd
-	.uleb128 0x15
-	.long	0x179
+	.long	0x1ad
+	.long	0x1b6
+	.uleb128 0x14
+	.long	0x172
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
 	.byte	0
-	.uleb128 0x14
-	.long	0x16b
-	.long	.LASF9
+	.uleb128 0x13
+	.long	0x164
+	.long	.LASF8
 	.quad	.LFB6
 	.quad	.LFE6-.LFB6
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x1e0
-	.long	0x1e9
-	.uleb128 0x15
-	.long	0x179
+	.long	0x1d9
+	.long	0x1e2
+	.uleb128 0x14
+	.long	0x172
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
 	.byte	0
-	.uleb128 0x16
+	.uleb128 0x15
 	.long	0xb5
 	.quad	.LFB7
 	.quad	.LFE7-.LFB7
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x204
-	.uleb128 0x17
-	.long	.LASF5
-	.long	0x12a
+	.long	0x1fd
+	.uleb128 0x16
+	.long	.LASF4
+	.long	0x123
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
@@ -613,7 +602,7 @@ _ZTS8Triangle:
 	.uleb128 0x3e
 	.uleb128 0xb
 	.uleb128 0x3
-	.uleb128 0xe
+	.uleb128 0x8
 	.byte	0
 	.byte	0
 	.uleb128 0xd
@@ -642,17 +631,6 @@ _ZTS8Triangle:
 	.byte	0
 	.byte	0
 	.uleb128 0x10
-	.uleb128 0x24
-	.byte	0
-	.uleb128 0xb
-	.uleb128 0xb
-	.uleb128 0x3e
-	.uleb128 0xb
-	.uleb128 0x3
-	.uleb128 0x8
-	.byte	0
-	.byte	0
-	.uleb128 0x11
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x47
@@ -665,7 +643,7 @@ _ZTS8Triangle:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x12
+	.uleb128 0x11
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
@@ -676,7 +654,7 @@ _ZTS8Triangle:
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0x13
+	.uleb128 0x12
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
@@ -689,7 +667,7 @@ _ZTS8Triangle:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x14
+	.uleb128 0x13
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x31
@@ -710,7 +688,7 @@ _ZTS8Triangle:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x15
+	.uleb128 0x14
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x31
@@ -719,7 +697,7 @@ _ZTS8Triangle:
 	.uleb128 0x18
 	.byte	0
 	.byte	0
-	.uleb128 0x16
+	.uleb128 0x15
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x47
@@ -736,7 +714,7 @@ _ZTS8Triangle:
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0x17
+	.uleb128 0x16
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
@@ -765,41 +743,39 @@ _ZTS8Triangle:
 	.section	.debug_line,"",@progbits
 .Ldebug_line0:
 	.section	.debug_str,"MS",@progbits,1
-.LASF8:
-	.string	"_ZN8TriangleD2Ev"
-.LASF6:
-	.string	"__in_chrg"
-.LASF16:
-	.string	"_ZN8Triangle4areaEv"
-.LASF14:
-	.string	"~Triangle"
-.LASF11:
-	.string	"Triangle.cpp"
-.LASF2:
-	.string	"double"
-.LASF10:
-	.string	"GNU C++ 4.8.3 20140911 (Red Hat 4.8.3-7) -mtune=generic -march=x86-64 -g -O0"
-.LASF4:
-	.string	"height"
-.LASF17:
-	.string	"Shape"
-.LASF12:
-	.string	"/home/llammers/EECS/692/polymorphism"
-.LASF5:
-	.string	"this"
 .LASF7:
-	.string	"_ZN8TriangleC2Edd"
+	.string	"_ZN8TriangleD2Ev"
+.LASF5:
+	.string	"__in_chrg"
+.LASF15:
+	.string	"_ZN8Triangle4areaEv"
+.LASF13:
+	.string	"~Triangle"
+.LASF10:
+	.string	"Triangle.cpp"
+.LASF9:
+	.string	"GNU C++ 4.8.3 20140911 (Red Hat 4.8.3-7) -mtune=generic -march=x86-64 -g -O0"
+.LASF3:
+	.string	"height"
+.LASF16:
+	.string	"Shape"
+.LASF11:
+	.string	"/home/llammers/EECS/692/polymorphism"
+.LASF4:
+	.string	"this"
+.LASF6:
+	.string	"_ZN8TriangleC2Eii"
 .LASF0:
 	.string	"m_base"
-.LASF3:
+.LASF2:
 	.string	"base"
-.LASF9:
+.LASF8:
 	.string	"_ZN8TriangleD0Ev"
 .LASF1:
 	.string	"m_height"
-.LASF13:
+.LASF12:
 	.string	"Triangle"
-.LASF15:
+.LASF14:
 	.string	"area"
 	.ident	"GCC: (GNU) 4.8.3 20140911 (Red Hat 4.8.3-7)"
 	.section	.note.GNU-stack,"",@progbits

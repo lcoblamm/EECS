@@ -7,7 +7,7 @@ public:
   Shape();
   virtual ~Shape();
 
-  virtual double area();
+  virtual int area();
 };
 
 #endif

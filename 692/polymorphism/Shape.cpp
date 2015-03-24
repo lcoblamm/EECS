@@ -8,7 +8,7 @@ Shape::~Shape()
 {
 }
 
-double Shape::area() 
+int Shape::area() 
 {
   return 0;
 }

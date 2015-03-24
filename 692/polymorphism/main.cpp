@@ -4,16 +4,21 @@
 #include "Rectangle.h"
 #include "Triangle.h"
 
-double getArea(Shape& poly);
+int getArea(Shape& poly);
 
 int main(int argc, char* argv[])
 {
   Shape* rect = new Rectangle(10, 5);
-  double areaRect = rect->area();
+  int areaRect = rect->area();
+
+  Shape* shape = new Shape();
+  int areaShape = shape->area(); 
 
   Triangle tri(10, 10);
-  double areaTri = getArea(tri);
+  int areaTri = getArea(tri);
 
+  Shape poly;
+  int areaPoly = getArea(poly);
   if (areaTri > areaRect) {
     std::cout << "Triangle has larger area." << std::endl;
   }
@@ -28,7 +33,7 @@ int main(int argc, char* argv[])
   return 0;
 }
 
-double getArea(Shape& poly)
+int getArea(Shape& poly)
 {
   return poly.area();
 }

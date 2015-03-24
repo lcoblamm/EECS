@@ -138,8 +138,6 @@ _ZN5Shape4areaEv:
 	.loc 1 13 0
 	movl	$0, %eax	#, D.2271
 	.loc 1 14 0
-	movq	%rax, -16(%rbp)	# <retval>, %sfp
-	movsd	-16(%rbp), %xmm0	# %sfp,
 	popq	%rbp	#
 	.cfi_def_cfa 7, 8
 	ret
@@ -179,32 +177,32 @@ _ZTS5Shape:
 	.file 2 "Shape.h"
 	.section	.debug_info,"",@progbits
 .Ldebug_info0:
-	.long	0x1e0
+	.long	0x1d9
 	.value	0x4
 	.long	.Ldebug_abbrev0
 	.byte	0x8
 	.uleb128 0x1
-	.long	.LASF6
+	.long	.LASF5
 	.byte	0x4
+	.long	.LASF6
 	.long	.LASF7
-	.long	.LASF8
 	.quad	.Ltext0
 	.quad	.Letext0-.Ltext0
 	.long	.Ldebug_line0
 	.uleb128 0x2
-	.long	.LASF9
+	.long	.LASF8
 	.byte	0x8
 	.byte	0x2
 	.byte	0x4
 	.long	0x2d
 	.long	0xba
 	.uleb128 0x3
-	.long	.LASF10
+	.long	.LASF9
 	.long	0xcc
 	.byte	0
 	.byte	0x1
 	.uleb128 0x4
-	.long	.LASF9
+	.long	.LASF8
 	.byte	0x1
 	.long	0x56
 	.long	0x61
@@ -214,7 +212,7 @@ _ZTS5Shape:
 	.long	0xe2
 	.byte	0
 	.uleb128 0x7
-	.long	.LASF9
+	.long	.LASF8
 	.byte	0x1
 	.byte	0x3
 	.byte	0x1
@@ -224,7 +222,7 @@ _ZTS5Shape:
 	.long	0xdc
 	.byte	0
 	.uleb128 0x8
-	.long	.LASF11
+	.long	.LASF10
 	.byte	0x1
 	.byte	0x7
 	.byte	0x1
@@ -238,11 +236,11 @@ _ZTS5Shape:
 	.long	0xc5
 	.byte	0
 	.uleb128 0x9
-	.long	.LASF12
+	.long	.LASF11
 	.byte	0x1
 	.byte	0xb
-	.long	.LASF13
-	.long	0xed
+	.long	.LASF12
+	.long	0xc5
 	.byte	0x1
 	.uleb128 0x2
 	.byte	0x10
@@ -268,7 +266,7 @@ _ZTS5Shape:
 	.long	0xd2
 	.uleb128 0xe
 	.byte	0x8
-	.long	.LASF14
+	.long	.LASF13
 	.long	0xba
 	.uleb128 0xd
 	.byte	0x8
@@ -279,89 +277,85 @@ _ZTS5Shape:
 	.uleb128 0x10
 	.long	0x2d
 	.uleb128 0x11
-	.byte	0x8
-	.byte	0x4
-	.long	.LASF0
-	.uleb128 0x12
 	.long	0x61
 	.byte	0
-	.long	0x102
-	.long	0x10c
-	.uleb128 0x13
-	.long	.LASF1
-	.long	0x10c
+	.long	0xfb
+	.long	0x105
+	.uleb128 0x12
+	.long	.LASF0
+	.long	0x105
 	.byte	0
 	.uleb128 0x10
 	.long	0xdc
-	.uleb128 0x14
-	.long	0xf4
-	.long	.LASF3
+	.uleb128 0x13
+	.long	0xed
+	.long	.LASF2
 	.quad	.LFB1
 	.quad	.LFE1-.LFB1
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x134
-	.long	0x13d
-	.uleb128 0x15
-	.long	0x102
+	.long	0x12d
+	.long	0x136
+	.uleb128 0x14
+	.long	0xfb
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
 	.byte	0
-	.uleb128 0x12
+	.uleb128 0x11
 	.long	0x77
 	.byte	0
-	.long	0x14b
-	.long	0x15e
-	.uleb128 0x13
+	.long	0x144
+	.long	0x157
+	.uleb128 0x12
+	.long	.LASF0
+	.long	0x105
+	.uleb128 0x12
 	.long	.LASF1
-	.long	0x10c
-	.uleb128 0x13
-	.long	.LASF2
-	.long	0x15e
+	.long	0x157
 	.byte	0
 	.uleb128 0x10
 	.long	0xc5
-	.uleb128 0x16
-	.long	0x13d
-	.long	.LASF4
+	.uleb128 0x15
+	.long	0x136
+	.long	.LASF3
 	.quad	.LFB4
 	.quad	.LFE4-.LFB4
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x186
-	.long	0x18f
+	.long	0x17f
+	.long	0x188
+	.uleb128 0x14
+	.long	0x144
+	.uleb128 0x2
+	.byte	0x91
+	.sleb128 -24
+	.byte	0
 	.uleb128 0x15
-	.long	0x14b
+	.long	0x136
+	.long	.LASF4
+	.quad	.LFB6
+	.quad	.LFE6-.LFB6
+	.uleb128 0x1
+	.byte	0x9c
+	.long	0x1ab
+	.long	0x1b4
+	.uleb128 0x14
+	.long	0x144
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
 	.byte	0
 	.uleb128 0x16
-	.long	0x13d
-	.long	.LASF5
-	.quad	.LFB6
-	.quad	.LFE6-.LFB6
-	.uleb128 0x1
-	.byte	0x9c
-	.long	0x1b2
-	.long	0x1bb
-	.uleb128 0x15
-	.long	0x14b
-	.uleb128 0x2
-	.byte	0x91
-	.sleb128 -24
-	.byte	0
-	.uleb128 0x17
 	.long	0x97
 	.quad	.LFB7
 	.quad	.LFE7-.LFB7
 	.uleb128 0x1
 	.byte	0x9c
-	.long	0x1d6
-	.uleb128 0x18
-	.long	.LASF1
-	.long	0x10c
+	.long	0x1cf
+	.uleb128 0x17
+	.long	.LASF0
+	.long	0x105
 	.uleb128 0x2
 	.byte	0x91
 	.sleb128 -24
@@ -592,17 +586,6 @@ _ZTS5Shape:
 	.byte	0
 	.byte	0
 	.uleb128 0x11
-	.uleb128 0x24
-	.byte	0
-	.uleb128 0xb
-	.uleb128 0xb
-	.uleb128 0x3e
-	.uleb128 0xb
-	.uleb128 0x3
-	.uleb128 0xe
-	.byte	0
-	.byte	0
-	.uleb128 0x12
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x47
@@ -615,7 +598,7 @@ _ZTS5Shape:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x13
+	.uleb128 0x12
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
@@ -626,7 +609,7 @@ _ZTS5Shape:
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0x14
+	.uleb128 0x13
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x31
@@ -647,7 +630,7 @@ _ZTS5Shape:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x15
+	.uleb128 0x14
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x31
@@ -656,7 +639,7 @@ _ZTS5Shape:
 	.uleb128 0x18
 	.byte	0
 	.byte	0
-	.uleb128 0x16
+	.uleb128 0x15
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x31
@@ -677,7 +660,7 @@ _ZTS5Shape:
 	.uleb128 0x13
 	.byte	0
 	.byte	0
-	.uleb128 0x17
+	.uleb128 0x16
 	.uleb128 0x2e
 	.byte	0x1
 	.uleb128 0x47
@@ -694,7 +677,7 @@ _ZTS5Shape:
 	.uleb128 0x19
 	.byte	0
 	.byte	0
-	.uleb128 0x18
+	.uleb128 0x17
 	.uleb128 0x5
 	.byte	0
 	.uleb128 0x3
@@ -723,35 +706,33 @@ _ZTS5Shape:
 	.section	.debug_line,"",@progbits
 .Ldebug_line0:
 	.section	.debug_str,"MS",@progbits,1
-.LASF13:
-	.string	"_ZN5Shape4areaEv"
-.LASF14:
-	.string	"__vtbl_ptr_type"
-.LASF10:
-	.string	"_vptr.Shape"
-.LASF3:
-	.string	"_ZN5ShapeC2Ev"
-.LASF4:
-	.string	"_ZN5ShapeD2Ev"
-.LASF6:
-	.string	"GNU C++ 4.8.3 20140911 (Red Hat 4.8.3-7) -mtune=generic -march=x86-64 -g -O0"
-.LASF1:
-	.string	"this"
-.LASF11:
-	.string	"~Shape"
-.LASF9:
-	.string	"Shape"
-.LASF8:
-	.string	"/home/llammers/EECS/692/polymorphism"
-.LASF7:
-	.string	"Shape.cpp"
-.LASF5:
-	.string	"_ZN5ShapeD0Ev"
-.LASF0:
-	.string	"double"
-.LASF2:
-	.string	"__in_chrg"
 .LASF12:
+	.string	"_ZN5Shape4areaEv"
+.LASF13:
+	.string	"__vtbl_ptr_type"
+.LASF9:
+	.string	"_vptr.Shape"
+.LASF2:
+	.string	"_ZN5ShapeC2Ev"
+.LASF3:
+	.string	"_ZN5ShapeD2Ev"
+.LASF5:
+	.string	"GNU C++ 4.8.3 20140911 (Red Hat 4.8.3-7) -mtune=generic -march=x86-64 -g -O0"
+.LASF0:
+	.string	"this"
+.LASF10:
+	.string	"~Shape"
+.LASF8:
+	.string	"Shape"
+.LASF7:
+	.string	"/home/llammers/EECS/692/polymorphism"
+.LASF6:
+	.string	"Shape.cpp"
+.LASF4:
+	.string	"_ZN5ShapeD0Ev"
+.LASF1:
+	.string	"__in_chrg"
+.LASF11:
 	.string	"area"
 	.ident	"GCC: (GNU) 4.8.3 20140911 (Red Hat 4.8.3-7)"
 	.section	.note.GNU-stack,"",@progbits
