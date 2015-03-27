@@ -20,14 +20,13 @@ public:
     void levelorder();
 
 private:
-    int getLeftChildIdx(int index);
-    int getRightChildIdx(int index);
-    int getParentIdx(int index);
-    int getGrandParentIdx(int index);
+    int floorLog(int index);
     void resize();
     void trickleDown(int index);
-    void trickleDownMax(int index);
     void trickleDownMin(int index);
+    int findTrickleMin(int parent);
+    void trickleDownMax(int index);
+    int findTrickleMax(int parent);
     void bubbleUp(int index);
     void bubbleUpMin(int index);
     void bubbleUpMax(int index);

@@ -62,7 +62,7 @@ int main(int argc, char* argv[])
       heap.deletemax();
       break;
     case 4:
-      std::cout << "Level order: \n"
+      std::cout << "Level order: \n";
       heap.levelorder();
       std::cout << std::endl;
       break;
