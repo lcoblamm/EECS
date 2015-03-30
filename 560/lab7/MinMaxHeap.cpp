@@ -349,6 +349,10 @@ void MinMaxHeap::bubbleUp(int index)
     }
 }
 
+/*
+Bubbles a new min value up through the heap
+@param index: index currently being bubbled up
+*/
 void MinMaxHeap::bubbleUpMin(int index)
 {
     // compare to grandparent, if less than, swap
@@ -368,6 +372,10 @@ void MinMaxHeap::bubbleUpMin(int index)
     bubbleUpMin(grandparent);
 }
 
+/*
+Bubbles a new max value up through the heap
+@param index: index currently being bubbled up
+*/
 void MinMaxHeap::bubbleUpMax(int index)
 {
     // compare to grandparent, if greater than, swap
@@ -384,5 +392,5 @@ void MinMaxHeap::bubbleUpMax(int index)
     m_heap[index] = m_heap[grandparent];
     m_heap[grandparent] = temp;
 
-    bubbleUpMin(grandparent);
+    bubbleUpMax(grandparent);
 }
