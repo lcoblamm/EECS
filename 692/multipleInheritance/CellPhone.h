@@ -8,8 +8,8 @@
 class CellPhone : public Phone, public Electronic
 {
 public:
-	CellPhone();
-	~CellPhone();
+	CellPhone() : m_isOn(false) {}
+	~CellPhone() {}
 
 	void turnOn();
 	void turnOff();

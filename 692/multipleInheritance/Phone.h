@@ -6,8 +6,8 @@
 class Phone
 {
 public:
-	Phone();
-	~Phone();
+	Phone() {}
+	virtual ~Phone() {}
 
 	virtual void makeCall(std::string phoneNum) = 0;
 };
