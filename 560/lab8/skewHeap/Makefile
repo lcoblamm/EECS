@@ -4,7 +4,7 @@ lab8: main.o SkewHeap.o Queue.o QueueNode.o
 main.o: main.cpp SkewHeap.h
 	g++ -g -std=c++11 main.cpp -c
 
-LeftistHeap.o: SkewHeap.cpp SkewHeap.h SkewHeapNode.h
+SkewHeap.o: SkewHeap.cpp SkewHeap.h SkewHeapNode.h
 	g++ -g -std=c++11 SkewHeap.cpp -c
 
 Queue.o: Queue.cpp Queue.h QueueNode.h
