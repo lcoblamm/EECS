@@ -10,7 +10,6 @@ Date: 2015.03.30
 class LeftistHeapNode
 {
 public:
-    LeftistHeapNode() : m_key(0), m_rank(1), m_left(nullptr), m_right(nullptr) {}
     LeftistHeapNode(int key) : m_key(key), m_rank(1), m_left(nullptr), m_right(nullptr) {}
     ~LeftistHeapNode() {}
 

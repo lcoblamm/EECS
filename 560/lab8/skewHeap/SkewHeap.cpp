@@ -1,19 +1,19 @@
 /*
-File: LeftistHeap.cpp
+File: SkewHeap.cpp
 Author: Lynne Coblammers
-Date: 2015.03.30
+Date: 2015.04.02
 */
 
 #include <iostream>
 
 #include "Queue.h"
-#include "LeftistHeapNode.h"
-#include "LeftistHeap.h"
+#include "SkewHeapNode.h"
+#include "SkewHeap.h"
 
 /*
 Constructor
 */
-LeftistHeap::LeftistHeap()
+SkewHeap::SkewHeap()
 {
     m_root = nullptr;
 }
@@ -21,7 +21,7 @@ LeftistHeap::LeftistHeap()
 /*
 Destructor
 */
-LeftistHeap::~LeftistHeap()
+SkewHeap::~SkewHeap()
 {
     if (m_root == nullptr) {
         return;
@@ -33,7 +33,7 @@ LeftistHeap::~LeftistHeap()
 Deletes entire tree recursively
 @param root: current root to delete
 */
-void LeftistHeap::deleteAll(LeftistHeapNode* root)
+void SkewHeap::deleteAll(SkewHeapNode* root)
 {
     if (root->left() != nullptr) {
         deleteAll(root->left());
@@ -48,24 +48,26 @@ void LeftistHeap::deleteAll(LeftistHeapNode* root)
 Inserts new value into heap
 @param key: new value to insert
 */
-void LeftistHeap::insert(int key)
+void SkewHeap::insert(int key)
 {
     // create heap node out of new key
-    LeftistHeapNode* newHeap = new LeftistHeapNode(key);
+    SkewHeapNode* newHeap = new SkewHeapNode(key);
     m_root = merge(m_root, newHeap);
+    levelorder();
+    std::cout << std::endl;
 }
 
 /*
 Deletes minimum value of heap
 */
-void LeftistHeap::deletemin()
+void SkewHeap::deletemin()
 {
     if (m_root == nullptr) {
         return;
     }
     // delete top value (min) and merge remaining heaps
-    LeftistHeapNode* left = m_root->left();
-    LeftistHeapNode* right = m_root->right();
+    SkewHeapNode* left = m_root->left();
+    SkewHeapNode* right = m_root->right();
     delete m_root;
     m_root = merge(left, right);
 }
@@ -73,7 +75,7 @@ void LeftistHeap::deletemin()
 /*
 Prints heap in preorder
 */
-void LeftistHeap::preorder()
+void SkewHeap::preorder()
 {
     if (m_root == nullptr) {
         std::cout << "The heap is empty\n";
@@ -85,7 +87,7 @@ void LeftistHeap::preorder()
 /*
 Prints heap in inorder
 */
-void LeftistHeap::inorder()
+void SkewHeap::inorder()
 {
     if (m_root == nullptr) {
         std::cout << "The heap is empty\n";
@@ -97,19 +99,19 @@ void LeftistHeap::inorder()
 /*
 Prints heap in level order
 */
-void LeftistHeap::levelorder()
+void SkewHeap::levelorder()
 {
     if (m_root == nullptr) {
         std::cout << "The heap is empty\n";
         return;
     }
 
-    Queue<LeftistHeapNode*> nodes;
+    Queue<SkewHeapNode*> nodes;
     nodes.enqueue(m_root);
     // nullptr is notification that level has finished
     nodes.enqueue(nullptr);
 
-    LeftistHeapNode* curr = nodes.dequeue();
+    SkewHeapNode* curr = nodes.dequeue();
     while(!nodes.isEmpty()) {
         // check if it's end of level
         if (curr == nullptr) {
@@ -137,7 +139,7 @@ Merges two heaps into one
 @param firstHeap, secondHeap: Pointers to roots of heaps to merge
 @return: pointer to root of new heap
 */
-LeftistHeapNode* LeftistHeap::merge(LeftistHeapNode* firstHeap, LeftistHeapNode* secondHeap)
+SkewHeapNode* SkewHeap::merge(SkewHeapNode* firstHeap, SkewHeapNode* secondHeap)
 {
     // if firstHeap or secondHeap are null, return the other heap
     if (firstHeap == nullptr) {
@@ -147,8 +149,8 @@ LeftistHeapNode* LeftistHeap::merge(LeftistHeapNode* firstHeap, LeftistHeapNode*
         return firstHeap;
     }
     // determine which heap is has min root
-    LeftistHeapNode* minHeap;
-    LeftistHeapNode* maxHeap;
+    SkewHeapNode* minHeap;
+    SkewHeapNode* maxHeap;
     if (firstHeap->key() <= secondHeap->key()) {
         minHeap = firstHeap;
         maxHeap = secondHeap;
@@ -158,52 +160,19 @@ LeftistHeapNode* LeftistHeap::merge(LeftistHeapNode* firstHeap, LeftistHeapNode*
         maxHeap = firstHeap;
     }
 
-    // otherwise, leave left child of min heap, and merge remaining to get right
-    minHeap->right(merge(minHeap->right(), maxHeap));
-    // set up new rank
-    updateRank(minHeap);
-    // check if swap is needed
-    if (minHeap->left() == nullptr) {
-        LeftistHeapNode* temp = minHeap->left();
-        minHeap->left(minHeap->right());
-        minHeap->right(temp);
-    }
-    else if (minHeap->left()->rank() < minHeap->right()->rank()) {
-        LeftistHeapNode* temp = minHeap->left();
-        minHeap->left(minHeap->right());
-        minHeap->right(temp);
-    }
+    // swap right to left, and merge to get new left
+    SkewHeapNode* temp = minHeap->right();
+    minHeap->right(minHeap->left());
+    minHeap->left(merge(temp, maxHeap));
 
     return minHeap;
-}
-
-/*
-Set rank of root 
-@param root: root to set new rank for
-*/
-void LeftistHeap::updateRank(LeftistHeapNode* root)
-{
-    if (root->left() == nullptr) {
-        root->rank(1);
-        return;
-    }
-    if (root->right() == nullptr) {
-        root->rank(1);
-        return;
-    }
-    // determine minimum rank of left and right children    
-    int leftRank = root->left()->rank();
-    int rightRank = root->right()->rank();
-    int minRank = leftRank < rightRank ? leftRank : rightRank;
-    // set root's rank to min + 1
-    root->rank(minRank + 1);
 }
 
 /*
 Prints tree in preorder recursively
 @param root: current node to print
 */
-void LeftistHeap::preorder(LeftistHeapNode* root)
+void SkewHeap::preorder(SkewHeapNode* root)
 {
     std::cout << root->key() << " ";
     if (root->left() != nullptr) {
@@ -218,7 +187,7 @@ void LeftistHeap::preorder(LeftistHeapNode* root)
 Prints tree in inorder recursively
 @param root: current node to print
 */
-void LeftistHeap::inorder(LeftistHeapNode* root)
+void SkewHeap::inorder(SkewHeapNode* root)
 {
     if (root->left() != nullptr) {
         inorder(root->left());

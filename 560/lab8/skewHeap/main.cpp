@@ -1,17 +1,17 @@
 /*
   File: main.cpp
   Author: Lynne Coblammers
-  Date: 2015.03.30
+  Date: 2015.04.02
 */
 
 #include <iostream>
 #include <fstream>
 
-#include "LeftistHeap.h"
+#include "SkewHeap.h"
 
 int main(int argc, char* argv[])
 {
-  LeftistHeap heap;
+  SkewHeap heap;
   // read in data.txt
   std::ifstream fin("data.txt");
   int num;
