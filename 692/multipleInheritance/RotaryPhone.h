@@ -10,7 +10,7 @@ public:
 	RotaryPhone() {}
 	~RotaryPhone() {}
 
-	void makeCall(std::string phoneNum);
+	void makeCall();
 };
 
 #endif

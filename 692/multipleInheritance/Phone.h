@@ -9,7 +9,7 @@ public:
 	Phone() {}
 	virtual ~Phone() {}
 
-	virtual void makeCall(std::string phoneNum) = 0;
+	virtual void makeCall() = 0;
 };
 
 #endif

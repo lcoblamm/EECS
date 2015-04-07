@@ -11,12 +11,12 @@ void CellPhone::turnOff()
 	m_isOn = false;
 }
 
-void CellPhone::makeCall(std::string phoneNum)
+void CellPhone::makeCall()
 {
 	if (!m_isOn) {
 		std::cout << "Can't call while phone is off.\n";
 	}
 	else {
-		std::cout << "Calling " << phoneNum << " on cell phone.\n";
+        std::cout << "Calling on cell phone.\n";
 	}
 }

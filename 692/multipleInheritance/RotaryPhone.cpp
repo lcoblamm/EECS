@@ -1,7 +1,7 @@
 #include "RotaryPhone.h"
 #include <iostream>
 
-void RotaryPhone::makeCall(std::string phoneNum)
+void RotaryPhone::makeCall()
 {
-	std::cout << "Dailing " << phoneNum << " on rotary phone.\n";
+    std::cout << "Dailing on rotary phone.\n";
 }

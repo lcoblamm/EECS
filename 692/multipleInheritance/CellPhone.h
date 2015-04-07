@@ -13,7 +13,7 @@ public:
 
 	void turnOn();
 	void turnOff();
-	void makeCall(std::string phoneNum);
+	void makeCall();
 
 private:
 	bool m_isOn;
