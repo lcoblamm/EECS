@@ -24,12 +24,12 @@
 
 ;; Problem 4.57
 ;; Rule for replacement
-(rule (can-replace ?person-1 ?person-2)
+(assert! (rule (can-replace ?person-1 ?person-2)
 	(and (job ?person-1 ?position-1)
 	     (job ?person-2 ?position-2)
 	     (or (same ?position-1 ?position-2)
 	         (can-do-job ?position-1 ?position-2))
-             (not (same ?person-1 ?person-2))))
+             (not (same ?person-1 ?person-2)))))
 ;; a) All people who can replace Cy D. Fect
 (can-replace ?name (Fect Cy D))
 ;; b) All people who can replace someone who is being paid more than they are together with the 
@@ -38,3 +38,184 @@
 	(salary ?person2 ?salary2)
 	(lisp-value < ?salary1 ?salary2)
 	(can-replace ?person1 ?person2))
+
+;; Part 3
+;; --------------------------------------------
+;; a)
+(assert! (rule (append-to-form () ?y ?y)))
+(assert! (rule (append-to-form (?u . ?v) ?y (?u . ?z)) (append-to-form ?v ?y ?z)))
+(append-to-form (a b) (c d) ?z)
+;; Output: 
+	;; (append-to-form (a b) (c d) (a b c d))
+(append-to-form (a b) ?y (a b c d))
+;; Output: 
+	;; (append-to-form (a b) (c d) (a b c d))
+(append-to-form ?x ?y (a b c d))
+;; Output: 
+	;; (append-to-form (a b c d) () (a b c d))
+	;; (append-to-form () (a b c d) (a b c d))
+	;; (append-to-form (a) (b c d) (a b c d))
+	;; (append-to-form (a b) (c d) (a b c d))
+	;; (append-to-form (a b c) (d) (a b c d))
+;; switching order of entering into system rules puts it in right order
+	;; (append-to-form () (a b c d) (a b c d))
+	;; (append-to-form (a) (b c d) (a b c d))
+	;; (append-to-form (a b) (c d) (a b c d))
+	;; (append-to-form (a b c) (d) (a b c d))
+	;; (append-to-form (a b c d) () (a b c d))
+
+;; b) Exercise 4.61
+(assert! (rule (?x next-to ?y in (?x ?y . ?u))))
+(assert! (rule (?x next-to ?y in (?v . ?z))
+	(?x next-to ?y in ?z)))
+(?x next-to ?y in (1 (2 3) 4))
+;; Output: 
+	;;((2 3) next-to 4 in (1 (2 3) 4))
+	;; (1 next-to (2 3) in (1 (2 3) 4))
+(?x next-to 1 in (2 1 3 1))
+;; Output: 
+	;; (3 next-to 1 in (2 1 3 1))
+	;; (2 next-to 1 in (2 1 3 1))
+
+;; c) Binary tree traversal
+(assert! (rule (tree->list (?x . ?y) ?v ?a)
+	(and (tree->list ?x ?v ?u)
+	     (tree->list ?y ?u ?a))))
+(assert! (rule (tree->list ?s ?v ?a)
+	(and (Ap (?s) ?v ?a)
+	     (lisp-value symbol? ?s))))
+(assert! (rule (tree->list () ?v ?a)
+	(Ap () ?v ?a)))
+(assert! (rule (tree->list ?t ?v)
+	(tree->list ?t ?v ())))
+(assert! (rule (Ap (?x1) (?x1 . ?l) ?l)))
+(assert! (rule (Ap () ?l ?l)))
+(tree->list (((a . b) . (c . d)) . (d . (e . f))) ?z)
+;; Output:
+	;; (tree->list (((a . b) c . d) d e . f) (a b c d d e f))
+;; Add following rule:
+(assert! (rule (tree->list ?num ?v ?a)
+	(and (Ap (?num) ?v ?a)
+	     (lisp-value number? ?num))))
+(tree->list (((a . 2) . (c . 4)) . (4 . (e . 6))) ?z)
+;; Output: 
+	;; (tree->list (((a . 2) c . 4) 4 e . 6) (a 2 c 4 4 e 6))
+
+;; d) 
+(tree->list ?t ())
+(tree->list ?t (a))
+(tree->list ?t (a b))
+;; The first two return neverending possible trees that could create the list
+;; The last one fails to return a result at all, but instead gets stuck in an infinite loop
+********** FIGURE OUT WHY ************
+
+
+;; Part 4
+;; -------------------------------------------------------
+;; a)
+(and (supervisor ?x ?y) (not (job ?x (computer programmer))))
+(and (not (job ?x (computer programmer))) (supervisor ?x ?y))
+;; The second query returns nothing because not works by filtering out all 
+;; frames from the incoming stream that don't match the pattern. Howerver, the
+;; incoming stream is initially empty, so the supervisor pattern gets an empty
+;; stream as input, and thus an empty stream is returned.
+
+;; b)
+(wheel who?)
+;; Oliver Warbucks shows up 4 times because there are four instances of people he
+;; supervises supervising someone else. The way the rule is written, for each instance
+;; where he supervises someone who supervises another person, he will show up as a wheel.
+
+;; c)
+(outranked-by (Bitdiddle Ben) ?who)
+(assert! (rule (***outranked-by ?staff-person ?boss)
+	(or (supervisor ?staff-person ?boss)
+	    (and (***outranked-by ?middle-manager ?boss)
+	         (supervisor ?staff-person ?middle-manager)))))
+(***outranked-by (Bitdiddle Ben) ?who)
+;; The program prints Warbucks but then gets stuck in an infinite loop because 
+;; both ?boss and ?middle-manager are unbound in this query
+
+;; Part 5
+;; --------------------------------------------------------
+(assert! (rule (sent4 ?r ?z (sent4 ?a ?b ?c ?d ?e ?f ?g ?h))
+	(and (sent ?r ?s ?a) (sent-conj ?s ?t ?b) (sent ?t ?u ?c)
+	     (semicolon ?u ?v ?d) (sent ?v ?w ?e) (sent-conj ?w ?x ?f)
+	     (sent ?x ?y ?g) (period ?y ?z ?h))))
+(assert! (rule (sent3* ?r ?y (sent4 ?a ?b ?c ?d ?e ?f ?g))
+	(and (sent ?r ?s ?a) (sent-conj ?s ?t ?b) (sent ?t ?u ?c)
+	     (semicolon ?u ?v ?d) (sent ?v ?w ?e)(sent-conj ?w ?x ?f)
+	     (sent ?x ?y ?g))))
+
+(assert! (rule (sent ?x ?z (sent ?a ?b))
+	(and (N+V ?x ?y ?a) (adj ?y ?z ?b))))
+(assert! (rule (sent ?x ?z (sent ?a ?b))
+	(and (np ?x ?y ?a) (vg ?y ?z ?b))))
+(assert! (rule (sent ?w ?z (sent ?a ?b ?c))
+	(and (preadj ?w ?x ?a) (inverb ?x ?y ?b) (np ?y ?z ?c))))
+(assert! (rule (sent ?x ?z (sent ?a ?b))
+	(and (np ?x ?y ?a) (verb ?y ?z ?b))))
+(assert! (rule (sent-conj ?x ?z (sent-conj ?a ?b))
+	(and (comma ?x ?y ?a) (conj ?y ?z ?b))))
+
+(assert! (rule (np ?x ?z (np ?a ?b))
+	(and (art ?x ?y ?a) (ng ?y ?z ?b))))
+(assert! (rule (ng ?x ?z (ng ?a ?b))
+	(and (adj ?x ?y ?a) (noun ?y ?z ?b))))
+(assert! (rule (ng ?x ?y (ng ?a))
+	(noun ?x ?y ?a)))
+(assert! (rule (vg ?w ?z (vg ?a ?b ?c))
+	(and (aux ?w ?x ?a) (vc ?x ?y ?b) (pp ?y ?z ?c))))
+(assert! (rule (vg ?x ?z (vg ?a ?b))
+	(and (aux ?x ?y ?a) (vc ?y ?z ?b))))
+(assert! (rule (vc ?w ?z (vc ?a ?b ?c))
+	(and (verb ?w ?x ?a) (conj ?x ?y ?b) (verb ?y ?z ?c))))
+(assert! (rule (vc ?w ?z (vc ?a ?b ?c))
+	(and (verb ?w ?x ?a) (conj ?x ?y ?b) (verb+PP ?y ?z ?c))))
+(assert! (rule (verb+PP ?x ?z (verb+PP ?a ?b))
+	(and (verb ?x ?y ?a) (pp ?y ?z ?b))))
+(assert! (rule (pp ?x ?z (pp ?a ?b))
+	(and (prep ?x ?y ?a) (np ?y ?z ?b))))
+(assert! (rule (preadj ?x ?z (preadj ?a ?b))
+	(and (adv ?x ?y ?a) (adj ?y ?z ?b))))
+
+(assert! (rule (N+V (Twas . ?x) ?x (N+V Twas))))
+(assert! (rule (adj (brillig . ?x) ?x (adj brillig))))
+(assert! (rule (adj (slithy . ?x) ?x (adj slithy))))
+(assert! (rule (adj (mimsy . ?x) ?x (adj mimsy))))
+(assert! (rule (adj (mome . ?x) ?x (adj mome))))
+(assert! (rule (conj (and . ?x) ?x (conj and))))
+(assert! (rule (conj (And . ?x) ?x (conj And))))
+(assert! (rule (art (the . ?x) ?x (art the))))
+(assert! (rule (noun (toves . ?x) ?x (noun toves))))
+(assert! (rule (noun (wabe . ?x) ?x (noun wabe))))
+(assert! (rule (noun (borogoves . ?x) ?x (noun borogoves))))
+(assert! (rule (noun (raths . ?x) ?x (noun raths))))
+(assert! (rule (aux (Did . ?x) ?x (aux Did))))
+(assert! (rule (verb (gyre . ?x) ?x (verb gyre))))
+(assert! (rule (verb (gimble . ?x) ?x (verb gimble))))
+(assert! (rule (verb (outgrabe . ?x) ?x (verb outgrabe))))
+(assert! (rule (inverb (were . ?x) ?x (inverb were))))
+(assert! (rule (prep (in . ?x) ?x (prep in))))
+(assert! (rule (adv (All . ?x) ?x (adv All))))
+(assert! (rule (comma (<comma> . ?x) ?x (comma <comma>))))
+(assert! (rule (semicolon (<semicolon> . ?x) ?x (semicolon <semicolon>))))
+(assert! (rule (period (<period> . ?x) ?x (period <period>))))
+
+(sent4 (Twas brillig <comma> and the slithy toves
+	Did gyre and gimble in the wabe <semicolon>
+	All mimsy were the borogoves <comma>
+	And the mome raths outgrabe <period>)
+	() 
+	?answer)
+
+(sent4 (Twas mimsy <comma> and the slithy borogoves
+	Did gimble and gyre in the wabe <semicolon>
+	All brillig were the raths <comma>
+	And the mome toves outgrabe <period>)
+	() 
+	?answer)
+
+
+
+

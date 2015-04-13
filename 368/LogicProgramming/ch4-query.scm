@@ -673,13 +673,6 @@
           (and (supervisor ?staff-person ?middle-manager)
                (outranked-by ?middle-manager ?boss))))
 
-(rule (can-replace ?person-1 ?person-2)
-	(and (job ?person-1 ?position-1)
-	     (job ?person-2 ?position-2)
-	     (or (same ?position-1 ?position-2)
-	         (can-do-job ?position-1 ?position-2))
-             (not (same ?person-1 ?person-2))))
-
 ))
 
 (initialize-data-base microshaft-data-base)
