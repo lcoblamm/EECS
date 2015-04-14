@@ -32,9 +32,6 @@ void BinomialQueue::insert(int key)
 		return;
 	}
 	merge(m_root, newTree);
-
-	levelorder();
-	std::cout << std::endl << std::endl;
 }
 
 /*
@@ -42,8 +39,59 @@ Deletes minimum value
 */
 void BinomialQueue::deletemin()
 {
+	if (m_root == nullptr) {
+		return;
+	}
 	// find min
-	// delete and merge each of children back in
+	BinomialNode* minRoot = m_root;
+	BinomialNode* sibling = m_root->right();
+	bool singleTree = sibling == nullptr;
+	while (sibling != nullptr) {
+		if (sibling->key() < minRoot->key()) {
+			minRoot = sibling;
+		}
+		sibling = sibling->right();
+	}
+	bool isFirstTree = minRoot == m_root;
+	bool isLastTree = minRoot == m_root->left();
+
+	// remove minRoot from queue 
+	BinomialNode* toMerge = nullptr;
+	if (singleTree) {
+		BinomialNode* firstChild = minRoot->child();
+		m_root = firstChild;
+		if (firstChild == nullptr) {
+			delete minRoot;
+			return;
+		}
+		toMerge = firstChild->right();
+	}
+	else if (isLastTree) {
+		m_root->left(minRoot->left());
+		minRoot->left()->right(nullptr);
+		toMerge = minRoot->child();
+	}
+	else if (isFirstTree) {
+		minRoot->right()->left(minRoot->left());
+		m_root = minRoot->right();
+		toMerge = minRoot->child();
+	}
+	else {
+		minRoot->left()->right(minRoot->right());
+		minRoot->right()->left(minRoot->left());
+		toMerge = minRoot->child();
+	}
+	minRoot->left(nullptr);
+	minRoot->right(nullptr);
+	delete minRoot;
+
+	while (toMerge != nullptr) {
+		BinomialNode* nextMerge = toMerge->right();
+		toMerge->right(nullptr);
+		toMerge->left(toMerge);
+		merge(m_root, toMerge);
+		toMerge = nextMerge;
+	}
 }
 
 /*
@@ -121,10 +169,13 @@ void BinomialQueue::merge(BinomialNode* queueRoot, BinomialNode* treeRoot)
 		// insert tree here
 		treeRoot->right(queueRoot);
 		treeRoot->left(queueRoot->left());
-		queueRoot->left(treeRoot);
 		if (isFirstTree) {
 			m_root = treeRoot;
 		}
+		else {
+			queueRoot->left()->right(treeRoot);
+		}
+		queueRoot->left(treeRoot);
 		return;
 	}
 	if (treeOrder > queueOrder) {
@@ -133,6 +184,7 @@ void BinomialQueue::merge(BinomialNode* queueRoot, BinomialNode* treeRoot)
 			queueRoot->right(treeRoot);
 			m_root->left(treeRoot);
 			treeRoot->left(queueRoot);
+			treeRoot->right(nullptr);
 			return;
 		}
 		// otherwise merge with next tree in queue
@@ -215,5 +267,6 @@ void BinomialQueue::deleteAll(BinomialNode* root)
 	if (root->child() != nullptr) {
 		deleteAll(root->child());
 	}
+	std::cout << "Deleting " << root->key() << std::endl;
 	delete root;
 }
