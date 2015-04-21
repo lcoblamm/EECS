@@ -1,0 +1,152 @@
+
+Timing for 50000 values
+------------------------------------------------
+Seed: 1
+	Leftist Heap Build: 0.035284 seconds
+	Skew Heap Build: 0.016868 seconds
+	Binomial Queue Build: 0.008997 seconds
+	Leftist Heap Random Op: 0.008185 seconds
+	Skew Heap Random Op: 0.003342 seconds
+	Binomial Queue Random Op: 0.013748 seconds
+Seed: 2
+	Leftist Heap Build: 0.021189 seconds
+	Skew Heap Build: 0.012149 seconds
+	Binomial Queue Build: 0.006503 seconds
+	Leftist Heap Random Op: 0.004691 seconds
+	Skew Heap Random Op: 0.001978 seconds
+	Binomial Queue Random Op: 0.008274 seconds
+Seed: 3
+	Leftist Heap Build: 0.014716 seconds
+	Skew Heap Build: 0.008553 seconds
+	Binomial Queue Build: 0.004453 seconds
+	Leftist Heap Random Op: 0.004425 seconds
+	Skew Heap Random Op: 0.001964 seconds
+	Binomial Queue Random Op: 0.008253 seconds
+Seed: 4
+	Leftist Heap Build: 0.013611 seconds
+	Skew Heap Build: 0.008277 seconds
+	Binomial Queue Build: 0.004421 seconds
+	Leftist Heap Random Op: 0.004366 seconds
+	Skew Heap Random Op: 0.001943 seconds
+	Binomial Queue Random Op: 0.0082 seconds
+Seed: 5
+	Leftist Heap Build: 0.015317 seconds
+	Skew Heap Build: 0.008803 seconds
+	Binomial Queue Build: 0.00513 seconds
+	Leftist Heap Random Op: 0.004556 seconds
+	Skew Heap Random Op: 0.001953 seconds
+	Binomial Queue Random Op: 0.00823 seconds
+
+Timing for 100000 values
+------------------------------------------------
+Seed: 6
+	Leftist Heap Build: 0.028459 seconds
+	Skew Heap Build: 0.018077 seconds
+	Binomial Queue Build: 0.009752 seconds
+	Leftist Heap Random Op: 0.010766 seconds
+	Skew Heap Random Op: 0.005553 seconds
+	Binomial Queue Random Op: 0.01969 seconds
+Seed: 7
+	Leftist Heap Build: 0.031751 seconds
+	Skew Heap Build: 0.019987 seconds
+	Binomial Queue Build: 0.011482 seconds
+	Leftist Heap Random Op: 0.011252 seconds
+	Skew Heap Random Op: 0.005312 seconds
+	Binomial Queue Random Op: 0.019565 seconds
+Seed: 8
+	Leftist Heap Build: 0.031611 seconds
+	Skew Heap Build: 0.019195 seconds
+	Binomial Queue Build: 0.011824 seconds
+	Leftist Heap Random Op: 0.011301 seconds
+	Skew Heap Random Op: 0.005351 seconds
+	Binomial Queue Random Op: 0.020312 seconds
+Seed: 9
+	Leftist Heap Build: 0.030393 seconds
+	Skew Heap Build: 0.020247 seconds
+	Binomial Queue Build: 0.012489 seconds
+	Leftist Heap Random Op: 0.012119 seconds
+	Skew Heap Random Op: 0.005625 seconds
+	Binomial Queue Random Op: 0.02028 seconds
+Seed: 10
+	Leftist Heap Build: 0.029335 seconds
+	Skew Heap Build: 0.019269 seconds
+	Binomial Queue Build: 0.012284 seconds
+	Leftist Heap Random Op: 0.011913 seconds
+	Skew Heap Random Op: 0.005445 seconds
+	Binomial Queue Random Op: 0.021126 seconds
+
+Timing for 200000 values
+------------------------------------------------
+Seed: 11
+	Leftist Heap Build: 0.067495 seconds
+	Skew Heap Build: 0.044866 seconds
+	Binomial Queue Build: 0.019684 seconds
+	Leftist Heap Random Op: 0.024964 seconds
+	Skew Heap Random Op: 0.012706 seconds
+	Binomial Queue Random Op: 0.043828 seconds
+Seed: 12
+	Leftist Heap Build: 0.065319 seconds
+	Skew Heap Build: 0.048551 seconds
+	Binomial Queue Build: 0.023433 seconds
+	Leftist Heap Random Op: 0.025737 seconds
+	Skew Heap Random Op: 0.01266 seconds
+	Binomial Queue Random Op: 0.044313 seconds
+Seed: 13
+	Leftist Heap Build: 0.067859 seconds
+	Skew Heap Build: 0.049691 seconds
+	Binomial Queue Build: 0.024559 seconds
+	Leftist Heap Random Op: 0.026116 seconds
+	Skew Heap Random Op: 0.012701 seconds
+	Binomial Queue Random Op: 0.044667 seconds
+Seed: 14
+	Leftist Heap Build: 0.069329 seconds
+	Skew Heap Build: 0.053686 seconds
+	Binomial Queue Build: 0.025097 seconds
+	Leftist Heap Random Op: 0.026421 seconds
+	Skew Heap Random Op: 0.013338 seconds
+	Binomial Queue Random Op: 0.045094 seconds
+Seed: 15
+	Leftist Heap Build: 0.072509 seconds
+	Skew Heap Build: 0.053865 seconds
+	Binomial Queue Build: 0.025488 seconds
+	Leftist Heap Random Op: 0.026872 seconds
+	Skew Heap Random Op: 0.01283 seconds
+	Binomial Queue Random Op: 0.045497 seconds
+
+Timing for 400000 values
+------------------------------------------------
+Seed: 16
+	Leftist Heap Build: 0.154747 seconds
+	Skew Heap Build: 0.105141 seconds
+	Binomial Queue Build: 0.040463 seconds
+	Leftist Heap Random Op: 0.065625 seconds
+	Skew Heap Random Op: 0.030346 seconds
+	Binomial Queue Random Op: 0.097905 seconds
+Seed: 17
+	Leftist Heap Build: 0.157912 seconds
+	Skew Heap Build: 0.116499 seconds
+	Binomial Queue Build: 0.050725 seconds
+	Leftist Heap Random Op: 0.061249 seconds
+	Skew Heap Random Op: 0.030217 seconds
+	Binomial Queue Random Op: 0.09919 seconds
+Seed: 18
+	Leftist Heap Build: 0.160673 seconds
+	Skew Heap Build: 0.118738 seconds
+	Binomial Queue Build: 0.052011 seconds
+	Leftist Heap Random Op: 0.065338 seconds
+	Skew Heap Random Op: 0.031996 seconds
+	Binomial Queue Random Op: 0.10136 seconds
+Seed: 19
+	Leftist Heap Build: 0.1565 seconds
+	Skew Heap Build: 0.119506 seconds
+	Binomial Queue Build: 0.054153 seconds
+	Leftist Heap Random Op: 0.062636 seconds
+	Skew Heap Random Op: 0.030926 seconds
+	Binomial Queue Random Op: 0.10061 seconds
+Seed: 20
+	Leftist Heap Build: 0.158497 seconds
+	Skew Heap Build: 0.132409 seconds
+	Binomial Queue Build: 0.057798 seconds
+	Leftist Heap Random Op: 0.070425 seconds
+	Skew Heap Random Op: 0.032108 seconds
+	Binomial Queue Random Op: 0.103139 seconds
