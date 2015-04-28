@@ -60,5 +60,5 @@ T QueueNode<T>::getValue()
   return m_value;
 }
 
-template class QueueNode<Edge*>;
+template class QueueNode<Edge>;
 template class QueueNode<SkewHeapNode<Edge>*>;

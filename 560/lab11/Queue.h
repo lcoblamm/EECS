@@ -20,6 +20,7 @@ public:
   T dequeue();
   bool isEmpty();
   T peek();
+  int size() { return m_size; }
   
 private:
   QueueNode<T>* m_head;

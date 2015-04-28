@@ -17,10 +17,11 @@ public:
     ~SkewHeap();
 
     void insert(T item, int key);
-    void deletemin();
+    T deletemin();
     void preorder();
     void inorder();
     void levelorder();
+    bool isEmpty() { return m_root == nullptr; }
 
 private:
     SkewHeapNode<T>* merge(SkewHeapNode<T>* firstHeap, SkewHeapNode<T>* secondHeap);

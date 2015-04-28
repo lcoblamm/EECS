@@ -86,5 +86,5 @@ T Queue<T>::peek()
   return m_head->getValue();
 }
 
-template class Queue<Edge*>;
+template class Queue<Edge>;
 template class Queue<SkewHeapNode<Edge>*>;

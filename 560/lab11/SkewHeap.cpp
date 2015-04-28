@@ -5,6 +5,7 @@ Date: 2015.04.02
 */
 
 #include <iostream>
+#include <stdexcept>
 
 #include "Queue.h"
 #include "SkewHeap.h"
@@ -62,16 +63,18 @@ void SkewHeap<T>::insert(T item, int key)
 Deletes minimum value of heap
 */
 template <typename T>
-void SkewHeap<T>::deletemin()
+T SkewHeap<T>::deletemin()
 {
     if (m_root == nullptr) {
-        return;
+        throw std::runtime_error("Tried to dequeue empty heap\n");
     }
     // delete top value (min) and merge remaining heaps
     SkewHeapNode<T>* left = m_root->left();
     SkewHeapNode<T>* right = m_root->right();
+    T min = m_root->item;
     delete m_root;
     m_root = merge(left, right);
+    return min;
 }
 
 /*
