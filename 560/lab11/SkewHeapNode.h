@@ -7,6 +7,8 @@ Date: 2015.04.02
 #ifndef SKEWHEAPNODE_H
 #define SKEWHEAPNODE_H
 
+#include "Edge.h"
+
 template <typename T>
 class SkewHeapNode
 {
@@ -30,5 +32,7 @@ private:
     SkewHeapNode* m_left;
     SkewHeapNode* m_right;
 };
+
+template class SkewHeapNode<Edge*>;
 
 #endif
