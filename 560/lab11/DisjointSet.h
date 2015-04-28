@@ -16,7 +16,7 @@ public:
     ~DisjointSet();
 
     int find(int element);
-    void union(int first, int second);
+    void setUnion(int first, int second);
 
 private:
     DisjointSetNode** m_elements;

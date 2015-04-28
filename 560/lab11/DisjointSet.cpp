@@ -41,7 +41,7 @@ int DisjointSet::find(int element)
 }
 
 // Union by rank 
-void DisjointSet::union(int first, int second)
+void DisjointSet::setUnion(int first, int second)
 {
     int rankFirst = m_elements[first]->getRank();
     int rankSecond = m_elements[second]->getRank();

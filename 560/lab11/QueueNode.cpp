@@ -5,6 +5,7 @@
 */
 
 #include "QueueNode.h"
+#include "Edge.h"
 #include "SkewHeapNode.h"
 
 /*
@@ -59,4 +60,5 @@ T QueueNode<T>::getValue()
   return m_value;
 }
 
-template class QueueNode<SkewHeapNode*>;
+template class QueueNode<Edge*>;
+template class QueueNode<SkewHeapNode<Edge>*>;

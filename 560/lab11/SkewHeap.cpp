@@ -7,13 +7,13 @@ Date: 2015.04.02
 #include <iostream>
 
 #include "Queue.h"
-#include "SkewHeapNode.h"
 #include "SkewHeap.h"
 
 /*
 Constructor
 */
-SkewHeap::SkewHeap()
+template <typename T>
+SkewHeap<T>::SkewHeap()
 {
     m_root = nullptr;
 }
@@ -21,7 +21,8 @@ SkewHeap::SkewHeap()
 /*
 Destructor
 */
-SkewHeap::~SkewHeap()
+template <typename T>
+SkewHeap<T>::~SkewHeap()
 {
     if (m_root == nullptr) {
         return;
@@ -33,7 +34,8 @@ SkewHeap::~SkewHeap()
 Deletes entire tree recursively
 @param root: current root to delete
 */
-void SkewHeap::deleteAll(SkewHeapNode* root)
+template <typename T>
+void SkewHeap<T>::deleteAll(SkewHeapNode<T>* root)
 {
     if (root->left() != nullptr) {
         deleteAll(root->left());
@@ -48,24 +50,26 @@ void SkewHeap::deleteAll(SkewHeapNode* root)
 Inserts new value into heap
 @param key: new value to insert
 */
-void SkewHeap::insert(int key)
+template <typename T>
+void SkewHeap<T>::insert(T item, int key)
 {
     // create heap node out of new key
-    SkewHeapNode* newHeap = new SkewHeapNode(key);
+    SkewHeapNode<T>* newHeap = new SkewHeapNode<T>(item, key);
     m_root = merge(m_root, newHeap);
 }
 
 /*
 Deletes minimum value of heap
 */
-void SkewHeap::deletemin()
+template <typename T>
+void SkewHeap<T>::deletemin()
 {
     if (m_root == nullptr) {
         return;
     }
     // delete top value (min) and merge remaining heaps
-    SkewHeapNode* left = m_root->left();
-    SkewHeapNode* right = m_root->right();
+    SkewHeapNode<T>* left = m_root->left();
+    SkewHeapNode<T>* right = m_root->right();
     delete m_root;
     m_root = merge(left, right);
 }
@@ -73,7 +77,8 @@ void SkewHeap::deletemin()
 /*
 Prints heap in preorder
 */
-void SkewHeap::preorder()
+template <typename T>
+void SkewHeap<T>::preorder()
 {
     if (m_root == nullptr) {
         std::cout << "The heap is empty\n";
@@ -85,7 +90,8 @@ void SkewHeap::preorder()
 /*
 Prints heap in inorder
 */
-void SkewHeap::inorder()
+template <typename T>
+void SkewHeap<T>::inorder()
 {
     if (m_root == nullptr) {
         std::cout << "The heap is empty\n";
@@ -97,19 +103,20 @@ void SkewHeap::inorder()
 /*
 Prints heap in level order
 */
-void SkewHeap::levelorder()
+template <typename T>
+void SkewHeap<T>::levelorder()
 {
     if (m_root == nullptr) {
         std::cout << "The heap is empty\n";
         return;
     }
 
-    Queue<SkewHeapNode*> nodes;
+    Queue<SkewHeapNode<T>*> nodes;
     nodes.enqueue(m_root);
     // nullptr is notification that level has finished
     nodes.enqueue(nullptr);
 
-    SkewHeapNode* curr = nodes.dequeue();
+    SkewHeapNode<T>* curr = nodes.dequeue();
     while(!nodes.isEmpty()) {
         // check if it's end of level
         if (curr == nullptr) {
@@ -137,7 +144,8 @@ Merges two heaps into one
 @param firstHeap, secondHeap: Pointers to roots of heaps to merge
 @return: pointer to root of new heap
 */
-SkewHeapNode* SkewHeap::merge(SkewHeapNode* firstHeap, SkewHeapNode* secondHeap)
+template <typename T>
+SkewHeapNode<T>* SkewHeap<T>::merge(SkewHeapNode<T>* firstHeap, SkewHeapNode<T>* secondHeap)
 {
     // if firstHeap or secondHeap are null, return the other heap
     if (firstHeap == nullptr) {
@@ -147,8 +155,8 @@ SkewHeapNode* SkewHeap::merge(SkewHeapNode* firstHeap, SkewHeapNode* secondHeap)
         return firstHeap;
     }
     // determine which heap is has min root
-    SkewHeapNode* minHeap;
-    SkewHeapNode* maxHeap;
+    SkewHeapNode<T>* minHeap;
+    SkewHeapNode<T>* maxHeap;
     if (firstHeap->key() <= secondHeap->key()) {
         minHeap = firstHeap;
         maxHeap = secondHeap;
@@ -159,7 +167,7 @@ SkewHeapNode* SkewHeap::merge(SkewHeapNode* firstHeap, SkewHeapNode* secondHeap)
     }
 
     // swap right to left, and merge to get new left
-    SkewHeapNode* temp = minHeap->right();
+    SkewHeapNode<T>* temp = minHeap->right();
     minHeap->right(minHeap->left());
     minHeap->left(merge(temp, maxHeap));
 
@@ -170,7 +178,8 @@ SkewHeapNode* SkewHeap::merge(SkewHeapNode* firstHeap, SkewHeapNode* secondHeap)
 Prints tree in preorder recursively
 @param root: current node to print
 */
-void SkewHeap::preorder(SkewHeapNode* root)
+template <typename T>
+void SkewHeap<T>::preorder(SkewHeapNode<T>* root)
 {
     std::cout << root->key() << " ";
     if (root->left() != nullptr) {
@@ -185,7 +194,8 @@ void SkewHeap::preorder(SkewHeapNode* root)
 Prints tree in inorder recursively
 @param root: current node to print
 */
-void SkewHeap::inorder(SkewHeapNode* root)
+template <typename T>
+void SkewHeap<T>::inorder(SkewHeapNode<T>* root)
 {
     if (root->left() != nullptr) {
         inorder(root->left());

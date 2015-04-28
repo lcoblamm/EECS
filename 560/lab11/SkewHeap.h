@@ -7,27 +7,28 @@ Date: 2015.04.02
 #ifndef SKEWHEAP_H
 #define SKEWHEAP_H
 
-class SkewHeapNode;
+#include "SkewHeapNode.h"
 
+template <typename T>
 class SkewHeap
 {
 public:
     SkewHeap();
     ~SkewHeap();
 
-    void insert(int key);
+    void insert(T item, int key);
     void deletemin();
     void preorder();
     void inorder();
     void levelorder();
 
 private:
-    SkewHeapNode* merge(SkewHeapNode* firstHeap, SkewHeapNode* secondHeap);
-    void preorder(SkewHeapNode* root);
-    void inorder(SkewHeapNode* root);
-    void deleteAll(SkewHeapNode* root);
+    SkewHeapNode<T>* merge(SkewHeapNode<T>* firstHeap, SkewHeapNode<T>* secondHeap);
+    void preorder(SkewHeapNode<T>* root);
+    void inorder(SkewHeapNode<T>* root);
+    void deleteAll(SkewHeapNode<T>* root);
 
-    SkewHeapNode* m_root;
+    SkewHeapNode<T>* m_root;
 };
 
 #endif

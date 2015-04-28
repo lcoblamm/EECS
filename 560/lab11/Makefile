@@ -10,10 +10,10 @@ DisjointSet.o: DisjointSet.h DisjointSet.cpp DisjointSetNode.h
 SkewHeap.o: SkewHeap.cpp SkewHeap.h SkewHeapNode.h
 	g++ -g -std=c++11 SkewHeap.cpp -c
 
-Queue.o: Queue.cpp Queue.h QueueNode.h
+Queue.o: Queue.cpp Queue.h QueueNode.h Edge.h
 	g++ -g -std=c++11 Queue.cpp -c
 
-QueueNode.o: QueueNode.cpp QueueNode.h
+QueueNode.o: QueueNode.cpp QueueNode.h Edge.h
 	g++ -g -std=c++11 QueueNode.cpp -c
 
 clean:
