@@ -18,12 +18,10 @@
        (case (car expr)
          ((+) (add (parse-wae (cadr expr)) (parse-wae (caddr expr))))
          ((-) (sub (parse-wae (cadr expr)) (parse-wae (caddr expr))))
-         ; todo: need to check if name is symbol somehow
          ((with) (with (car (cadr expr)) 
                        (parse-wae (cadr (cadr expr)))
                        (parse-wae (caddr expr))))
-         ; todo: throw error
-         )))))
+         (else (error 'parse-wae "Invalid symbol in expression")))))))
 
 (define interp-wae
   (lambda (expr)
@@ -34,7 +32,7 @@
       (sub (l r) (- (interp-wae l) (interp-wae r)))
       (with (name named-expr body)
             (interp-wae (substitute body name named-expr)))
-      ; todo: throw error
+      ; todo: throw error?
       )))
 
 (define substitute
@@ -53,7 +51,7 @@
                 (with bound-id 
                       (substitute named-expr sub-id val)
                       (substitute bound-body sub-id val))))
-      ; todo: throw error
+      ; todo: throw error?
       )))
 
 ; todo: check for errors
@@ -61,4 +59,4 @@
   (lambda (expr)
     (interp-wae (parse-wae expr))))
 
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; EXERCISE 2 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(parse-wae '{with {2 3} {+ 2 3}})
