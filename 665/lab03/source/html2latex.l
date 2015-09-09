@@ -67,7 +67,7 @@ int list_type;
     /*
     * Matched the beginning of an ordered list. Start enumerate section.
     */
-    printf("\\begin{enumerate}");
+    printf("\\begin{enumerate}\n");
     BEGIN OL;
 }
 
@@ -75,11 +75,19 @@ int list_type;
     /*
     * Matched the beginning of an unordered list. Start itemize section.
     */
-    printf("\\begin{itemize}");
+    printf("\\begin{itemize}\n");
     BEGIN UL;
 }
 
-[ \t\n\r]+ {
+<INITIAL,UL,OL,LI>"<li>" {
+    /*
+    * Matched beginning of a list item. Print item tag.
+    */
+    printf("    \\item ");
+    BEGIN LI;
+}
+
+<INITIAL,UL,OL>[ \t\n\r]+ {
     /**************************************************************************
      * Matched some whitespace that is not inside of an HTML tag. We
      * just ignore the whitespace.
@@ -138,14 +146,6 @@ int list_type;
     BEGIN 0;
 }
 
-<PRE>. {
-    /*
-    * Matched any character in a pre-formatted section besides end tag. Print
-    * it out as is.
-    */
-    printf("%s", yytext);
-}
-
 <PARA>"</p>" {
     /*
     * Matched end of paragraph character. Print newline.
@@ -154,7 +154,7 @@ int list_type;
     BEGIN 0;
 }
 
-<OL,LI>"</ol>" {
+<INITIAL,OL>"</ol>" {
     /*
     * Matched the end of an ordered list. Print ending statement.
     */
@@ -162,7 +162,7 @@ int list_type;
     BEGIN 0;
 }
 
-<UL,LI>"</ul>" {
+<INITIAL,UL>"</ul>" {
     /*
     * Matched the end of an unordered list. Print ending statement.
     */
@@ -170,31 +170,15 @@ int list_type;
     BEGIN 0;
 }
 
-<OL,UL>"<li>" {
-    /*
-    * Matched beginning of a list item. Print item tag.
-    */
-    printf("\t\\item ");
-    BEGIN LI;
-}
-
-<OL,LI>"</li>" {
+<OL,UL,LI>"</li>" {
     /*
     * Matched the end of a list item.
     */
-    printf("\n");
-    BEGIN OL;
+    printf("\n\n");
+    BEGIN 0;
 }
 
-<UL,LI>"</li>" {
-    /*
-    * Matched the end of a list item.
-    */
-    printf("\n");
-    BEGIN UL;
-}
-
-<PARA,OL,UL,LI>"<small>"[^<]*"</small>" {
+<PARA,LI>"<small>"[^<]*"</small>" {
     /*
     * Matched small text. Print as scriptsize text.
     */
@@ -202,7 +186,7 @@ int list_type;
     printf("{\\scriptsize %s}", yytext + 7);
 }
 
-<PARA,OL,UL,LI>"<big>"[^<]*"</big>" {
+<PARA,LI>"<big>"[^<]*"</big>" {
     /*
     * Matched big text. Print as Large text.
     */
@@ -210,7 +194,7 @@ int list_type;
     printf("{\\Large %s}", yytext + 5);
 }
 
-<PARA,OL,UL,LI>"<b>"[^<]*"</b>" {
+<PARA,LI>"<b>"[^<]*"</b>" {
     /*
     * Matched bold text. Print as textbf text.
     */
@@ -218,7 +202,7 @@ int list_type;
     printf("\\textbf{%s}", yytext + 3);
 }
 
-<PARA,OL,UL,LI>"<i>"[^<]*"</i>" {
+<PARA,LI>"<i>"[^<]*"</i>" {
     /*
     * Matched italic text. Print as textit text.
     */
@@ -226,7 +210,7 @@ int list_type;
     printf("\\textit{%s}", yytext + 3);
 }
 
-<PARA,OL,UL,LI>"<strong>"[^<]*"</strong>" {
+<PARA,LI>"<strong>"[^<]*"</strong>" {
     /*
     * Matched strong text. Print as textmd text.
     */
@@ -234,7 +218,7 @@ int list_type;
     printf("\\textmd{%s}", yytext + 8);
 }
 
-<PARA,OL,UL,LI>"<em>"[^<]*"</em>" {
+<PARA,LI>"<em>"[^<]*"</em>" {
     /*
     * Matched emphasized text. Print as emph text.
     */
@@ -242,7 +226,7 @@ int list_type;
     printf("\\emph{%s}", yytext + 4);
 }
 
-<PARA,OL,UL,LI>"<sup>"[^<]*"</sup>" {
+<PARA,LI>"<sup>"[^<]*"</sup>" {
     /*
     * Matched superscript text. Print as textsuperscript text.
     */
@@ -250,7 +234,7 @@ int list_type;
     printf("\\textsuperscript{%s}", yytext + 5);
 }
 
-<PARA,OL,UL,LI>"<sub>"[^<]*"</sub>" {
+<PARA,LI>"<sub>"[^<]*"</sub>" {
     /*
     * Matched subscript text. Print as textsubscript text.
     */
@@ -258,7 +242,7 @@ int list_type;
     printf("\\textsubscript{%s}", yytext + 5);
 }
 
-<PARA,OL,UL,LI>. {
+<PRE,PARA,LI>. {
     /*
     * Matched character that wasn't caught by other rules. Print as is.
     */

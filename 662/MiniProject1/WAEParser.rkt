@@ -27,12 +27,11 @@
   (lambda (expr)
     (type-case WAE expr
       (num (n) n)
-      (id (name) name) ; todo: figure out what to do for unbound id
+      (id (name) (error 'interp-wae "Free identifier"))
       (add (l r) (+ (interp-wae l) (interp-wae r)))
       (sub (l r) (- (interp-wae l) (interp-wae r)))
       (with (name named-expr body)
             (interp-wae (substitute body name named-expr)))
-      ; todo: throw error?
       )))
 
 (define substitute
@@ -51,7 +50,6 @@
                 (with bound-id 
                       (substitute named-expr sub-id val)
                       (substitute bound-body sub-id val))))
-      ; todo: throw error?
       )))
 
 ; todo: check for errors
@@ -59,4 +57,4 @@
   (lambda (expr)
     (interp-wae (parse-wae expr))))
 
-(parse-wae '{with {2 3} {+ 2 3}})
+(eval-wae '{with {x 5} {with {y x} {+ y 3}}})
