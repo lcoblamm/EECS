@@ -31,25 +31,24 @@
       (add (l r) (+ (interp-wae l) (interp-wae r)))
       (sub (l r) (- (interp-wae l) (interp-wae r)))
       (with (name named-expr body)
-            (interp-wae (substitute body name named-expr)))
-      )))
+            (interp-wae (substitute name (num (interp-wae named-expr)) body))))))
 
 (define substitute
-  (lambda (expr sub-id val)
+  (lambda (sub-id val expr)
     (type-case WAE expr
       (num (n) expr)
       (id (name)
           (if (symbol=? name sub-id) val expr))
-      (add (l r) (add (substitute l sub-id val) (substitute r sub-id val)))
-      (sub (l r) (sub (substitute l sub-id val) (substitute r sub-id val)))
+      (add (l r) (add (substitute sub-id val l) (substitute sub-id val r)))
+      (sub (l r) (sub (substitute sub-id val l) (substitute sub-id val r)))
       (with (bound-id named-expr bound-body)
             (if (symbol=? bound-id sub-id)
                 (with bound-id
-                      (substitute named-expr sub-id val)
+                      (substitute sub-id val named-expr)
                       bound-body)
                 (with bound-id 
-                      (substitute named-expr sub-id val)
-                      (substitute bound-body sub-id val))))
+                      (substitute sub-id val named-expr)
+                      (substitute sub-id val bound-body))))
       )))
 
 ; todo: check for errors
