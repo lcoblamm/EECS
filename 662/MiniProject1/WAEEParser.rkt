@@ -15,7 +15,14 @@
   (op (name symbol?)))
 
 (define-type binop-rec
-  (binop-record (name operator?) (op-proc procedure?)))
+  (binop-record (name symbol?) (op-proc procedure?)))
+
+(define binop-table
+  (list
+   (binop-record 'add +)
+   (binop-record 'sub -)
+   (binop-record 'mult *)
+   (binop-record 'div /)))
 
 (define parse-waee
   (lambda (expr)
@@ -43,18 +50,19 @@
     (type-case WAEE expr
       (num (n) n)
       (id (name) (error 'interp-waee "Free identifier"))
-      (binop (oper l r) ((lookup (op-name oper)) (interp-waee l) (interp-waee r)))
+      (binop (oper l r) ((lookup (op-name oper) binop-table) (interp-waee l) (interp-waee r)))
       (with (bindings body)
             (if (check-unique bindings)
                 (interp-waee (foldl subst-waee body bindings))
                 (error 'interp-waee "Illegal binding"))))))
 
 (define lookup
-  (lambda (name)
-    (cond ((symbol=? name 'add) +)
-          ((symbol=? name 'sub) -)
-          ((symbol=? name 'mult) *)
-          ((symbol=? name 'div) /))))
+  (lambda (name tbl)
+    (cond ((empty? tbl) (error 'lookup "Operator not found"))
+          (else 
+           (if (symbol=? (binop-record-name (car tbl)) name)
+               (binop-record-op-proc (car tbl))
+               (lookup name (cdr tbl)))))))
 
 ; check that there are no duplicate bindings
 (define check-unique
@@ -87,6 +95,35 @@
 (define subst-bindings
   (lambda (sub-id val bindings)
     (map (lambda (x) (bind (bind-name x) (substitute sub-id val (bind-expr x)))) bindings)))
-  
 
-(interp-waee (with (list (bind 'x (num 6))) (with (list (bind 'x (num 5)) (bind 'y (id 'x))) (binop (op 'add) (id 'x) (id 'y)))))
+(define eval-waee
+  (lambda (expr)
+    (interp-waee (parse-waee expr))))
+  
+; test case successes
+(eval-waee '5) ;5
+(eval-waee '{+ 5 7}) ;12
+(eval-waee '{- 7 5}) ;2
+(eval-waee '{* 5 7}) ;35
+(eval-waee '{/ 7 7}) ;1
+(eval-waee '{+ {- 3 0} 7}) ;10
+(eval-waee '{with {{x 5}} {+ 2 7}}) ;9
+(eval-waee '{with {{x 5}} {+ x x}}) ;10
+(eval-waee '{with {{x 5} {y 2}} {+ x y}}) ;7
+(eval-waee '{with {{y 7}} {with {{x 5}} {+ x x}}}) ;10
+(eval-waee '{with {{y 7}} {with {{x 5}} {+ x y}}}) ;12
+(eval-waee '{with {{y 7}} {with {{x y}} {+ x y}}}) ;14
+(eval-waee '{with {{x 7}} {with {{x 5}} {+ x x}}}) ;10
+
+
+; test case failures
+;(eval-waee 'x)
+;(eval-waee '+) 
+;(eval-waee '{+ 5}) 
+;(eval-waee '{-})
+;(eval-waee '{5 7})
+;(eval-waee '{^ 7 7})
+;(eval-waee '{+ {3 0} 7})
+;(eval-waee '{with {{x 5}} {+ y x}})
+;(eval-waee '{with {{{x 5}}} {+ x x}})
+;(eval-waee '{with {{x 5} {y x}} {+ x y}})
