@@ -21,7 +21,7 @@
          ((with) (with (car (cadr expr)) 
                        (parse-wae (cadr (cadr expr)))
                        (parse-wae (caddr expr))))
-         (else (error 'parse-wae "Invalid symbol in expression")))))))
+         (else (error 'parse-wae "Invalid expression syntax or unrecognized symbol")))))))
 
 (define interp-wae
   (lambda (expr)
@@ -51,9 +51,43 @@
                       (substitute sub-id val bound-body))))
       )))
 
-; todo: check for errors
 (define eval-wae
   (lambda (expr)
     (interp-wae (parse-wae expr))))
 
-(eval-wae '{with {x 5} {with {y x} {+ y 3}}})
+; test case successes
+;(eval-wae '5) ;5
+;(eval-wae '{+ 5 7}) ;12
+;(eval-wae '{- 7 5}) ;2
+;(eval-wae '{+ {- 3 0} 7}) ;10
+;(eval-wae '{with {x 5} {+ 2 7}}) ;9
+;(eval-wae '{with {x 5} {+ x x}}) ;10
+;(eval-wae '{with {x 5} {with {y 2} {+ x y}}}) ;7
+;(eval-wae '{with {y 7} {with {x 5} {+ x x}}}) ;10
+;(eval-wae '{with {y 7} {with {x y} {+ x y}}}) ;14
+;(eval-wae '{with {x 7} {with {x 5} {+ x x}}}) ;10
+;(eval-wae '{with {x 5} {with {y x} {+ y 3}}}) ;8
+;(eval-wae '{with {x 5} {+ x {with {x 3} 10}}}) ;15
+;(eval-wae '{with {x 5} {+ x {with {y 3} x}}}) ;10
+;(eval-wae '{with {x {+ 5 5}} {+ x x}}) ;20)
+;(eval-wae '{with {x {+ 5 5}} {with {y {- x 3}} {+ y y}}}) ;14)
+;(eval-wae '{with {x 5} {with {y {- x 3}} {+ y y}}}) ;4)
+;(eval-wae '{with {x 5} {+ x {with {x 3} 10}}}) ;15)
+;(eval-wae '{with {x 5} {+ x {with {x 3} x}}}) ;8)
+;(eval-wae '{with {x 5} {+ x {with {y 3} x}}}) ;10)
+;(eval-wae '{with {x 5} {with {y x} y}}) ;5)
+;(eval-wae '{with {x 5} {with {x x} x}}) ;5)
+
+; test case failures
+;(eval-wae 'x)
+;(eval-wae '+) 
+;(eval-wae '{+ 5}) 
+;(eval-wae '{-})
+;(eval-wae '{* 5 7}) ;35
+;(eval-wae '{/ 7 7}) ;1
+;(eval-wae '{5 7})
+;(eval-wae '{^ 7 7})
+;(eval-wae '{+ {3 0} 7})
+;(eval-wae '{with {x 5} {+ y x}})
+;(eval-wae '{with {{x 5}} {+ x x}})
+;(eval-wae '{with {x 5} {y x} {+ x y}})

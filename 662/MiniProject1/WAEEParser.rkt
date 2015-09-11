@@ -36,12 +36,11 @@
          ((*) (binop (op 'mult) (parse-waee (cadr expr)) (parse-waee (caddr expr))))
          ((/) (binop (op 'div) (parse-waee (cadr expr)) (parse-waee (caddr expr))))
          ((with) (with (parse-bindings (cadr expr)) (parse-waee (caddr expr))))
-         (else (error 'parse-waee "Invalid symbol in expression")))))))
+         (else (error 'parse-waee "Invalid expression syntax or unrecognized symbol")))))))
 
 (define parse-bindings
   (lambda (b)
     (cond ((empty? b) '())
-          ((symbol? (car b)) (cons (bind (car b) (parse-waee (cadr b))) '()))
           (else (cons (bind (caar b) (parse-waee (cadar b))) (parse-bindings (cdr b)))))))
                  
 
@@ -101,19 +100,23 @@
     (interp-waee (parse-waee expr))))
   
 ; test case successes
-(eval-waee '5) ;5
-(eval-waee '{+ 5 7}) ;12
-(eval-waee '{- 7 5}) ;2
-(eval-waee '{* 5 7}) ;35
-(eval-waee '{/ 7 7}) ;1
-(eval-waee '{+ {- 3 0} 7}) ;10
-(eval-waee '{with {{x 5}} {+ 2 7}}) ;9
-(eval-waee '{with {{x 5}} {+ x x}}) ;10
-(eval-waee '{with {{x 5} {y 2}} {+ x y}}) ;7
-(eval-waee '{with {{y 7}} {with {{x 5}} {+ x x}}}) ;10
-(eval-waee '{with {{y 7}} {with {{x 5}} {+ x y}}}) ;12
-(eval-waee '{with {{y 7}} {with {{x y}} {+ x y}}}) ;14
-(eval-waee '{with {{x 7}} {with {{x 5}} {+ x x}}}) ;10
+;(eval-waee '5) ;5
+;(eval-waee '{+ 5 7}) ;12
+;(eval-waee '{- 7 5}) ;2
+;(eval-waee '{* 5 7}) ;35
+;(eval-waee '{/ 7 7}) ;1
+;(eval-waee '{+ {- 3 0} 7}) ;10
+;(eval-waee '{with {{x 5}} {+ 2 7}}) ;9
+;(eval-waee '{with {{x 5}} {+ x x}}) ;10
+;(eval-waee '{with {{x 5} {y 2}} {+ x y}}) ;7
+;(eval-waee '{with {{x 5} {y {- 2 0}}} {+ x y}}) ;7
+;(eval-waee '{with {{y 7}} {with {{x 5}} {+ x x}}}) ;10
+;(eval-waee '{with {{y 7}} {with {{x 5}} {+ x y}}}) ;12
+;(eval-waee '{with {{y 7}} {with {{x y}} {+ x y}}}) ;14
+;(eval-waee '{with {{x 7}} {with {{x 5}} {+ x x}}}) ;10
+;(eval-waee '{with {{x 8}} {+ x {with {{y 4} {x 3}} {+ x y}}}}) ; 15
+;(eval-waee '{with {{x 8}} {+ x {with {{y {+ 5 x}} {x 3}} {+ x y}}}}) ; 24
+;(eval-waee '{with {{x 7} {y 1} {z 3}} {+ x {with {{z 2}} {+ y z}}}}) ; 10
 
 
 ; test case failures
@@ -126,4 +129,14 @@
 ;(eval-waee '{+ {3 0} 7})
 ;(eval-waee '{with {{x 5}} {+ y x}})
 ;(eval-waee '{with {{{x 5}}} {+ x x}})
+;(eval-waee '{with {x 5} {+ x x}})
 ;(eval-waee '{with {{x 5} {y x}} {+ x y}})
+;(eval-waee '{with {{x 5} {x 7}} {+ x y}})
+;(eval-waee '{with {{y 7} {x y}} {with {{x 5}} {+ x x}}}) 
+;(eval-waee '{with {{y 7} {x {+ 10 y}}} {with {{x 5}} {+ x x}}}) 
+;(eval-waee '{with {{y 7}} {with {x 5} {+ x x}}}) 
+;(eval-waee '{with {{y x}} {with {{x 5}} {+ x y}}}) 
+;(eval-waee '{with {{x 7} {+ x 2}} {with {{x 5}} {+ x x}}})
+;(eval-waee '{with {{x 8}} {+ x {with {{y 4} {x y}} {+ x y}}}})
+;(eval-waee '{with {{x 8}} {+ x {with {{y {+ 5 x}} {x 3}} {+ x z}}}}) 
+;(eval-waee '{with {{x 7} {y 1}} {+ z {with {{z 2}} {+ y z}}}}) 
