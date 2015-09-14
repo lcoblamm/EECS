@@ -1,7 +1,13 @@
-#lang plai
+; Lynne Coblammers
+; EECS 662
+; Mini Project 1
+; 2015.09.14
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; EXERCISE 2 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+#lang plai
+
+; abstract syntax
 (define-type WAEE
   (num (n number?))
   (id (name symbol?))
@@ -14,9 +20,11 @@
 (define-type operator
   (op (name symbol?)))
 
+; stores a binary operator name and its associated operation
 (define-type binop-rec
   (binop-record (name symbol?) (op-proc procedure?)))
 
+; table of valid binary operator records
 (define binop-table
   (list
    (binop-record 'add +)
@@ -24,6 +32,8 @@
    (binop-record 'mult *)
    (binop-record 'div /)))
 
+; parses an expression, taking it from concrete syntax to the abstract syntax 
+; defined above
 (define parse-waee
   (lambda (expr)
     (cond
@@ -38,12 +48,13 @@
          ((with) (with (parse-bindings (cadr expr)) (parse-waee (caddr expr))))
          (else (error 'parse-waee "Invalid expression syntax or unrecognized symbol")))))))
 
+; parses a binding expression 
 (define parse-bindings
   (lambda (b)
     (cond ((empty? b) '())
           (else (cons (bind (caar b) (parse-waee (cadar b))) (parse-bindings (cdr b)))))))
                  
-
+; evaluates a WAEE expression in the abstract syntax defined above
 (define interp-waee
   (lambda (expr)
     (type-case WAEE expr
@@ -55,6 +66,7 @@
                 (interp-waee (foldl subst-waee body bindings))
                 (error 'interp-waee "Illegal binding"))))))
 
+; looks up the operation associated with a binary operation name
 (define lookup
   (lambda (name tbl)
     (cond ((empty? tbl) (error 'lookup "Operator not found"))
@@ -70,11 +82,13 @@
           (else (and 
                  (andmap (lambda (x) (not (symbol=? (bind-name (car b)) (bind-name x)))) (cdr b))
                  (check-unique (cdr b)))))))
-  
+
+; a helper function to pass a binding expression and body into the substitute function
 (define subst-waee
   (lambda (binder body)
     (substitute (bind-name binder) (num (interp-waee (bind-expr binder))) body)))
-    
+
+; substitutes the spefied id for the value in the expression
 (define substitute
   (lambda (sub-id val expr)
     (type-case WAEE expr
@@ -95,48 +109,7 @@
   (lambda (sub-id val bindings)
     (map (lambda (x) (bind (bind-name x) (substitute sub-id val (bind-expr x)))) bindings)))
 
+; parses and interprets a WAEE expression
 (define eval-waee
   (lambda (expr)
     (interp-waee (parse-waee expr))))
-  
-; test case successes
-;(eval-waee '5) ;5
-;(eval-waee '{+ 5 7}) ;12
-;(eval-waee '{- 7 5}) ;2
-;(eval-waee '{* 5 7}) ;35
-;(eval-waee '{/ 7 7}) ;1
-;(eval-waee '{+ {- 3 0} 7}) ;10
-;(eval-waee '{with {{x 5}} {+ 2 7}}) ;9
-;(eval-waee '{with {{x 5}} {+ x x}}) ;10
-;(eval-waee '{with {{x 5} {y 2}} {+ x y}}) ;7
-;(eval-waee '{with {{x 5} {y {- 2 0}}} {+ x y}}) ;7
-;(eval-waee '{with {{y 7}} {with {{x 5}} {+ x x}}}) ;10
-;(eval-waee '{with {{y 7}} {with {{x 5}} {+ x y}}}) ;12
-;(eval-waee '{with {{y 7}} {with {{x y}} {+ x y}}}) ;14
-;(eval-waee '{with {{x 7}} {with {{x 5}} {+ x x}}}) ;10
-;(eval-waee '{with {{x 8}} {+ x {with {{y 4} {x 3}} {+ x y}}}}) ; 15
-;(eval-waee '{with {{x 8}} {+ x {with {{y {+ 5 x}} {x 3}} {+ x y}}}}) ; 24
-;(eval-waee '{with {{x 7} {y 1} {z 3}} {+ x {with {{z 2}} {+ y z}}}}) ; 10
-
-
-; test case failures
-;(eval-waee 'x)
-;(eval-waee '+) 
-;(eval-waee '{+ 5}) 
-;(eval-waee '{-})
-;(eval-waee '{5 7})
-;(eval-waee '{^ 7 7})
-;(eval-waee '{+ {3 0} 7})
-;(eval-waee '{with {{x 5}} {+ y x}})
-;(eval-waee '{with {{{x 5}}} {+ x x}})
-;(eval-waee '{with {x 5} {+ x x}})
-;(eval-waee '{with {{x 5} {y x}} {+ x y}})
-;(eval-waee '{with {{x 5} {x 7}} {+ x y}})
-;(eval-waee '{with {{y 7} {x y}} {with {{x 5}} {+ x x}}}) 
-;(eval-waee '{with {{y 7} {x {+ 10 y}}} {with {{x 5}} {+ x x}}}) 
-;(eval-waee '{with {{y 7}} {with {x 5} {+ x x}}}) 
-;(eval-waee '{with {{y x}} {with {{x 5}} {+ x y}}}) 
-;(eval-waee '{with {{x 7} {+ x 2}} {with {{x 5}} {+ x x}}})
-;(eval-waee '{with {{x 8}} {+ x {with {{y 4} {x y}} {+ x y}}}})
-;(eval-waee '{with {{x 8}} {+ x {with {{y {+ 5 x}} {x 3}} {+ x z}}}}) 
-;(eval-waee '{with {{x 7} {y 1}} {+ z {with {{z 2}} {+ y z}}}}) 
