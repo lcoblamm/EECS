@@ -6,48 +6,74 @@ Author: Lynne Coblammers
 Date: 2015.09.17
 */
 
+#include <list>
 #include <iostream>
+#include <string>
+#include <cstring>
+#include <cstdlib>
+
 #include "State.h"
 #include "Converter.h"
 
-void readNFA(State** states, int& numStates, int& startState, int* finalStates);
+bool readNFA(State** states, int& numStates, int& startState, std::list<int>& finalStates);
 
 int main(int argc, char* argv[])
 {
 	State** nfaStates;
 	int numStates = 0;
 	int startState = 0;
-	int* finalStates;
+	std::list<int> finalStates;
 
 	if (!readNFA(nfaStates, numStates, startState, finalStates)) {
 		return 0;
 	}
 
-	State** dfaStates = converToDFA(nfaStates, numStates, startState, finalStates);
+	// convert to dfa
 	
 	// print out states
 }
 
-bool readNFA(State** states, int& numStates, int& startState, int** finalStates)
+bool readNFA(State** states, int& numStates, int& startState, std::list<int>& finalStates)
 {
-	// read in initial state
-	std::string tempstr;
-	// ignore "Initial State"
-	std::cin >> tempstr;
-	std::cin >> tempstr;
-	char tempc;
-	// Ignore {, read start state, ignore }
-	std::cin >> tempc;
-	std::cin >> startState;
-	std::cin >> tempc;
-	// ignore "Final States: {"
-	std::cin >> tempstr;
-	std::cin >> tempstr;
-	std::cin >> tempc;
+	std::string line;
+	std::size_t open;
+	std::size_t close;
 
-	finalStates = new int*
-	std::cin >> tempc;
-	while (tempc != '}') {
+	// read initial state
+	std::getline(std::cin, line);
+	open = line.find('{');
+	close = line.find('}');
+	std::string s = line.substr(open + 1, close - open);
+	startState = atoi(s.c_str());
+	// TODOLMC: remove this
+	std::cout << "Start state: " << startState << std::endl;
 
+	// read in final states
+	std::getline(std::cin, line);
+	open = line.find('{');
+	close = line.find ('}');
+	s = line.substr(open + 1, close - open);
+	std::size_t commapos;
+	commapos = s.find(',');
+	std::size_t start = 0;
+	while (comma != std::string::npos) {
+		std::string currNum = s.substr(start, commapos - start);
+		finalStates.push_back(atoi(currNum.c_str()));
+		start = commapos + 1;
+		// TODOLMC: remove this
+		std::cout << "Final state: " << finalState << std::endl;
 	}
+
+	// read in total states
+	std::getline(std::cin, line);
+	open = line.find(":");
+	s = substr(open + 1, line.size() - (open + 1));
+	numStates = atoi(s.c_str());
+	// TODOLMC: remove this
+	std::cout << "Number of states: " << numStates << std::endl;
+
+	// read in headers
+	std::getline(std::cin, line);
+
+	// read in state data
 }

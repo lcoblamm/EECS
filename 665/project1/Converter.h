@@ -9,15 +9,17 @@ Date: 2015.09.17
 #ifndef CONVERTER_H
 #define CONVERTER_H
 
+#include <list>
+
 #include "State.h"
 
 class Converter
 {
 public:
-	Converter();
-	~Converter();
+	Converter() {}
+	~Converter() {}
 
-	State** convertToDFA(State** nfa, int numStates, int startState, int* finalStates);
+	State** convertToDFA(State** nfa, int numStates, int startState, std::list<int>& finalStates);
 
 private:
 	State** move(char symbol, State** initialStates);
