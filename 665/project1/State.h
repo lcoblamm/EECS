@@ -1,0 +1,24 @@
+/*
+File: State.h
+Course: EECS 665
+Assignment: Project 1 - NFA to DFA Converter
+Author: Lynne Coblammers
+Date: 2015.09.17
+*/
+
+#ifndef STATE_H
+#define STATE_H
+
+struct Transition;
+
+struct State
+{
+public:
+	State(int stateID) { id = stateID; }
+	~State() {}
+
+	int id;
+	Transition** moves;
+};
+
+#endif
