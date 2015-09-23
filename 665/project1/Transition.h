@@ -9,6 +9,8 @@ Date: 2015.09.17
 #ifndef TRANSITION_H
 #define TRANSITION_H
 
+#include <list>
+
 struct Transition
 {
 public:
@@ -16,7 +18,7 @@ public:
 	~Transition() {}
 
 	char symbol;
-	int* states;
+	list<int> states;
 };
 
 #endif
