@@ -12,11 +12,11 @@ Date: 2015.09.17
 struct Transition
 {
 public:
-	Transition(char tranSymbol, int nextState) : symbol(tranSymbol), stateID(nextState) {}
+	Transition(char tranSymbol) : symbol(tranSymbol) {}
 	~Transition() {}
 
 	char symbol;
-	int stateID;
+	int* states;
 };
 
 #endif
