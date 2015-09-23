@@ -34,3 +34,6 @@
 *.tar.gz
 **/EECS_140/**/*
 **/.metadata/**/*
+*.vo
+*.glob
+*.crashcoqide
