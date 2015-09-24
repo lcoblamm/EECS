@@ -20,15 +20,17 @@ public:
 	Parser() {}
 	~Parser() {}
 
-	void readNFA(State** states, int& numStates, int& startState, std::list<int>& finalStates, std::list<char>& symbols);
+	void readNFA(State*** states, int& numStates, int& startState, std::list<int>& finalStates, std::list<char>& symbols);
 
 private:
 	int readStartState(const std::string& line);
 	void readFinalStates(const std::string& line, std::list<int>& finalStates);
 	int readNumStates(const std::string& line);
 	void readHeaders(const std::string& line, std::list<char>& symbols);
-	void readState(const std::string& line, State* state, std::list<char>& symbols);
-	void parseStateList(const std::string& states, std::list<int>& parsedStates);
+	void readState(const std::string& line, State** state, std::list<char>& symbols);
+	void parseStateList(const std::string states, std::list<int>& parsedStates);
+
+    void printState(State* state, std::list<char>& symbols);
 };
 
 #endif

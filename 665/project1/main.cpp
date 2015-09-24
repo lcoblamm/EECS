@@ -22,7 +22,7 @@ int main(int argc, char* argv[])
 	std::list<char> symbols;
 
 	Parser parser;
-	parser.readNFA(nfaStates, numStates, startState, finalStates, symbols);
+	parser.readNFA(&nfaStates, numStates, startState, finalStates, symbols);
 
 	// convert to dfa
 	

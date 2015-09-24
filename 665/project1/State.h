@@ -9,6 +9,7 @@ Date: 2015.09.17
 #ifndef STATE_H
 #define STATE_H
 
+#include <map>
 #include "Transition.h"
 
 struct State
@@ -19,7 +20,7 @@ public:
 	~State() {}
 
 	int id;
-	Transition* moves;
+	std::map<char,Transition*> moves;
 };
 
 #endif
