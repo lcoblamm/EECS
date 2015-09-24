@@ -9,16 +9,17 @@ Date: 2015.09.17
 #ifndef STATE_H
 #define STATE_H
 
-struct Transition;
+#include "Transition.h"
 
 struct State
 {
 public:
+	State() {}
 	State(int stateID) { id = stateID; }
 	~State() {}
 
 	int id;
-	Transition** moves;
+	Transition* moves;
 };
 
 #endif

@@ -14,11 +14,12 @@ Date: 2015.09.17
 struct Transition
 {
 public:
+	Transition() {}
 	Transition(char tranSymbol) : symbol(tranSymbol) {}
 	~Transition() {}
 
 	char symbol;
-	list<int> states;
+	std::list<int> states;
 };
 
 #endif
