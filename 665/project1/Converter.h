@@ -10,21 +10,35 @@ Date: 2015.09.17
 #define CONVERTER_H
 
 #include <list>
+#include <map>
 
 #include "State.h"
 
 class Converter
 {
 public:
-	Converter() {}
+	Converter(std::map<int,State>& nfa, int numStates, int startState, 
+        std::set<int>& nfaFinal, std::list<char>& symbols) : m_nfa(nfa), 
+        m_numStates(numStates), m_startState(startState), m_nfaFinal(nfaFinal), 
+        m_symbols(symbols) {}
 	~Converter() {}
 
-	State** convertToDFA(State** nfa, int numStates, int startState, std::list<int>& finalStates);
+	std::map<int,State> convertToDFA();
+
+    std::set<int> dfaFinalStates() { return m_dfaFinal; }
 
 private:
-	State** move(char symbol, State** initialStates);
-	State** epsClosure(State** stateSet);
-	int* calcFinalStates(int* finalNFA);
+	std::set<int> move(char symbol);
+	std::set<int> epsClosure(std::set<int>& states);
+	void calcFinalStates();
+
+    std::map<int,State> m_nfa;
+    std::map<int,State> m_dfa;
+    int m_numStates;
+    int m_startState;
+    std::set<int> m_nfaFinal;
+    std::set<int> m_dfaFinal;
+    std::list<char> m_symbols;
 
 };
 

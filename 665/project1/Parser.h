@@ -19,23 +19,34 @@ Date: 2015.09.22
 class Parser 
 {
 public:
-	Parser() {}
+	Parser() : m_numStates(0), m_startState(0) {}
 	~Parser() {}
 
-	void readNFA(State*** states, int& numStates, int& startState, std::set<int>& finalStates, std::list<char>& symbols);
+	void readNFA();
+
+	std::map<int, State> states() { return m_nfaStates; }
+	int numStates() { return m_numStates; }
+	int startState() { return m_startState; }
+	std::set<int> finalStates() { return m_finalStates; }
+	std::list<char> symbols() { return m_symbols; }
 
 private:
 	std::vector<std::string> split(const std::string& s, char delim);
 	std::string stripCurlies(const std::string& s);
 
-	int readStartState();
-	void readFinalStates(std::set<int>& finalStates);
-	int readNumStates();
-	void readHeaders(std::list<char>& symbols);
-	void readState(const std::string& line, State** state, std::list<char>& symbols);
+	void readStartState();
+	void readFinalStates();
+	void readNumStates();
+	void readHeaders();
+	void readState();
 	void parseStateList(const std::string& states, std::set<int>& parsedStates);
 
-    void printState(State* state, std::list<char>& symbols);
+    std::map<int, State> m_nfaStates;
+    int m_numStates;
+    int m_startState;
+    std::set<int> m_finalStates;
+    std::list<char> m_symbols;
+
 };
 
 #endif

@@ -10,87 +10,78 @@ Date: 2015.09.22
 
 #include "Parser.h"
 
-void Parser::readNFA(State*** states, int& numStates, int& startState, std::set<int>& finalStates, std::list<char>& symbols)
+void Parser::readNFA()
 {
-	// read initial state
-	startState = readStartState();
-
-	// read in final states
-	readFinalStates(finalStates);
-			
-	// read in total states
-	numStates = readNumStates();
-
-	// read in headers
-	readHeaders(symbols);
+	readStartState();
+	readFinalStates();
+	readNumStates();
+	readHeaders();
 
 	// read in state data
-	*states = new State*[numStates];
-	for(int i = 0; i < numStates; ++i) {
-		std::string line;
-		std::getline(std::cin, line);
-		readState(line, &(*states)[i], symbols);
-	}
-	for(int i = 0; i < numStates; ++i) {
-		printState((*states)[i], symbols);
+	for(int i = 0; i < m_numStates; ++i) {
+		readState();
 	}
 }
 
-int Parser::readStartState()
+void Parser::readStartState()
 {
 	std::string line;
 	std::getline(std::cin, line);
 	std::string s = stripCurlies(line);
-	return stoi(s);
+	m_startState =  stoi(s);
 }
 
-void Parser::readFinalStates(std::set<int>& finalStates)
+void Parser::readFinalStates()
 {
 	std::string line;
 	std::getline(std::cin, line);
 	std::string s = stripCurlies(line);
-	parseStateList(s, finalStates);
+	parseStateList(s, m_finalStates);
 }
 
-int Parser::readNumStates()
+void Parser::readNumStates()
 {
 	std::string line;
 	std::getline(std::cin, line);
 	std::size_t open = line.find(":");
 	std::string s = line.substr(open + 1, line.size() - (open + 1));
-	return stoi(s);
+	m_numStates = stoi(s);
 }
 
-void Parser::readHeaders(std::list<char>& symbols)
+void Parser::readHeaders()
 {
 	std::string line;
 	std::getline(std::cin, line);
 	std::vector<std::string> tokens = split(line, '\t');
 	// get symbols, ignoring the first token, "state"
 	for (int i = 1; i < tokens.size(); ++i) {
-		symbols.push_back(tokens[i].at(0));
+		m_symbols.push_back(tokens[i].at(0));
 	}
 }
 
-void Parser::readState(const std::string& line, State** state, std::list<char>& symbols)
+void Parser::readState()
 {
+	std::string line;
+	std::getline(std::cin, line);
+
 	std::vector<std::string> tokens = split(line, '\t');
 
 	// get state num
-	*state = new State(stoi(tokens[0]));
-
+	int stateID = stoi(tokens[0]);
+	State currState(stateID);
 	// get transitions
-	std::list<char>::iterator iter = symbols.begin();
+	std::list<char>::iterator iter = m_symbols.begin();
 	int i = 1;
-	for (; iter != symbols.end(); ++iter, ++i) {
+	for (; iter != m_symbols.end(); ++iter, ++i) {
 		Transition t(*iter);
 
 		// parse transitions
 		std::string s = stripCurlies(tokens[i]);
 		parseStateList(s, t.states);
 
-		(*state)->moves[*iter] = t;
+		currState.moves[*iter] = t;
 	}
+	m_nfaStates[stateID] = currState;
 }
 
 void Parser::parseStateList(const std::string& states, std::set<int>& parsedStates)
@@ -102,22 +93,6 @@ void Parser::parseStateList(const std::string& states, std::set<int>& parsedStat
 	for (int i = 0; i < tokens.size(); ++i) {
 		parsedStates.insert(stoi(tokens[i]));
 	}
-}
-
-void Parser::printState(State* state, std::list<char>& symbols)
-{
-	std::cout << "State " << state->id << std::endl;
-	std::list<char>::iterator iter = symbols.begin();
-	for (; iter != symbols.end(); iter++) {
-		std::cout << "\tTransitions on " << state->moves[*iter].symbol << ": ";
-		std::set<int> states = state->moves[*iter].states;
-		std::set<int>::iterator stateIter = states.begin();
-		for (; stateIter != states.end(); stateIter++) {
-			std::cout << *stateIter << " ";
-		}
-		std::cout << std::endl;
-	}
-	std::cout << std::endl;
 }
 
 std::vector<std::string> Parser::split(const std::string& s, char delim)
