@@ -9,7 +9,7 @@ Date: 2015.09.17
 #ifndef TRANSITION_H
 #define TRANSITION_H
 
-#include <list>
+#include <set>
 
 struct Transition
 {
@@ -19,7 +19,7 @@ public:
 	~Transition() {}
 
 	char symbol;
-	std::list<int> states;
+	std::set<int> states;
 };
 
 #endif

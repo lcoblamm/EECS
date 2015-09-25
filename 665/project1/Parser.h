@@ -10,7 +10,9 @@ Date: 2015.09.22
 #define PARSER_H
 
 #include <list>
+#include <set>
 #include <string>
+#include <vector>
 
 #include "State.h"
 
@@ -20,15 +22,18 @@ public:
 	Parser() {}
 	~Parser() {}
 
-	void readNFA(State*** states, int& numStates, int& startState, std::list<int>& finalStates, std::list<char>& symbols);
+	void readNFA(State*** states, int& numStates, int& startState, std::set<int>& finalStates, std::list<char>& symbols);
 
 private:
-	int readStartState(const std::string& line);
-	void readFinalStates(const std::string& line, std::list<int>& finalStates);
-	int readNumStates(const std::string& line);
-	void readHeaders(const std::string& line, std::list<char>& symbols);
+	std::vector<std::string> split(const std::string& s, char delim);
+	std::string stripCurlies(const std::string& s);
+
+	int readStartState();
+	void readFinalStates(std::set<int>& finalStates);
+	int readNumStates();
+	void readHeaders(std::list<char>& symbols);
 	void readState(const std::string& line, State** state, std::list<char>& symbols);
-	void parseStateList(const std::string states, std::list<int>& parsedStates);
+	void parseStateList(const std::string& states, std::set<int>& parsedStates);
 
     void printState(State* state, std::list<char>& symbols);
 };

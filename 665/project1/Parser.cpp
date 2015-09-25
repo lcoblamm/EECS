@@ -7,51 +7,27 @@ Date: 2015.09.22
 */
 
 #include <iostream>
-#include <cstring>
 
 #include "Parser.h"
 
-void Parser::readNFA(State*** states, int& numStates, int& startState, std::list<int>& finalStates, std::list<char>& symbols)
+void Parser::readNFA(State*** states, int& numStates, int& startState, std::set<int>& finalStates, std::list<char>& symbols)
 {
-	std::string line;
-
 	// read initial state
-	std::getline(std::cin, line);
-	startState = readStartState(line);
-	// TODOLMC: remove this
-	std::cout << "Start state: " << startState << std::endl;
+	startState = readStartState();
 
 	// read in final states
-	std::getline(std::cin, line);
-	readFinalStates(line, finalStates);
-	// TODOLMC: remove this
-	std::cout << "Final states: ";
-	for (std::list<int>::iterator iter = finalStates.begin(); iter != finalStates.end(); iter++)
-	{
-		std::cout << *iter << " ";
-	}
-	std::cout << std::endl;
+	readFinalStates(finalStates);
 			
 	// read in total states
-	std::getline(std::cin, line);
-	numStates = readNumStates(line);
-	// TODOLMC: remove this
-	std::cout << "Number of states: " << numStates << std::endl;
+	numStates = readNumStates();
 
 	// read in headers
-	std::getline(std::cin, line);
-	readHeaders(line, symbols);
-	// TODOLMC: remove this
-	std::cout << "Symbols: ";
-	std::list<char>::iterator iter = symbols.begin();
-	for (; iter != symbols.end(); iter++) {
-		std::cout << *iter << " ";
-	}
-	std::cout << std::endl;
+	readHeaders(symbols);
 
 	// read in state data
 	*states = new State*[numStates];
 	for(int i = 0; i < numStates; ++i) {
+		std::string line;
 		std::getline(std::cin, line);
 		readState(line, &(*states)[i], symbols);
 	}
@@ -60,93 +36,72 @@ void Parser::readNFA(State*** states, int& numStates, int& startState, std::list
 	}
 }
 
-int Parser::readStartState(const std::string& line)
+int Parser::readStartState()
 {
-	std::size_t open = line.find('{');
-	std::size_t close = line.find('}');
-	std::string s = line.substr(open + 1, close - (open +1));
-	return atoi(s.c_str());
+	std::string line;
+	std::getline(std::cin, line);
+	std::string s = stripCurlies(line);
+	return stoi(s);
 }
 
-void Parser::readFinalStates(const std::string& line, std::list<int>& finalStates)
+void Parser::readFinalStates(std::set<int>& finalStates)
 {
-	std::size_t open = line.find('{');
-	std::size_t close = line.find ('}');
-	std::string s = line.substr(open + 1, close - (open + 1));
+	std::string line;
+	std::getline(std::cin, line);
+	std::string s = stripCurlies(line);
 	parseStateList(s, finalStates);
 }
 
-int Parser::readNumStates(const std::string& line)
+int Parser::readNumStates()
 {
+	std::string line;
+	std::getline(std::cin, line);
 	std::size_t open = line.find(":");
 	std::string s = line.substr(open + 1, line.size() - (open + 1));
-	return atoi(s.c_str());
+	return stoi(s);
 }
 
-void Parser::readHeaders(const std::string& line, std::list<char>& symbols)
+void Parser::readHeaders(std::list<char>& symbols)
 {
-	char* temp = new char[line.length()];
-	std::size_t len = line.copy(temp, line.length());
-	temp[len] = '\0';
-	char* symbol = strtok(temp, "\t");
-	symbol = strtok(NULL, "\t");
-	int i = 0;
-	while (symbol != NULL) {
-		symbols.push_back(symbol[0]);
-		i++;
-		symbol = strtok(NULL, "\t");
+	std::string line;
+	std::getline(std::cin, line);
+	std::vector<std::string> tokens = split(line, '\t');
+	// get symbols, ignoring the first token, "state"
+	for (int i = 1; i < tokens.size(); ++i) {
+		symbols.push_back(tokens[i].at(0));
 	}
-	delete temp;
 }
 
 void Parser::readState(const std::string& line, State** state, std::list<char>& symbols)
 {
-	char* temp = new char[line.length()];
-	std::size_t len = line.copy(temp, line.length());
-	temp[len] = '\0';
+	std::vector<std::string> tokens = split(line, '\t');
 
 	// get state num
-	char* num = strtok(temp, "\t");
-	*state = new State(atoi(num));
+	*state = new State(stoi(tokens[0]));
 
 	// get transitions
 	std::list<char>::iterator iter = symbols.begin();
-	int i = 0;
-	char* tranSet = strtok(NULL, "\t");
-	while (tranSet != NULL) {
-		Transition* t = new Transition(*iter);
-		std::string currTran(tranSet);
+	int i = 1;
+	for (; iter != symbols.end(); ++iter, ++i) {
+		Transition t(*iter);
 
 		// parse transitions
-		std::size_t open = currTran.find('{');
-		std::size_t close = currTran.find ('}');
-		std::string s = currTran.substr(open + 1, close - (open + 1));
-		parseStateList(s, t->states);
+		std::string s = stripCurlies(tokens[i]);
+		parseStateList(s, t.states);
 
 		(*state)->moves[*iter] = t;
-
-		// update
-		tranSet = strtok(NULL, "\t");
-		iter++;
 	}
-	delete temp;
 }
 
-void Parser::parseStateList(const std::string states, std::list<int>& parsedStates)
+void Parser::parseStateList(const std::string& states, std::set<int>& parsedStates)
 {
 	if (states.empty()) {
 		return;
 	}
-	char* temp = new char[states.length()];
-	std::size_t len = states.copy(temp, states.length());
-	temp[len] = '\0';
-	char* state = strtok(temp, ",");
-	while (state != NULL) {
-		parsedStates.push_back(atoi(state));
-		std::cout << "DEBUG, state added: " << parsedStates.back();
-		state = strtok(NULL, ",");
+	std::vector<std::string> tokens = split(states, ',');
+	for (int i = 0; i < tokens.size(); ++i) {
+		parsedStates.insert(stoi(tokens[i]));
 	}
-	delete temp;
 }
 
 void Parser::printState(State* state, std::list<char>& symbols)
@@ -154,13 +109,39 @@ void Parser::printState(State* state, std::list<char>& symbols)
 	std::cout << "State " << state->id << std::endl;
 	std::list<char>::iterator iter = symbols.begin();
 	for (; iter != symbols.end(); iter++) {
-		std::cout << "\tTransitions on " << state->moves[*iter]->symbol << ": ";
-		std::list<int> states = state->moves[*iter]->states;
-		std::list<int>::iterator stateIter = states.begin();
+		std::cout << "\tTransitions on " << state->moves[*iter].symbol << ": ";
+		std::set<int> states = state->moves[*iter].states;
+		std::set<int>::iterator stateIter = states.begin();
 		for (; stateIter != states.end(); stateIter++) {
 			std::cout << *stateIter << " ";
 		}
 		std::cout << std::endl;
 	}
 	std::cout << std::endl;
+}
+
+std::vector<std::string> Parser::split(const std::string& s, char delim)
+{
+	std::vector<std::string> tokens;
+
+	std::string remainder = s;
+	std::size_t pos = remainder.find(delim);
+
+	while (pos != std::string::npos) {
+		std::string token = remainder.substr(0, pos);
+		tokens.push_back(token);
+		remainder = remainder.substr(pos + 1, remainder.size() - (pos + 1));
+		pos = remainder.find(delim);
+	}
+	tokens.push_back(remainder);
+	return tokens;
+}
+
+std::string Parser::stripCurlies(const std::string& s)
+{
+
+	std::size_t open = s.find('{');
+	std::size_t close = s.find('}');
+	std::string stripped = s.substr(open + 1, close - (open + 1));
+	return stripped;
 }

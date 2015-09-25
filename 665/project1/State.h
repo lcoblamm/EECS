@@ -20,7 +20,7 @@ public:
 	~State() {}
 
 	int id;
-	std::map<char,Transition*> moves;
+	std::map<char,Transition> moves;
 };
 
 #endif

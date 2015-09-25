@@ -7,7 +7,7 @@ Date: 2015.09.17
 */
 
 #include <list>
-#include <iostream>
+#include <set>
 
 #include "State.h"
 #include "Converter.h"
@@ -18,7 +18,7 @@ int main(int argc, char* argv[])
 	State** nfaStates;
 	int numStates = 0;
 	int startState = 0;
-	std::list<int> finalStates;
+	std::set<int> finalStates;
 	std::list<char> symbols;
 
 	Parser parser;
