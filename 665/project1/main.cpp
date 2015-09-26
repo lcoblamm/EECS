@@ -12,6 +12,7 @@ Date: 2015.09.17
 #include <iostream>
 
 #include "State.h"
+#include "DFAState.h"
 #include "Converter.h"
 #include "Parser.h"
 

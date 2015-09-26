@@ -13,6 +13,7 @@ Date: 2015.09.17
 #include <map>
 
 #include "State.h"
+#include "DFAState.h"
 
 class Converter
 {
@@ -23,17 +24,17 @@ public:
         m_symbols(symbols) {}
 	~Converter() {}
 
-	std::map<int,State> convertToDFA();
+	std::map<int,DFAState> convertToDFA();
 
     std::set<int> dfaFinalStates() { return m_dfaFinal; }
 
 private:
-	std::set<int> move(char symbol);
+	std::set<int> move(char symbol, std::set<int>& states);
 	std::set<int> epsClosure(std::set<int>& states);
 	void calcFinalStates();
 
     std::map<int,State> m_nfa;
-    std::map<int,State> m_dfa;
+    std::map<int,DFAState> m_dfa;
     int m_numStates;
     int m_startState;
     std::set<int> m_nfaFinal;
