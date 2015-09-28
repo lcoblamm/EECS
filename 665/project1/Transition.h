@@ -11,15 +11,20 @@ Date: 2015.09.17
 
 #include <set>
 
-struct Transition
+class Transition
 {
 public:
-	Transition() {}
-	Transition(char tranSymbol) : symbol(tranSymbol) {}
+    Transition() {}
+	Transition(char tranSymbol) : m_symbol(tranSymbol) {}
 	~Transition() {}
 
-	char symbol;
-	std::set<int> states;
+    char symbol() { return m_symbol; }
+    std::set<int> states() { return m_states; }
+    void states(const std::set<int>& states) { m_states = states; }
+
+private:
+	char m_symbol;
+	std::set<int> m_states;
 };
 
 #endif

@@ -16,10 +16,14 @@ Date: 2015.09.17
 class DFAState : public State 
 {
 public:
-	DFAState() {}
+    DFAState() {}
 	DFAState(int stateID, std::set<int>& nfaStates) : State(stateID), m_nfaStates(nfaStates) {}
 	virtual ~DFAState() {}
 
+    std::set<int> nfaStates() { return m_nfaStates; }
+    void nfaStates(const std::set<int>& nfaStates) { m_nfaStates = nfaStates; }
+
+private:
 	std::set<int> m_nfaStates;
 };
 

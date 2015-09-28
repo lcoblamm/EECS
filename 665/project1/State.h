@@ -15,12 +15,17 @@ Date: 2015.09.17
 class State 
 {
 public:
-	State() {}
-	State(int stateID) : id(stateID) {}
+    State() {}
+	State(int stateID) : m_id(stateID) {}
 	virtual ~State() {}
 
-	int id;
-	std::map<char,Transition> moves;
+    int id() { return m_id; }
+    std::map<char,Transition> moves() { return m_moves; }
+    void moves(const std::map<char,Transition>& moves) { m_moves = moves; }
+
+private:
+	int m_id;
+	std::map<char,Transition> m_moves;
 };
 
 #endif

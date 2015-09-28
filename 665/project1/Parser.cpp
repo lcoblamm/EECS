@@ -9,6 +9,7 @@ Date: 2015.09.22
 #include <iostream>
 
 #include "Parser.h"
+#include "Transition.h"
 
 void Parser::readNFA()
 {
@@ -77,9 +78,13 @@ void Parser::readState()
 
 		// parse transitions
 		std::string s = stripCurlies(tokens[i]);
-		parseStateList(s, t.states);
+		std::set<int> transStates;
+		parseStateList(s, transStates);
+		t.states(transStates);
 
-		currState.moves[*iter] = t;
+		std::map<char,Transition> currMoves = currState.moves();
+		currMoves[*iter] = t;
+		currState.moves(currMoves);
 	}
 	m_nfaStates[stateID] = currState;
 }
@@ -114,7 +119,6 @@ std::vector<std::string> Parser::split(const std::string& s, char delim)
 
 std::string Parser::stripCurlies(const std::string& s)
 {
-
 	std::size_t open = s.find('{');
 	std::size_t close = s.find('}');
 	std::string stripped = s.substr(open + 1, close - (open + 1));

@@ -7,11 +7,12 @@ Date: 2015.09.24
 */
 
 #include "Converter.h"
+#include "Transition.h"
 
 std::map<int,DFAState> Converter::convertToDFA()
 {
-    // create new state set that is epsilon closure of start state
     int stateCounter = 1;
+
     std::set<int> nextStateSet;
     nextStateSet.insert(m_startState);
     nextStateSet = epsClosure(nextStateSet);
@@ -25,15 +26,16 @@ std::map<int,DFAState> Converter::convertToDFA()
     			break;
     		}
     		// calculate moves on symbol
-            nextStateSet = move(*symbol, iter->second.m_nfaStates);
+            std::set<int> nfaStates = iter->second.nfaStates();
+            nextStateSet = move(*symbol, nfaStates);
     		nextStateSet = epsClosure(nextStateSet);
     		// see if state is currently in list & add if not
     		bool shouldInsert = true;
             int currState = 0;
     		for (std::map<int,DFAState>::iterator eqIter = m_dfa.begin(); eqIter != m_dfa.end(); ++eqIter) {
-    			if (eqIter->second.m_nfaStates == nextStateSet) {
+    			if (eqIter->second.nfaStates() == nextStateSet) {
     				shouldInsert = false;
-                    currState = eqIter->second.id;
+                    currState = eqIter->second.id();
     			}
     		}
     		if (shouldInsert) {
@@ -41,31 +43,33 @@ std::map<int,DFAState> Converter::convertToDFA()
                 DFAState newState(stateCounter, nextStateSet);
     			m_dfa[stateCounter] = newState;
     		}
-            iter->second.moves[*symbol] = currState;
+            std::map<char,Transition> currMoves = iter->second.moves();
+            currMoves[*symbol] = currState;
+            iter->second.moves(currMoves);
     	}
     	iter++;
     }
 
 }
 
-std::set<int> Converter::move(char symbol, std::set<int>& states)
+std::set<int> Converter::move(char symbol, const std::set<int>& states)
 {
 	std::set<int> moves;
 	for (std::set<int>::iterator iter = states.begin(); iter != states.end(); ++iter) 
 	{
-		std::set<int> movesOnSym = m_nfa[*iter].moves[symbol].states;
+		std::set<int> movesOnSym = m_nfa[*iter].moves()[symbol].states();
 		moves.insert(movesOnSym.begin(), movesOnSym.end());
 	}
 	return moves;
 }
 
-std::set<int> Converter::epsClosure(std::set<int>& states)
+std::set<int> Converter::epsClosure(const std::set<int>& states)
 {
 	std::set<int> epsClosure;
 	for (std::set<int>::iterator iter = states.begin(); iter != states.end(); ++iter)
 	{
 		epsClosure.insert(*iter);
-		std::set<int> movesOnE = m_nfa[*iter].moves['E'].states;
+		std::set<int> movesOnE = m_nfa[*iter].moves()['E'].states();
 		epsClosure.insert(movesOnE.begin(), movesOnE.end());
 	}
 	return epsClosure;
