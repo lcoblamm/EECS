@@ -1,4 +1,4 @@
-clexer: lex.yy.c
+a.out: lex.yy.c
 	gcc lex.yy.c
 
 lex.yy.c: clexer.l
@@ -8,5 +8,5 @@ clean:
 	$(RM) *.o
 	$(RM) *.lex.c
 	$(RM) *.tex *.log *.aux *.pdf
-	$(RM) clexer
 	$(RM) lex.yy.c
+	$(RM) a.out

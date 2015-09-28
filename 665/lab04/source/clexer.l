@@ -501,6 +501,10 @@ WHITESPACE [ \t\r\n\f]
     BEGIN 0;
 }
 
+<MULTCOMMENT,COMMENT>{WHITESPACE} {
+    // ignore
+}
+
 <MULTCOMMENT,COMMENT>. {
     /****************************************
     * Lexer ignores the comments section
