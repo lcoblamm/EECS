@@ -18,8 +18,8 @@ Date: 2015.09.17
 class Converter
 {
 public:
-	Converter(std::map<int,State>& nfa, int numStates, int startState, 
-        std::set<int>& nfaFinal, std::list<char>& symbols) : m_nfa(nfa), 
+	Converter(std::map<int,State> nfa, int numStates, int startState, 
+        std::set<int> nfaFinal, std::list<char> symbols) : m_nfa(nfa), 
         m_numStates(numStates), m_startState(startState), m_nfaFinal(nfaFinal), 
         m_symbols(symbols) {}
 	~Converter() {}

@@ -12,12 +12,12 @@ Date: 2015.09.17
 #include <map>
 #include "Transition.h"
 
-struct State
+class State 
 {
 public:
 	State() {}
-	State(int stateID) { id = stateID; }
-	~State() {}
+	State(int stateID) : id(stateID) {}
+	virtual ~State() {}
 
 	int id;
 	std::map<char,Transition> moves;

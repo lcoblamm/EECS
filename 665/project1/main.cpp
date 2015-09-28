@@ -44,10 +44,25 @@ int main(int argc, char* argv[])
 			}
 			std::cout << std::endl;
 		}
-
 	}
 
 	// convert to dfa
+	Converter converter(parser.states(), parser.numStates(), parser.startState(), parser.finalStates(), parser.symbols());
+	std::map<int,DFAState> dfaStates = converter.convertToDFA();
+
+	for (std::map<int,DFAState>::iterator it = dfaStates.begin(); it != dfaStates.end(); ++it) {
+		std::cout << "State " << it->second.id << std::endl;
+		std::map<char, Transition> moves = it->second.moves;
+		for (std::map<char,Transition>::iterator titer = moves.begin(); titer != moves.end(); ++titer) {
+			std::cout << "\tTransitions on " << titer->second.symbol << ": ";
+			std::set<int> states = titer->second.states;
+			std::set<int>::iterator stateIter = states.begin();
+			for (; stateIter != states.end(); stateIter++) {
+				std::cout << *stateIter << " ";
+			}
+			std::cout << std::endl;
+		}
+	}
 	
 	// print out states
 }

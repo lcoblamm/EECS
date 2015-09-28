@@ -17,7 +17,7 @@ class DFAState : public State
 {
 public:
 	DFAState() {}
-	DFAState(int stateID, std::set<int>& nfaStates) : id(stateID), m_nfaStates(nfaStates) {}
+	DFAState(int stateID, std::set<int>& nfaStates) : State(stateID), m_nfaStates(nfaStates) {}
 	virtual ~DFAState() {}
 
 	std::set<int> m_nfaStates;
