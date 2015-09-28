@@ -1,0 +1,59 @@
+-- Lynne Coblammers
+-- EECS 776
+-- HW 1
+-- 2015.09.21
+
+-- Assumptions: input string contains only uppercase alphabetic characters and spaces
+rot13 :: String -> String
+rot13 s = map plus13 s
+
+plus13 :: Char -> Char
+plus13 x = 
+    case x of
+        'A' -> 'N'
+        'B' -> 'O'
+        'C' -> 'P'
+        'D' -> 'Q'
+        'E' -> 'R'
+        'F' -> 'S'
+        'G' -> 'T'
+        'H' -> 'U'
+        'I' -> 'V'
+        'J' -> 'W'
+        'K' -> 'X'
+        'L' -> 'Y'
+        'M' -> 'Z'
+        'N' -> 'A'
+        'O' -> 'B'
+        'P' -> 'C'
+        'Q' -> 'D'
+        'R' -> 'E'
+        'S' -> 'F'
+        'T' -> 'G'
+        'U' -> 'H'
+        'V' -> 'I'
+        'W' -> 'J'
+        'X' -> 'K'
+        'Y' -> 'L'
+        'Z' -> 'M'
+        ' ' -> ' '
+		
+-- In GHCI:
+
+GHCi, version 7.8.3: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+[1 of 1] Compiling Main             ( H:\EECS\776\rot13.hs, interpreted )
+Ok, modules loaded: Main.
+*Main> rot13 ['A'..'Z']
+"NOPQRSTUVWXYZABCDEFGHIJKLM"
+*Main> rot13 $ rot13 ['A'..'Z']
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+*Main> rot13 "HELLO WORLD"
+"URYYB JBEYQ"
+*Main> rot13 "URYYB JBEYQ"
+"HELLO WORLD"
+*Main> rot13 "this should fail."
+"*** Exception: H:\EECS\776\rot13.hs:(11,5)-(38,18): Non-exhaustive patterns in
+case
