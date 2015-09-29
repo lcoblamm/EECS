@@ -30,7 +30,7 @@ public:
 
 private:
 	std::set<int> move(char symbol, const std::set<int>& states);
-	std::set<int> epsClosure(const std::set<int>& states);
+	std::set<int> epsClosure(std::set<int> states);
 	void calcFinalStates();
 
     std::map<int,State> m_nfa;

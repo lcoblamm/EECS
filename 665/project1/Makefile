@@ -1,14 +1,14 @@
 project1: main.o Parser.o Converter.o
-	g++ -g -std=c++11 main.o Parser.o Converter.o -o project1
+	g++ -g main.o Parser.o Converter.o -o project1
 
 main.o: main.cpp State.h Transition.h Converter.h Parser.h DFAState.h
-	g++ -g -std=c++11 main.cpp -c
+	g++ -g main.cpp -c
 
-Parser.o: Parser.h Parser.cpp State.h
-	g++ -g -std=c++11 Parser.cpp -c
+Parser.o: Parser.h Parser.cpp DFAState.h State.h Transition.h
+	g++ -g Parser.cpp -c
 
-Converter.o: Converter.h Converter.cpp State.h Transition.h
-	g++ -g -std=c++11 Converter.cpp -c
+Converter.o: Converter.h Converter.cpp DFAState.h State.h Transition.h
+	g++ -g Converter.cpp -c
 
 clean:
 	rm *.o project1 *~

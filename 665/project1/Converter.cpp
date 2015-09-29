@@ -6,6 +6,8 @@ Author: Lynne Coblammers
 Date: 2015.09.24
 */
 
+#include <iostream>
+
 #include "Converter.h"
 #include "Transition.h"
 
@@ -13,6 +15,7 @@ std::map<int,DFAState> Converter::convertToDFA()
 {
     int stateCounter = 1;
 
+    // create new state that is epsilon closure of original initial state
     std::set<int> nextStateSet;
     nextStateSet.insert(m_startState);
     nextStateSet = epsClosure(nextStateSet);
@@ -27,29 +30,39 @@ std::map<int,DFAState> Converter::convertToDFA()
     		}
     		// calculate moves on symbol
             std::set<int> nfaStates = iter->second.nfaStates();
-            nextStateSet = move(*symbol, nfaStates);
-    		nextStateSet = epsClosure(nextStateSet);
-    		// see if state is currently in list & add if not
-    		bool shouldInsert = true;
-            int currState = 0;
-    		for (std::map<int,DFAState>::iterator eqIter = m_dfa.begin(); eqIter != m_dfa.end(); ++eqIter) {
-    			if (eqIter->second.nfaStates() == nextStateSet) {
-    				shouldInsert = false;
-                    currState = eqIter->second.id();
-    			}
-    		}
-    		if (shouldInsert) {
-                currState = ++stateCounter;
-                DFAState newState(stateCounter, nextStateSet);
-    			m_dfa[stateCounter] = newState;
-    		}
+            nextStateSet = epsClosure(move(*symbol, nfaStates));
+    		
+            int currState = -1;
+    		if (!nextStateSet.empty()) {
+                // see if state is currently in list & add if not
+                bool shouldInsert = true;
+                for (std::map<int,DFAState>::iterator eqIter = m_dfa.begin(); eqIter != m_dfa.end(); ++eqIter) {
+                    if (eqIter->second.nfaStates() == nextStateSet) {
+                        shouldInsert = false;
+                        currState = eqIter->second.id();
+                    }
+                }
+                if (shouldInsert) {
+                    currState = ++stateCounter;
+                    DFAState newState(stateCounter, nextStateSet);
+                    m_dfa[stateCounter] = newState;
+                }
+            }
+
+            Transition t(*symbol);
+            if (currState != -1) {
+                std::set<int> s;
+                s.insert(currState);
+                t.states(s);
+            }
             std::map<char,Transition> currMoves = iter->second.moves();
-            currMoves[*symbol] = currState;
+            currMoves[*symbol] = t;
             iter->second.moves(currMoves);
     	}
     	iter++;
     }
-
+    calcFinalStates();
+    return m_dfa;
 }
 
 std::set<int> Converter::move(char symbol, const std::set<int>& states)
@@ -63,19 +76,27 @@ std::set<int> Converter::move(char symbol, const std::set<int>& states)
 	return moves;
 }
 
-std::set<int> Converter::epsClosure(const std::set<int>& states)
+std::set<int> Converter::epsClosure(std::set<int> states)
 {
-	std::set<int> epsClosure;
 	for (std::set<int>::iterator iter = states.begin(); iter != states.end(); ++iter)
 	{
-		epsClosure.insert(*iter);
 		std::set<int> movesOnE = m_nfa[*iter].moves()['E'].states();
-		epsClosure.insert(movesOnE.begin(), movesOnE.end());
+		states.insert(movesOnE.begin(), movesOnE.end());
 	}
-	return epsClosure;
+	return states;
 }
 
 void Converter::calcFinalStates()
 {
-
+    for (std::set<int>::iterator iter = m_nfaFinal.begin(); iter != m_nfaFinal.end(); ++iter) {
+        for (std::map<int,DFAState>::iterator jiter = m_dfa.begin(); jiter != m_dfa.end(); ++jiter) {
+            std::set<int> nfaStates = jiter->second.nfaStates();
+            for (std::set<int>::iterator kiter = nfaStates.begin(); kiter != nfaStates.end(); ++kiter) {
+                if (*iter == *kiter) {
+                    m_dfaFinal.insert(jiter->first);
+                    break;
+                }
+            }
+        }
+    }
 }
