@@ -1,0 +1,32 @@
+; Lynne Coblammers
+; 2124909
+; EECS 662
+; Mini Project 2
+; 2015.09.30
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; EXERCISE 1 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+#lang plai
+
+; abstract syntax
+(define-type CFAE
+  (num (n number?))
+  (id (name symbol?))
+  (add (lhs WAE?) (rhs WAE?))
+  (sub (lhs WAE?) (rhs WAE?))
+  (with (name symbol?) (named-expression WAE?) (body WAE?)))
+
+; deferred substitution list
+(define-type dfrdsub)
+
+; evaluates a WAE expression in the abstract syntax defined above
+(define interp-wae
+  (lambda (expr)
+    (type-case WAE expr
+      (num (n) n)
+      (id (name) (error 'interp-wae "Free identifier"))
+      (add (l r) (+ (interp-wae l) (interp-wae r)))
+      (sub (l r) (- (interp-wae l) (interp-wae r)))
+      (with (name named-expr body)
+            (interp-wae (substitute name (num (interp-wae named-expr)) body))))))
+
