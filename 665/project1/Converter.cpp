@@ -11,7 +11,11 @@ Date: 2015.09.24
 #include "Converter.h"
 #include "Transition.h"
 
-std::map<int,DFAState> Converter::convertToDFA()
+/*
+Converts m_nfa to equivalent dfa
+return: Map of dfa states
+*/
+void Converter::convertToDFA()
 {
     int stateCounter = 1;
 
@@ -22,16 +26,29 @@ std::map<int,DFAState> Converter::convertToDFA()
     DFAState firstState(stateCounter, nextStateSet);
     m_dfa[stateCounter] = firstState;
 
+    std::cout << "E-closure(I0) = ";
+    printStateSet(nextStateSet);
+    std::cout << " = " << stateCounter << std::endl << std::endl;
+
     std::map<int,DFAState>::iterator iter = m_dfa.begin();
     while (iter != m_dfa.end()) {
+        std::cout << "Mark " << iter->first << std::endl;
     	for (std::list<char>::iterator symbol = m_symbols.begin(); symbol != m_symbols.end(); ++symbol) {
     		if (*symbol == 'E') {
     			break;
     		}
+
     		// calculate moves on symbol
             std::set<int> nfaStates = iter->second.nfaStates();
-            nextStateSet = epsClosure(move(*symbol, nfaStates));
-    		
+            nextStateSet = move(*symbol, nfaStates);
+            if (!nextStateSet.empty()) {
+                std::cout << "E-closure";
+                printStateSet(nextStateSet);
+                std::cout << " = ";
+                nextStateSet = epsClosure(nextStateSet);
+                printStateSet(nextStateSet);
+            }
+            
             int currState = -1;
     		if (!nextStateSet.empty()) {
                 // see if state is currently in list & add if not
@@ -47,6 +64,8 @@ std::map<int,DFAState> Converter::convertToDFA()
                     DFAState newState(stateCounter, nextStateSet);
                     m_dfa[stateCounter] = newState;
                 }
+                // print state found
+                std::cout << " = " << currState << std::endl << std::endl;
             }
 
             Transition t(*symbol);
@@ -62,9 +81,15 @@ std::map<int,DFAState> Converter::convertToDFA()
     	iter++;
     }
     calcFinalStates();
-    return m_dfa;
+    printDFA();
 }
 
+/*
+Calculates the possible moves on a symbol for a set of states
+param symbol: symbol to find transitions for
+param states: states in set to move from
+return: set of states that can be reached on symbol
+*/
 std::set<int> Converter::move(char symbol, const std::set<int>& states)
 {
 	std::set<int> moves;
@@ -73,11 +98,25 @@ std::set<int> Converter::move(char symbol, const std::set<int>& states)
 		std::set<int> movesOnSym = m_nfa[*iter].moves()[symbol].states();
 		moves.insert(movesOnSym.begin(), movesOnSym.end());
 	}
+    if (!moves.empty()) {
+        printStateSet(states);
+        std::cout << " --" << symbol << "--> ";
+        printStateSet(moves);
+        std::cout << std::endl;
+    }
 	return moves;
 }
 
+/*
+Calculates the epsilon closure of a set of states
+param states: states in original set
+return: set of states that can be reached on epsilon move from parameter states
+*/
 std::set<int> Converter::epsClosure(std::set<int> states)
 {
+    if (states.empty()) {
+        return states;
+    }
 	for (std::set<int>::iterator iter = states.begin(); iter != states.end(); ++iter)
 	{
 		std::set<int> movesOnE = m_nfa[*iter].moves()['E'].states();
@@ -86,6 +125,9 @@ std::set<int> Converter::epsClosure(std::set<int> states)
 	return states;
 }
 
+/*
+Determine which states in dfa are final states
+*/
 void Converter::calcFinalStates()
 {
     for (std::set<int>::iterator iter = m_nfaFinal.begin(); iter != m_nfaFinal.end(); ++iter) {
@@ -98,5 +140,68 @@ void Converter::calcFinalStates()
                 }
             }
         }
+    }
+}
+
+/*
+Prints set of states in curly brackets
+*/
+void Converter::printStateSet(std::set<int> states) 
+{
+    std::cout << "{";
+    bool isFirst = true;
+    for (std::set<int>::iterator it = states.begin(); it != states.end(); ++it) {
+        if (isFirst) {
+            std::cout << *it;
+            isFirst = false;
+        }
+        else {
+            std::cout << "," << *it;
+        }
+    }
+    std::cout << "}";
+}
+
+void Converter::printDFA() 
+{
+    std::cout << "Initial State: {" << m_startState << "}\n";
+    std::cout << "Final States: ";
+    printStateSet(m_dfaFinal);
+    std::cout << std::endl;
+    printSymbols();
+    std::cout << std::endl;
+    printDFAStates();
+
+}
+
+/*
+Prints symbol headers for transition table
+*/
+void Converter::printSymbols()
+{
+    std::cout << "State";
+    for (std::list<char>::iterator it = m_symbols.begin(); it != m_symbols.end(); ++it) {
+        if (*it != 'E') {
+            std::cout << "\t" << *it;
+        }
+    }
+}
+
+/*
+Prints transition table for DFA States
+*/
+void Converter::printDFAStates()
+{
+    for (std::map<int,DFAState>::iterator it = m_dfa.begin(); it != m_dfa.end(); ++it) {
+        std::cout << it->first;
+
+        std::map<char, Transition> moves = it->second.moves();
+        for (std::list<char>::iterator jt = m_symbols.begin(); jt != m_symbols.end(); ++jt) {
+            if (*jt != 'E') {
+                std::cout << "\t";
+                printStateSet(moves[*jt].states());
+            }
+        }
+        std::cout << std::endl;
     }
 }

@@ -20,6 +20,7 @@ int main(int argc, char* argv[])
 	Parser parser;
 	parser.readNFA();
 
+/*
 	int numStates = parser.numStates();
 	std::cout << "Number of states: " << numStates << std::endl;
 	std::cout << "Start state: " << parser.startState() << std::endl;
@@ -44,33 +45,10 @@ int main(int argc, char* argv[])
 			std::cout << std::endl;
 		}
 	}
-
+*/
 	// convert to dfa
 	Converter con(parser.states(), parser.numStates(), parser.startState(), parser.finalStates(), parser.symbols());
-	std::map<int,DFAState> dfa = con.convertToDFA();
+	con.convertToDFA();
 
-	std::cout << std::endl << "DFA States" << std::endl;
-
-	for (std::map<int,DFAState>::iterator it = dfa.begin(); it != dfa.end(); ++it) {
-		std::cout << "State " << it->second.id() << std::endl;
-		std::map<char, Transition> moves = it->second.moves();
-		for (std::map<char,Transition>::iterator titer = moves.begin(); titer != moves.end(); ++titer) {
-			std::cout << "\tTransitions on " << titer->second.symbol() << ": ";
-			std::set<int> states = titer->second.states();
-			std::set<int>::iterator stateIter = states.begin();
-			for (; stateIter != states.end(); stateIter++) {
-				std::cout << *stateIter << " ";
-			}
-			std::cout << std::endl;
-		}
-	}
-	
-	std::cout << "\nFinal states: ";
-	std::set<int> finalDFA = con.dfaFinalStates();
-	for (std::set<int>::iterator it = finalDFA.begin(); it != finalDFA.end(); ++it) {
-		std::cout << *it << " ";
-	}
-	std::cout << std::endl;
-	// print out states
 
 }

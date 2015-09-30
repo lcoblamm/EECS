@@ -24,14 +24,16 @@ public:
         m_symbols(symbols) {}
 	~Converter() {}
 
-	std::map<int,DFAState> convertToDFA();
-
-    std::set<int> dfaFinalStates() { return m_dfaFinal; }
+	void convertToDFA();
 
 private:
 	std::set<int> move(char symbol, const std::set<int>& states);
 	std::set<int> epsClosure(std::set<int> states);
 	void calcFinalStates();
+    void printStateSet(std::set<int> states);
+    void printDFA();
+    void printSymbols();
+    void printDFAStates();
 
     std::map<int,State> m_nfa;
     std::map<int,DFAState> m_dfa;
