@@ -102,27 +102,105 @@ top :
 function : func_signature '{' func_body '}'
 
 /* This rule matches a function signature such as int main( int argc, char *argv[])*/
-func_signature : type ID '(' args ')' { printf("%s", $2); printf(";\n"); lastFunction = $2;}
+func_signature : anyType ID '(' args ')' { printf("%s", $2); printf(";\n"); lastFunction = $2; }
+    | anyType ID '(' ')' { printf("%s", $2); printf(";\n"); lastFunction = $2; }
 
 /* matches function arguments */
-args : /* empty rule */
-    | param
+args : param
     | param ',' args
 
 param : type ID
     | type MUL ID 
     | type ID '[' arraySize ']'
 
-arraySize:
+arraySize :
     | INTVAL
 
-/*********************************************************
- * An example rule used to parse a single expression.
- * Currently this rule parses only an integer value
- * but you should modify the rule to parse the required
- * expressions.
- ********************************************************/
+func_body : 
+    | declaration func_body
+    | statement func_body
+
+declaration : param ';' 
+
+statement : ID SET expr ';'
+    | RETURN expr ';'
+    | ID '(' funcArgs ')' ';' { printf("%s -> %s", lastFunction, $1); }
+    | ID '(' ')' ';' { printf("%s -> %s", lastFunction, $1); }
+    | '{' statementSet '}'
+    | IF '(' expr ')' statement ELSE statement
+    | IF '(' expr ')' statement
+    | WHILE '(' expr ')' statement
+
+statementSet :
+    | statement statementSet
+
+funcArgs : expr
+    | expr ',' exprs
+
 expr : INTVAL
+    | STRVAL
+    | CHARVAL
+    | DBLVAL
+    | FLTVAL
+    | expr binop8 term7
+    | term7
+    | ID '(' ')' { printf("%s -> %s", lastFunction, $1); }
+    | ID '(' funcArgs ')' { printf("%s -> %s", lastFunction, $1); }
+    | ID
+
+term7 : term7 binop7 term6 
+    | term6
+
+term6 : term6 binop6 term5
+    | term5
+
+term5 : term5 binop5 term4
+    | term4
+
+term4 : term4 binop4 term3 
+    | term3
+
+term3 : term3 binop3 term2
+    | term2
+
+term2 : term2 binop2 term1
+    | term1
+
+term1 : term1 binop1 term1
+
+binop1 : MUL 
+    | DIV 
+    | MOD 
+
+binop2 : ADD 
+    | SUB 
+
+binop3 : LSH 
+    | RSH 
+
+binop4 : GE 
+    | LE 
+    | GT 
+    | LT 
+
+binop5: EQ
+    | NE
+
+binop6: BITAND 
+
+binop7: BITXOR
+
+binop8: BINOR
+
+anyType: VOID
+    | type
+
+type : CHAR
+    | SHORT
+    | INT
+    | LONG
+    | FLOAT
+    | DOUBLE
 
 %%
 
