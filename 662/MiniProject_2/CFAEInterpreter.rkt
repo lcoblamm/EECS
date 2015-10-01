@@ -93,6 +93,25 @@
                        (interp-cfae t ds)
                        (interp-cfae e ds))))))
 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; EXERCISE 2 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+; abstract syntax
+(define-type CFWAE
+  (wnum (n number?))
+  (wid (name symbol?))
+  (wbinop (op-name operator?) (lhs CFWAE?) (rhs CFWAE?))
+  (wfun (param symbol?) (body CFWAE?))
+  (wapp (fun-expr CFWAE?) (expr CFWAE?))
+  (wif0 (cnd CFWAE?) (thn CFWAE?) (el CFWAE?))
+  (with (name symbol?) (named-expr CFWAE?) (bound-expr CFWAE?))
+  (cond0 (conditions condcase?)))
+
+(define-type condcase
+  (default (expr CFWAE?))
+  (condSet (test CFWAE?) (result CFWAE?) (rest condcase?)))
+  
+
+
 ;(interp-cfae (num 7) (emptySub))
 ;(interp-cfae (binop (op 'add) (num 3) (num 7)) (emptySub))
 ;(interp-cfae (binop (op 'sub) (num 7) (num 3)) (emptySub))
