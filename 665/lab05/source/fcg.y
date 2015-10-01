@@ -106,12 +106,16 @@ func_signature : anyType ID '(' args ')' { printf("%s", $2); printf(";\n"); last
     | anyType ID '(' ')' { printf("%s", $2); printf(";\n"); lastFunction = $2; }
 
 /* matches function arguments */
-args : param
-    | param ',' args
+args : typedID
+    | typedID ',' args
 
-param : type ID
-    | type MUL ID 
-    | type ID '[' arraySize ']'
+typedID : type pointer ID array
+
+pointer : 
+    | MUL pointer
+
+array : 
+    | '[' arraySize ']' array
 
 arraySize :
     | INTVAL
@@ -120,33 +124,43 @@ func_body :
     | declaration func_body
     | statement func_body
 
-declaration : param ';' 
+declaration : typedID ';' 
 
-statement : ID SET expr ';'
+statement : ifmatched
+    | ifunmatched
+
+nonifstatement : ID SET expr ';'
     | RETURN expr ';'
-    | ID '(' funcArgs ')' ';' { printf("%s -> %s", lastFunction, $1); }
-    | ID '(' ')' ';' { printf("%s -> %s", lastFunction, $1); }
+    | ID '(' funcArgs ')' ';' { printf("%s -> %s;\n", lastFunction, $1); }
+    | ID '(' ')' ';' { printf("%s -> %s;\n", lastFunction, $1); }
     | '{' statementSet '}'
-    | IF '(' expr ')' statement ELSE statement
-    | IF '(' expr ')' statement
     | WHILE '(' expr ')' statement
+
+ifmatched : IF '(' expr ')' ifmatched ELSE ifmatched
+    | nonifstatement
+
+ifunmatched : IF '(' expr ')' statement
+    | IF '(' expr ')' ifmatched ELSE ifunmatched
 
 statementSet :
     | statement statementSet
 
 funcArgs : expr
-    | expr ',' exprs
+    | expr ',' funcArgs
 
-expr : INTVAL
+expr : term8
+
+exprNoBinop : INTVAL
     | STRVAL
     | CHARVAL
     | DBLVAL
     | FLTVAL
-    | expr binop8 term7
-    | term7
-    | ID '(' ')' { printf("%s -> %s", lastFunction, $1); }
-    | ID '(' funcArgs ')' { printf("%s -> %s", lastFunction, $1); }
+    | ID '(' ')' { printf("%s -> %s;\n", lastFunction, $1); }
+    | ID '(' funcArgs ')' { printf("%s -> %s;\n", lastFunction, $1); }
     | ID
+
+term8 : term8 binop8 term7
+    | term7
 
 term7 : term7 binop7 term6 
     | term6
@@ -166,7 +180,8 @@ term3 : term3 binop3 term2
 term2 : term2 binop2 term1
     | term1
 
-term1 : term1 binop1 term1
+term1 : term1 binop1 exprNoBinop
+    | exprNoBinop
 
 binop1 : MUL 
     | DIV 
@@ -190,7 +205,7 @@ binop6: BITAND
 
 binop7: BITXOR
 
-binop8: BINOR
+binop8: BITOR
 
 anyType: VOID
     | type

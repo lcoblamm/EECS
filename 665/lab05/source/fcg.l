@@ -61,7 +61,7 @@ octdigit      [0-7]
 
 "double" { DEBUGF("DOUBLE\n"); return DOUBLE; }
 
-"==" { DEBUGF ("EQ\n"); return _EQ; }
+"==" { DEBUGF ("EQ\n"); return EQ; }
 
 "!=" { DEBUGF("NE\n"); return NE; }
 
@@ -83,9 +83,9 @@ octdigit      [0-7]
 
 "%" { DEBUGF("MOD\n"); return MOD; }
 
-"||" { DEBUGF("OR\n"); return _OR; }
+"||" { DEBUGF("OR\n"); return OR; }
 
-"&&" { DEBUGF("AND\n"); return _AND; }
+"&&" { DEBUGF("AND\n"); return AND; }
 
 "|" { DEBUGF("BITOR\n"); return BITOR; }
 
@@ -125,7 +125,7 @@ octdigit      [0-7]
 
 "return" { DEBUGF("RETURN\n"); return RETURN; }
 
-"do" { DEBUGF("DO\n"); return _DO; }
+"do" { DEBUGF("DO\n"); return DO; }
 
 "while" { DEBUGF("WHILE\n"); return WHILE; }
 
@@ -133,13 +133,13 @@ octdigit      [0-7]
 
 "switch" { DEBUGF("SWITCH\n"); return SWITCH; }
 
-"case" { DEBUGF("CASE\n"); return _CASE; }
+"case" { DEBUGF("CASE\n"); return CASE; }
 
 "default" { DEBUGF("DEFAULT\n"); return DEFAULT; }
 
-"if" { DEBUGF("IF\n"); return _IF; }
+"if" { DEBUGF("IF\n"); return IF; }
 
-"else" { DEBUGF("ELSE\n"); return _ELSE; }
+"else" { DEBUGF("ELSE\n"); return ELSE; }
 
 "continue" { DEBUGF("CONTINUE\n"); return CONTINUE; }
 
@@ -215,3 +215,5 @@ octdigit      [0-7]
     fprintf( stderr, "Unexpected input at line %d: '%s'\n", yylineno, yytext );
     exit( 1 );
 }
+
+%%
