@@ -129,20 +129,21 @@ declaration : typedID ';'
 statement : ifmatched
     | ifunmatched
 
-nonifstatement : ID SET expr ';'
+simplestatement : ID SET expr ';'
     | RETURN expr ';'
     | ID '(' funcArgs ')' ';' { printf("%s -> %s;\n", lastFunction, $1); }
     | ID '(' ')' ';' { printf("%s -> %s;\n", lastFunction, $1); }
     | '{' statementSet '}'
-    | WHILE '(' expr ')' statement
 
 ifmatched : IF '(' expr ')' ifmatched ELSE ifmatched
-    | nonifstatement
+    | simplestatement
+    | WHILE '(' expr ')' ifmatched
 
 ifunmatched : IF '(' expr ')' statement
     | IF '(' expr ')' ifmatched ELSE ifunmatched
+    | WHILE '(' expr ')' ifunmatched
 
-statementSet :
+statementSet : statement
     | statement statementSet
 
 funcArgs : expr
