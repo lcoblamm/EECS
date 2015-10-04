@@ -104,11 +104,11 @@
   (wapp (fun-expr CFWAE?) (expr CFWAE?))
   (wif0 (cnd CFWAE?) (thn CFWAE?) (el CFWAE?))
   (with (name symbol?) (named-expr CFWAE?) (bound-expr CFWAE?))
-  (cond0 (conditions condcase?)))
+  (cond0 (conditions condition?)))
 
-(define-type condcase
+(define-type condition
   (default (expr CFWAE?))
-  (condSet (test CFWAE?) (result CFWAE?) (rest condcase?)))
+  (condSet (test CFWAE?) (result CFWAE?) (rest condition?)))
   
 
 
