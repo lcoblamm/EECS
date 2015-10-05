@@ -51,9 +51,33 @@
 ; cond
 (test (elab-cfwae (cond0 (condSet (wnum 0) (wnum 1) (default (wnum 10))))) (if0 (num 0) (num 1) (num 10)))
 (test (elab-cfwae (cond0 (condSet (wid 'x) (wnum 2) (condSet (wnum 0) (wnum 1) (default (wnum 10)))))) (if0 (id 'x) (num 2) (if0 (num 0) (num 1) (num 10))))
+(test (elab-cfwae (cond0 (default (with 'x (wnum 3) (wbinop (op 'div) (wnum 12) (wid 'x)))))) (app (fun 'x (binop (op 'div) (num 12) (id 'x))) (num 3)))
 
 ; eval-cfwae
+; num 
+(test (eval-cfwae (wnum 7)) (num 7))
+; id
+(test/exn (eval-cfwae (wid 'x)) "No binding for identifier")
+; binop
+(test (eval-cfwae (wbinop (op 'add) (wbinop (op 'subt) (wnum 5) (wnum 4)) (wnum 4))) (num 5))
+; function
+(test (eval-cfwae (wfun 'y (wnum 7))) (fun 'y (num 7)))
+; app
+(test (eval-cfwae (wapp (wfun 'y (wid 'y)) (wnum 7))) (num 7))
+; if
+(test (eval-cfwae (wif0 (wnum 0) (wnum 1) (wnum 2))) (num 1))
+; with
+(test (eval-cfwae (with 'x (wnum 7) (wid 'x))) (num 7))
+(test (eval-cfwae (with 'double (wfun 'y (wbinop (op 'add) (wid 'y) (wid 'y))) (wapp (wid 'double) (wnum 5)))) (num 10))
+(test (eval-cfwae (with 'x (wnum 5) (with 'x (wnum 8) (wid 'x)))) (num 8))
+(test (eval-cfwae (with 'x (wnum 5) (with 'y (wnum 8) (wbinop (op 'subt) (wid 'x) (wid 'y))))) (num -3))
+; cond
+(test (eval-cfwae (cond0 (condSet (wnum 0) (wnum 1) (default (wnum 10))))) (num 1))
+(test (eval-cfwae (cond0 (condSet (wnum 10) (wnum 2) (condSet (wnum 0) (wnum 1) (default (wnum 10)))))) (num 1))
+(test (eval-cfwae (cond0 (default (with 'x (wnum 3) (wbinop (op 'div) (wnum 12) (wid 'x)))))) (num 4))
 ; prelude 
 (test (eval-cfwae (wapp (wid 'inc) (wnum 3))) (num 4))
 (test (eval-cfwae (wapp (wid 'area) (wnum 3))) (num 28.274333882308138))
 (test (eval-cfwae (wbinop (op 'add) (wid 'pi) (wnum 1))) (num 4.141592653589793))
+; dynamic scoping
+(test (eval-cfwae (with 'plusx (wfun 'y (wbinop (op 'add) (wid 'y) (wid 'x))) (with 'x (wnum 3) (wapp (wid 'plusx) (wnum 5))))) (num 8))

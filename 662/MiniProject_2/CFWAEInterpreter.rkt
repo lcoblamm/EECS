@@ -120,12 +120,14 @@
       (default (ex) (elab-cfwae ex))
       (condSet (c t rest) (if0 (elab-cfwae c) (elab-cfwae t) (elab-condition rest))))))
 
+; prelude of definitions including inc, area, and pi
 (define prelude
   (sub 'inc (fun 'x (binop (op 'add) (id 'x) (num 1)))
            (sub 'area (fun 'y (binop (op 'mult) (id 'pi) (binop (op 'mult) (id 'y) (id 'y))))
                 (sub 'pi (num 3.141592653589793)
                      (emptySub)))))
 
+; elaborates and interprets a cfwae expression
 (define eval-cfwae
   (lambda (e)
     (interp-cfae (elab-cfwae e) prelude)))
