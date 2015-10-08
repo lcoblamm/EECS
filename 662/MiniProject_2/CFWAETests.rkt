@@ -60,8 +60,11 @@
 (test/exn (eval-cfwae (wid 'x)) "No binding for identifier")
 ; binop
 (test (eval-cfwae (wbinop (op 'add) (wbinop (op 'subt) (wnum 5) (wnum 4)) (wnum 4))) (num 5))
+(test/exn (eval-cfwae (wbinop (op 'add) (wfun 'x (wid 'x)) (wnum 7))) "Numeric argument expected, non-numeric received")
 ; function
 (test (eval-cfwae (wfun 'y (wnum 7))) (fun 'y (num 7)))
+(test/exn (eval-cfwae (wapp (wnum 6) (wnum 7))) "Functional argument to app expected, non-functional received")
+(test (eval-cfwae (wapp (wfun 'x (wapp (wid 'x) (wnum 3))) (wfun 'y (wbinop (op 'add) (wid 'y) (wnum 1))))) (num 4))
 ; app
 (test (eval-cfwae (wapp (wfun 'y (wid 'y)) (wnum 7))) (num 7))
 ; if
@@ -81,3 +84,4 @@
 (test (eval-cfwae (wbinop (op 'add) (wid 'pi) (wnum 1))) (num 4.141592653589793))
 ; dynamic scoping
 (test (eval-cfwae (with 'plusx (wfun 'y (wbinop (op 'add) (wid 'y) (wid 'x))) (with 'x (wnum 3) (wapp (wid 'plusx) (wnum 5))))) (num 8))
+(test (eval-cfwae (with 'plusx (wfun 'y (wbinop (op 'add) (wid 'y) (wid 'x))) (with 'x (wnum 4) (wapp (wid 'plusx) (wnum 5))))) (num 9))
