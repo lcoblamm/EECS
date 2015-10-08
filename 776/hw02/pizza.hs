@@ -10,10 +10,10 @@ module Pizza where
 data Pizza :: * where
     Pizza :: ZaSize -> ToppingList -> Pizza
 
-data ZaSize = TenInch | TwelveInch | FourteenInch
+data ZaSize = Ten | Twelve | Fourteen
 
 data Topping = Cheese | Pepperoni | Sausage | Bacon | Hamburger | Onions | Peppers | Olives |
-               Mushrooms | Garlic | Pineapple | Tomatoes | CreamCheese
+               Mushrooms | Garlic | Pineapple | Tomatoes
                deriving(Show)
 
 data ToppingList :: * where
@@ -27,9 +27,9 @@ instance Show ToppingList where
     show (Cons t ts) = show t ++ ", " ++ show ts
 
 instance Show ZaSize where
-    show TenInch = "Ten inch"
-    show TwelveInch = "Twelve inch"
-    show FourteenInch = "Fourteen inch"
+    show Ten = "Ten inch"
+    show Twelve = "Twelve inch"
+    show Fourteen = "Fourteen inch"
 
 
 instance Show Pizza where

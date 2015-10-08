@@ -1,0 +1,14 @@
+[llammers:~/EECS/776/hw02]: ghci pizza.hs 
+GHCi, version 7.8.4: http://www.haskell.org/ghc/  :? for help
+Loading package ghc-prim ... linking ... done.
+Loading package integer-gmp ... linking ... done.
+Loading package base ... linking ... done.
+[1 of 1] Compiling Pizza            ( pizza.hs, interpreted )
+Ok, modules loaded: Pizza.
+*Pizza> Pizza Ten (Cons Cheese End)
+Ten inch pizza with Cheese
+*Pizza> Pizza Twelve (Cons Pepperoni (Cons Cheese End))
+Twelve inch pizza with Pepperoni and Cheese
+*Pizza> Pizza Fourteen (Cons Bacon (Cons Pepperoni (Cons Garlic (Cons Olives (Cons Tomatoes (Cons Peppers (Cons Cheese End)))))))
+Fourteen inch pizza with Bacon, Pepperoni, Garlic, Olives, Tomatoes, Peppers and Cheese
+*Pizza> 
