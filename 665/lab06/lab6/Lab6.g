@@ -38,55 +38,69 @@ fragment HEX: ('0' .. '9' | 'A' .. 'F' | 'a' .. 'f');
 // and hide the results from the parser.
 WS : (' ' | '\t' | '\r' | '\n')+ { $channel=HIDDEN; };
 
-ZERO : "0" ;
-BINARY : "0b"BIN+ ;
-OCTAL : "0"OCT+ ;
-HEXADECIMAL : "0x"HEX+ ;
+ZERO : '0' ;
+BINARY : '0b'BIN+ ;
+OCTAL : '0'OCT+ ;
+HEXADECIMAL : '0x'HEX+ ;
 // The decimal value lexer rule. Match one or more decimal digits.
 DECIMAL : DEC+ ;
-REAL : DEC+"."DEC+ ;
-ADD: "+" ;
-SUB: "-" ;
-MUL: "*" ;
-DIV: "/" ;
-EXP: "^" ;
-OPEN: "(" ;
-CLOSE: ")" ;
-LOG: "log" ;
-SIN: "sin" ;
-COS: "cos" ;
-TAN: "tan" ; 
+REAL : DEC+'.'DEC+ ;
+ADD: '+' ;
+SUB: '-' ;
+MUL: '*' ;
+DIV: '/' ;
+EXP: '^' ;
+OPEN: '(' ;
+CLOSE: ')' ;
+LOG: 'log' ;
+SIN: 'sin' ;
+COS: 'cos' ;
+TAN: 'tan' ; 
 
 // The top rule. You should replace this with your own rule definition to
 // parse expressions according to the assignment.
-top : term3 ;
+top : term3;
 
-term3 : term2 term3p | term2 ;
+unop : LOG | SIN | COS | TAN;
+    
+binop1 : EXP;
 
-term3p : term3 binop3 term2 term3p | term3 binop3 term2
+binop2 : MUL | DIV;
 
-term2 : term1 term2p | term 1 ;
+binop3 : ADD | SUB;
 
-term2p : term2 binop2 term1 term2p | term2 binop2 term1 ;
+number retuns [double value]: REAL { $value = Double.parseDouble ($REAL.getText()); }
+	| BINARY { String b = $BINARY.getText();
+		b = b.substring(2);
+		$value = (double)Integer.parseInt(b, 2); }
+	| OCTAL 
+	| HEXADECIMAL 
+	| DECIMAL;
 
-term1 : unopterm term1p | unopterm ;
+parenterm: OPEN term3 CLOSE
+    	| number;
 
-term1p : term1 binop1 unopterm term1p | term1 binop1 unopterm ;
+unopterm : (parenterm) (unop parenterm)* ;
 
-unopterm : parenterm unoptermp | parenterm ;
+term1 : (unopterm) (binop1 unopterm)* ;
 
-unoptermp : unopterm unop parenterm unoptermp | unopterm unop parenterm
+term2 : (term1) (binop2 term1)*;
 
-parenterm : OPEN parenterm CLOSE
-    | number;
+term3 : (term2) (binop3 term2)* ;
 
-number : REAL | BINARY | OCTAL | HEXADECIMAL | DECIMAL
 
-unop : LOG 
-    | SIN
-    | COS
-    | TAN ;
 
-binop1 : EXP ;
-binop2 : MUL | DIV ;
-binop3 : ADD | SUB ;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
