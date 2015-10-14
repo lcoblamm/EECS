@@ -9,6 +9,7 @@ tokens {
 // Written in the target language. The header section can be
 // used to import any Java classes that may be required.
 @header {
+import java.lang.Math;
 }
 
 // A main function to the parser. This function will setup the
@@ -59,35 +60,35 @@ TAN: 'tan' ;
 
 // The top rule. You should replace this with your own rule definition to
 // parse expressions according to the assignment.
-top : term3;
+top : term3 { System.out.println($term3.value); };
 
-unop : LOG | SIN | COS | TAN;
-    
-binop1 : EXP;
-
-binop2 : MUL | DIV;
-
-binop3 : ADD | SUB;
-
-number retuns [double value]: REAL { $value = Double.parseDouble ($REAL.getText()); }
+number returns [double value]: REAL { $value = Double.parseDouble($REAL.getText()); }
 	| BINARY { String b = $BINARY.getText();
 		b = b.substring(2);
 		$value = (double)Integer.parseInt(b, 2); }
-	| OCTAL 
-	| HEXADECIMAL 
-	| DECIMAL;
+	| OCTAL { $value = (double)Integer.parseInt($OCTAL.getText(), 8); }
+	| HEXADECIMAL { String s = $HEXADECIMAL.getText();
+		s = s.substring(2);
+		$value = (double)Integer.parseInt(s, 16); }
+	| DECIMAL { $value = (double)Double.parseDouble($DECIMAL.getText()); };
 
-parenterm: OPEN term3 CLOSE
-    	| number;
+parenterm returns [double value]: OPEN term3 CLOSE { $value = $term3.value; }
+    	| number { $value = $number.value; };
 
-unopterm : (parenterm) (unop parenterm)* ;
+unopterm returns [double value]: LOG parenterm  { $value = Math.log($parenterm.value); }
+	| SIN parenterm { $value = Math.sin($parenterm.value); }
+	| COS parenterm { $value = Math.cos($parenterm.value); }
+	| TAN parenterm { $value = Math.tan($parenterm.value); }
+	| parenterm { $value = $parenterm.value; };
 
-term1 : (unopterm) (binop1 unopterm)* ;
+term1 returns [double value] : (l = unopterm { $value = $l.value; }) 
+	(EXP r = unopterm { $value = Math.pow($l.value, $r.value); })* ;
 
-term2 : (term1) (binop2 term1)*;
+term2 returns [double value]: (l = term1 { $value = $l.value; }) 
+	(MUL r = term1 { $value *= $r.value; } | DIV r = term1 { $value /= $r.value; })*;
 
-term3 : (term2) (binop3 term2)* ;
-
+term3 returns [double value] : (l = term2 { $value = $l.value; }) 
+	(ADD  r = term2 { $value += $r.value; } | SUB  r = term2 { $value -= $r.value; })*;
 
 
 
