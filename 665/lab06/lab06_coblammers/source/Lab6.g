@@ -39,7 +39,6 @@ fragment HEX: ('0' .. '9' | 'A' .. 'F' | 'a' .. 'f');
 // and hide the results from the parser.
 WS : (' ' | '\t' | '\r' | '\n')+ { $channel=HIDDEN; };
 
-ZERO : '0' ;
 BINARY : '0b'BIN+ ;
 OCTAL : '0'OCT+ ;
 HEXADECIMAL : '0x'HEX+ ;
@@ -85,7 +84,9 @@ term1 returns [double value] : (l = unopterm { $value = $l.value; })
 	(EXP r = unopterm { $value = Math.pow($l.value, $r.value); })* ;
 
 term2 returns [double value]: (l = term1 { $value = $l.value; }) 
-	(MUL r = term1 { $value *= $r.value; } | DIV r = term1 { $value /= $r.value; })*;
+	(MUL r = term1 { $value *= $r.value; } 
+		| DIV r = term1 { if ($r.value == 0) 
+			{ $value = 0; System.out.println("Error: divide by 0"); } else { $value /= $r.value; } })*;
 
 term3 returns [double value] : (l = term2 { $value = $l.value; }) 
 	(ADD  r = term2 { $value += $r.value; } | SUB  r = term2 { $value -= $r.value; })*;
