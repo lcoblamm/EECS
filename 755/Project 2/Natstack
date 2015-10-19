@@ -1,0 +1,55 @@
+(* Lynne Coblammers *)
+(* EECS 755 *)
+(* Mini Project 2 *)
+(* 2015.10.18 *)
+
+(*************************Problem 1**********************)
+Inductive SC : Type :=
+  | Value : nat -> SC
+  | Unknown : SC.
+
+Inductive NatStack : Type :=
+  | Empty : NatStack
+  | Add : nat -> NatStack -> NatStack.
+
+(* 
+  Preconditions: None 
+  Postconditions: n is top of resulting stack
+  Invariants: resulting stack is same as s except for new top element
+*)
+Definition push (n : nat) (s : NatStack) : NatStack :=
+  Add n s.
+
+
+(* 
+  Preconditions: s is not empty
+  Postconditions: top element removed from stack
+  Invariants: resulting stack is same except for removed top element
+*)
+Definition pop (s : NatStack) : NatStack  :=
+  match s with
+    | Empty => Empty
+    | Add n s => s
+  end.
+
+(* 
+  Preconditions: s is not empty
+  Postconditions: nat is top element of stack
+  Invariants: stack is unchanged
+*)
+Definition top (s : NatStack) : nat :=
+  match s with
+    | Empty => 0
+    | Add n s => n
+  end.
+
+(* 
+  Preconditions: None
+  Postconditions: true if stack is empty, false otherwise
+  Invariants: stack is unchanged
+*)
+Definition isEmpty (s : NatStack) : bool :=
+  match s with
+    | Empty => true
+    | Add _ _ => false
+  end.
