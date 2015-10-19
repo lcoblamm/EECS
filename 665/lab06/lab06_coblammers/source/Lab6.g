@@ -24,6 +24,8 @@ import java.lang.Math;
             parser.top();
         } catch (RecognitionException e)  {
             e.printStackTrace();
+        } catch (RuntimeException e) {
+            System.out.println(e.getMessage());
         }
     }
 }
@@ -86,7 +88,8 @@ term1 returns [double value] : (l = unopterm { $value = $l.value; })
 term2 returns [double value]: (l = term1 { $value = $l.value; }) 
 	(MUL r = term1 { $value *= $r.value; } 
 		| DIV r = term1 { if ($r.value == 0) 
-			{ $value = 0; System.out.println("Error: divide by 0"); } else { $value /= $r.value; } })*;
+			{ throw new RuntimeException("Division by zero error"); }
+			else { $value /= $r.value; } })*;
 
 term3 returns [double value] : (l = term2 { $value = $l.value; }) 
 	(ADD  r = term2 { $value += $r.value; } | SUB  r = term2 { $value -= $r.value; })*;
