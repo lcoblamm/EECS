@@ -36,9 +36,11 @@ void dump(int blev, FILE *f)
 
    fprintf(f, "Dumping identifier table\n");
    for (i = id_table; i < &id_table[ITABSIZE]; i++) {
-      p = *i;
-      if (p->blevel >= blev) {
-         fprintf(f, "%s\t%d\t%d\t%d\n", p->i_name, p->blevel, p->i_type, p->i_active);
+      if (*i) {
+         p = *i;
+         if (p->i_blevel >= blev) {
+            fprintf(f, "%s\t%d\t%d\t%d\n", p->i_name, p->i_blevel, p->i_type, p->i_defined);
+         }
       }
    }
 }
@@ -105,17 +107,19 @@ struct id_entry *install(char *name, int blev)
 void leaveblock()
 {
    dump(level, stdout);
-   struct id_entry **id;
+   struct id_entry *id;
    int i = 0;
-   for (i; i < ITABSIZE; i++) {
+   for (i = 0; i < ITABSIZE; i++) {
       id = id_table[i];
-      if ((*id)->i_blevel >= level) {
-         id_table[i] = NULL;
-         free(id);
+      if (id) {
+         if (id->i_blevel >= level) {
+            id_table[i] = NULL;
+            free(id);
+         }
       }
    }
-   level--;
    exit_block();
+   level--;
 }
 
 /*
