@@ -6,6 +6,10 @@ Require Import Omega.
 (* 2015.10.18 *)
 
 (*************************Problem 1**********************)
+Inductive SC : Type :=
+  | Value : nat -> SC
+  | Unknown : SC.
+
 Inductive NatStack : Type :=
   | Empty : NatStack
   | Add : nat -> NatStack -> NatStack.
@@ -31,19 +35,19 @@ Definition pop (s : NatStack) : NatStack  :=
 
 (* 
   Preconditions: s is not empty
-  Postconditions: nat is top element of stack
-  Invariants: stack is unchanged
+  Postconditions: SC is top element of stack
+  Invariants: None
 *)
-Definition top (s : NatStack) : nat :=
+Definition top (s : NatStack) : SC :=
   match s with
-    | Empty => 0
-    | Add n s => n
+    | Empty => Unknown
+    | Add n s => Value n
   end.
 
 (* 
   Preconditions: None
   Postconditions: true if stack is empty, false otherwise
-  Invariants: stack is unchanged
+  Invariants: None
 *)
 Definition isEmpty (s : NatStack) : bool :=
   match s with
@@ -57,38 +61,39 @@ Fixpoint size (s : NatStack) : nat :=
     | Add _ s => 1 + size s
   end.
 
-Theorem top_correct : forall n s, top (Add n s) = n.
+Theorem top_correct : forall n s, top (Add n s) = Value n.
 Proof.
   intros.
-  simpl.
   reflexivity.
 Qed.
 
-Theorem push_immediate : forall n s, top (push n s) = n.
+Theorem push_immediate : forall n s, top (push n s) = Value n.
 Proof.
   intros.
-  simpl.
   reflexivity.
 Qed.
 
 Theorem push_increase_size : forall n s, size (push n s) = 1 + size s.
 Proof.
   intros.
-  simpl.
   reflexivity.
 Qed.
 
 Theorem push_invariant : forall n s, pop (push n s) = s.
 Proof.
   intros.
-  simpl.
   reflexivity.
 Qed.
 
 Theorem pop_imediate : forall n s, size (pop (Add n s)) = size s.
 Proof.
   intros.
-  simpl.
+  reflexivity.
+Qed.
+
+Theorem pop_invariant : forall n s, pop (Add n s) = s.
+Proof.
+  intros.
   reflexivity.
 Qed.
 
