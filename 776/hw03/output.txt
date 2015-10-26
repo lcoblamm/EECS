@@ -1,0 +1,24 @@
+Sample output:
+
+*Main> main
+Guess a number.
+9
+Too high!
+Guess a number.
+8
+Too high!
+Guess a number.
+1
+Too low!
+Guess a number.
+3
+Too low!
+Guess a number.
+4
+You win a cookie!
+
+Explanation:
+
+Behind the scenes, do combines statements using applicative functors and monads in the background so that their effects all occur and their return values are combined to a single value. For example, the prompt function could be rewritten to be 
+prompt = putStrLn "Guess a number." >> (getline >>= (\ xs -> loop (read xs)))
+The >> operator has the type Monad m => m a -> m b -> m b. The first argument is  putStrLn, for which the effect occurs, printing the text, and then it's return value, IO (), is essentially discarded. The second part also has its effect occur, and its return value is the one returned. The >>= operator has type Monad m => m a (a -> m b) -> m b. It produces the effect of getline (m a in this case), which gets input and returns an IO String. The second argument to >>= is the anonymous function which takes an argument and calls loop on read of that argument. The >>= operator essentially takes the output of getline and feeds it to this function, which takes a string, runs read to get an Int from it in this case, and then calls loop on that. The do in checkGuess could also be written in a similar form, using applicative functors and monads to combine effects.
