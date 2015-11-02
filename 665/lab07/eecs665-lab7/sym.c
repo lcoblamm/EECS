@@ -107,13 +107,14 @@ struct id_entry *install(char *name, int blev)
 void leaveblock()
 {
    dump(level, stdout);
+   // update id_table to remove functions
    struct id_entry *id;
    int i = 0;
    for (i = 0; i < ITABSIZE; i++) {
       id = id_table[i];
       if (id) {
          if (id->i_blevel >= level) {
-            id_table[i] = NULL;
+            id_table[i] = id->i_link;
             free(id);
          }
       }
