@@ -5,7 +5,7 @@ Require Import Omega.
 (* Mini Project 2 *)
 (* 2015.10.19 *)
 
-(*************************Problem 2**********************)
+(*************************Problem 2************************)
 Inductive SC (T: Type) : Type :=
   | Value : T -> SC T
   | Unknown : SC T.
@@ -14,7 +14,7 @@ Inductive Stack (T: Type) : Type :=
   | Empty : Stack T
   | Add : T -> Stack T -> Stack T.
 
-Definition checkNonEmpty (T : Type) (s : Stack T) : Prop :=
+Definition checkNonEmpty (T: Type) (s: Stack T) : Prop :=
   match s with
     | Empty => False
     | Add _ _ => True
@@ -35,8 +35,8 @@ Definition push (T : Type) (e : T) (s : Stack T) : Stack T :=
 *)
 Definition pop (T : Type) (s : Stack T) : (checkNonEmpty T s) -> Stack T  :=
   match s with
-    | Empty => (fun (p : (checkNonEmpty T s)) => (Empty T))
-    | Add _ s1 => (fun (p : (checkNonEmpty T s)) => s1)
+    | Empty => (fun (p : checkNonEmpty T s) => (Empty T))
+    | Add _ s1 => (fun (p : checkNonEmpty T s) => s1)
   end.
 
 (* 
@@ -46,8 +46,8 @@ Definition pop (T : Type) (s : Stack T) : (checkNonEmpty T s) -> Stack T  :=
 *)
 Definition top (T: Type) (s : Stack T) : (checkNonEmpty T s) -> SC T :=
   match s with
-    | Empty => (fun (p : (checkNonEmpty T s)) => Unknown T)
-    | Add n _ => (fun (p : (checkNonEmpty T s)) => Value T n)
+    | Empty => (fun (p : checkNonEmpty T s) => Unknown T)
+    | Add n _ => (fun (p : checkNonEmpty T s) => Value T n)
   end.
 
 (* 
@@ -61,71 +61,56 @@ Definition isEmpty (T: Type) (s : Stack T) : bool :=
     | Add _ _ => false
   end.
 
-Fixpoint size (T : Type) (s : Stack T) : nat :=
-  match s with
-    | Empty => 0
-    | Add _ s => 1 + size T s
-  end.
-
 Theorem top_correct : forall T n s p, (top T (Add T n s)) p = Value T n.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem push_immediate : forall T n s p, (top T (push T n s)) p = Value T n.
 Proof.
-  intros.
-  reflexivity.
-Qed.
-
-Theorem push_increase_size : forall T n s, size T (push T n s) = 1 + size T s.
-Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem push_invariant : forall T n s p,( pop T (push T n s)) p = s.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
-Theorem pop_imediate : forall T n s p, size T (pop T (Add T n s) p) = size T s.
+Theorem pop_correct_invariant : forall T n s p, (pop T (Add T n s) p) = s.
 Proof.
-  intros.
-  reflexivity.
-Qed.
-
-Theorem pop_invariant : forall T n s p, (pop T (Add T n s) p) = s.
-Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem isEmpty_correct_true : forall T, isEmpty T (Empty T) = true.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem isEmpty_correct_false : forall T n s, isEmpty T (Add T n s) = false.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
+
+Example push_push_not_empty : forall T x y, checkNonEmpty T (push T x (push T y (Empty T))).
+Proof.
+  intros. reflexivity.
+Qed.
+
+Example push_push_pop_not_empty : forall T x y, checkNonEmpty (pop T (push T x (push T y (Empty T))) push_push_not_empty).
 
 (* Two pops on two pushes is always safe because no matter what is pushed,
 two items will be on the stack before removing those two elements with the pops.
 Therefore, a proof that the stack is not empty is feasible for each pop. *)
-Example pop_push_safe : forall T x y p, (pop T (pop T (push T x (push T y (Empty T))) p) p) = Empty T.
+Example pop_push_safe : forall T x y, (pop T (pop T (push T x (push T y (Empty T))) push_push_not_empty) push_push_pop_not_empty) = Empty T.
 Proof.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 (* Two pops on a single push is not possible because no proof exists for the second pop
 that the stack is not empty because the stack is empty at that point. *)
-Example pop_push_unsafe : forall T x p, (pop T (pop T (push T x (Empty T)) p) p) = Empty T.
+Example pop_push_unsafe : forall T x, forall p q, (pop T (pop T (push T x (Empty T)) p) q) = Empty T.
 Proof.
+  intros.
+  simpl.
   reflexivity.
 Qed.

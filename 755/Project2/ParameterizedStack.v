@@ -55,58 +55,34 @@ Definition isEmpty (T: Type) (s : Stack T) : bool :=
     | Add _ _ => false
   end.
 
-Fixpoint size (T : Type) (s : Stack T) : nat :=
-  match s with
-    | Empty => 0
-    | Add _ s => 1 + size T s
-  end.
-
 Theorem top_correct : forall T n s, top T (Add T n s) = Value T n.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem push_immediate : forall T n s, top T (push T n s) = Value T n.
 Proof.
-  intros.
-  reflexivity.
-Qed.
-
-Theorem push_increase_size : forall T n s, size T (push T n s) = 1 + size T s.
-Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem push_invariant : forall T n s, pop T (push T n s) = s.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
-Theorem pop_imediate : forall T n s, size T (pop T (Add T n s)) = size T s.
+Theorem pop_correct_invariant : forall T n s, pop T (Add T n s) = s.
 Proof.
-  intros.
-  reflexivity.
-Qed.
-
-Theorem pop_invariant : forall T n s, pop T (Add T n s) = s.
-Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem isEmpty_correct_true : forall T, isEmpty T (Empty T) = true.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem isEmpty_correct_false : forall T n s, isEmpty T (Add T n s) = false.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 (* Two pops on two pushes is always safe because no matter what is pushed,
@@ -114,14 +90,16 @@ two items will be on the stack before removing those two elements with the pops.
 Therefore, the precondition of not popping on an emtpy stack will be avoided. *)
 Example pop_push_safe : forall T x y, (pop T (pop T (push T x (push T y (Empty T))))) = Empty T.
 Proof.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 (* Two pops on a single push will not crash. However, it is not safe because 
 pushing a single item and then popping twice leads to violating the precondition 
 for pop that you don't pop on an empty stack. Although you'll get an empty stack
-back, no pop was actually executed because there were no items to pop.*)
+back, no pop was actually executed because there were no items to pop. Therefore,
+you cannot distinguish the stack that results from a pop on a stack with a single item
+from the stack that results from a pop on an empty stack. *)
 Example pop_push_unsafe : forall T x, (pop T (pop T (push T x (Empty T)))) = Empty T.
 Proof.
-  reflexivity.
+  intros. reflexivity.
 Qed.

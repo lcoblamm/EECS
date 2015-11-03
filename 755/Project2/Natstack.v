@@ -55,46 +55,24 @@ Definition isEmpty (s : NatStack) : bool :=
     | Add _ _ => false
   end.
 
-Fixpoint size (s : NatStack) : nat :=
-  match s with
-    | Empty => 0
-    | Add _ s => 1 + size s
-  end.
-
 Theorem top_correct : forall n s, top (Add n s) = Value n.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem push_immediate : forall n s, top (push n s) = Value n.
 Proof.
-  intros.
-  reflexivity.
-Qed.
-
-Theorem push_increase_size : forall n s, size (push n s) = 1 + size s.
-Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem push_invariant : forall n s, pop (push n s) = s.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
-Theorem pop_imediate : forall n s, size (pop (Add n s)) = size s.
+Theorem pop_correct_invariant : forall n s, pop (Add n s) = s.
 Proof.
-  intros.
-  reflexivity.
-Qed.
-
-Theorem pop_invariant : forall n s, pop (Add n s) = s.
-Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
 
 Theorem isEmpty_correct_true : isEmpty(Empty) = true.
@@ -104,6 +82,5 @@ Qed.
 
 Theorem isEmpty_correct_false : forall n s, isEmpty(Add n s) = false.
 Proof.
-  intros.
-  reflexivity.
+  intros. reflexivity.
 Qed.
