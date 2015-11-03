@@ -24,3 +24,4 @@ checkGuess i = if i == 4
                     else putStrLn "Too high!"
                   prompt
                 
+            
