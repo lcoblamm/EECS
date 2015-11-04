@@ -7,6 +7,7 @@ Date: 2015.09.24
 */
 
 #include <iostream>
+#include <queue>
 
 #include "Converter.h"
 #include "Transition.h"
@@ -118,11 +119,24 @@ std::set<int> Converter::epsClosure(std::set<int> states)
     if (states.empty()) {
         return states;
     }
-	for (std::set<int>::iterator iter = states.begin(); iter != states.end(); ++iter)
+    // create queue from state set
+    std::queue<int> stateQ;
+    for (std::set<int>::iterator iter = states.begin(); iter != states.end(); ++iter) {
+        stateQ.push(*iter);
+    }
+    // find epsilon closure for each state in queue
+	while (!stateQ.empty())
 	{
-		std::set<int> movesOnE = m_nfa[*iter].moves()['E'].states();
-		states.insert(movesOnE.begin(), movesOnE.end());
-	}
+        int curr = stateQ.front();
+        stateQ.pop();
+		std::set<int> movesOnE = m_nfa[curr].moves()['E'].states();
+		for (std::set<int>::iterator iter = movesOnE.begin(); iter != movesOnE.end(); ++iter) {
+            if (states.find(*iter) == states.end()) {
+                states.insert(*iter);
+                stateQ.push(*iter);
+            }
+        }
+	} 
 	return states;
 }
 
