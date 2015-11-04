@@ -77,13 +77,21 @@ myjoin :: Monad m => m (m a) -> m a
 myjoin mm = mm >>= (\ x -> x)
 {-
 join is a function that takes a monad inside a monad and flattens it
-to a single monad by executing both and returning the result. Bind
-takes a monad, m a, and a function from a to monad b to produce
-monad b. TODO: finish this
+to a single monad. Bind takes a monad, m a, and a function from a to 
+monad b to produce monad b. Therefore, to use bind to define join, we
+need to run bind with the double layered monad as its first argument,
+and an identity function. This will pull the inner monad out of the 
+outer monad and essentially return the inner monad itself.
 -}
 -- Write >>= using join, without using >>=
 mybind :: (Functor m, Monad m) => m a -> (a -> m b) -> m b
 mybind ma f = join (fmap f ma)
 {-
-TODO: explain this
+The bind function takes a monad, m a, and a function from an a to a
+monad b, and applies that to get a monad, m b. Since join takes in a 
+nested monad and flattens it, we need to create a monad wrapped in a 
+monad to pass to join. To do this and apply the function, we can use
+an fmap, mapping the function over the monad, which will produce 
+something of the form m (m b). When join is applied to this, it will
+flatten it to m b, our desired result.
 -}
