@@ -96,21 +96,31 @@ Proof.
   intros. reflexivity.
 Qed.
 
-Example push_push_pop_not_empty : forall T x y, checkNonEmpty (pop T (push T x (push T y (Empty T))) push_push_not_empty).
-
-(* Two pops on two pushes is always safe because no matter what is pushed,
-two items will be on the stack before removing those two elements with the pops.
-Therefore, a proof that the stack is not empty is feasible for each pop. *)
-Example pop_push_safe : forall T x y, (pop T (pop T (push T x (push T y (Empty T))) push_push_not_empty) push_push_pop_not_empty) = Empty T.
+Example push_push_pop_not_empty : forall T x y, checkNonEmpty T (pop T (push T x (push T y (Empty T))) (push_push_not_empty T x y)).
 Proof.
   intros. reflexivity.
 Qed.
 
-(* Two pops on a single push is not possible because no proof exists for the second pop
-that the stack is not empty because the stack is empty at that point. *)
-Example pop_push_unsafe : forall T x, forall p q, (pop T (pop T (push T x (Empty T)) p) q) = Empty T.
+(* Two pops on two pushes is always safe because no matter what is pushed,
+two items will be on the stack before removing those two elements with the pops.
+Therefore, a proof that the stack is not empty is feasible for each pop. *)
+Example pop_push_safe : forall T x y, (pop T (pop T (push T x (push T y (Empty T))) (push_push_not_empty T x y)) (push_push_pop_not_empty T x y)) = Empty T.
 Proof.
-  intros.
-  simpl.
-  reflexivity.
+  intros. reflexivity.
 Qed.
+
+Example push_not_empty: forall T x, checkNonEmpty T (push T x (Empty T)).
+Proof.
+  intros. reflexivity.
+Qed.
+
+Example push_pop_not_empty: forall T x, checkNonEmpty T (pop T (push T x (Empty T)) (push_not_empty T x)).
+Proof.
+  intros. simpl.
+Abort.
+
+(* Two pops on a single push is not possible because no proof exists for the second pop
+that the stack is not empty because the stack is empty at that point. Since I had to abort
+the push_pop_not_empty proof, there is no value that can be inserted as a proof to the 
+second pop that the stack is not empty.  *)
+Example pop_push_unsafe : forall T x, (pop T (pop T (push T x (Empty T)) (push_not_empty T x)) (push_pop_not_empty T x)) = Empty T.
