@@ -159,11 +159,15 @@ unop    : ISUB ID       { }
         | IINV ID       { }
         | IDEREF ID     { }
         | IARG ID       { printf( "    pushl      " );
-                          function_labeltemp(function,$2); 
+                          function_printtemp(function,$2); 
                           printf( "\n"); }
         | ICALL ID INT  { printf( "    call       " );
                           function_labeltemp(function,$2);
-                          printf( "\n"); }
+                          printf( "\n"); 
+                          
+                          printf( "    addl       ");
+                          int size = $3 * 4;
+                          printf( "$%d, %%esp\n", size);}
         | IRET ID       { printf( "    movl       " );
                           function_printtemp(function,$2);
                           printf( ", %%eax\n" ); }
