@@ -11,7 +11,7 @@ extern char localtypes[];
 extern int localwidths[];
 
 int numlabels = 0;                      /* total labels in file */
-int numblabels = 0;                     /* toal backpatch labels in file */
+int numblabels = 0;                     /* total backpatch labels in file */
 
 /*
  * backpatch - backpatch list of quadruples starting at p with k
@@ -29,7 +29,6 @@ void bgnstmt()
   extern int lineno;
 
   printf("bgnstmt %d\n", lineno);
-  //   fprintf(stderr, "sem: bgnstmt not implemented\n");
 }
 
 /*
@@ -106,7 +105,7 @@ struct sem_rec *con(char *x)
   }
 
   /* print the quad t%d = const */
-  printf("t%d = %s\n", nexttemp(), x);
+  printf("t%d := %s\n", nexttemp(), x);
   
   /* construct a new node corresponding to this constant generation 
      into a temporary. This will allow this temporary to be referenced
@@ -161,7 +160,8 @@ void dogoto(char *id)
  */
 void doif(struct sem_rec *e, int m1, int m2)
 {
-   fprintf(stderr, "sem: doif not implemented\n");
+  backpatch(e->back.s_true, m1);
+  backpatch(e->s_false, m2);
 }
 
 /*
@@ -178,7 +178,7 @@ void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
  */
 void doret(struct sem_rec *e)
 {
-   fprintf(stderr, "sem: doret not implemented\n");
+  gen("ret", (struct sem_rec*)NULL, e, e->s_mode);
 }
 
 /*
@@ -212,7 +212,36 @@ struct sem_rec *exprs(struct sem_rec *l, struct sem_rec *e)
  */
 void fhead(struct id_entry *p)
 {
-   fprintf(stderr, "sem: fhead not implemented\n");
+  // print params
+  int i;
+  for (i = 0; i < formalnum; ++i) {
+    int size;
+    if (formaltypes[i] == 'f') {
+      size = tsize(T_DOUBLE);
+    }
+    else if (formaltypes[i] == 'i') {
+      size = tsize(T_INT);
+    }
+    else {
+      size = 0;
+    }
+    printf("formal %d\n", size);
+  }
+  // print locals
+  for (i = 0; i < localnum; ++i) {
+    int size;
+    if (localtypes[i] == 'f') {
+      size = tsize(T_DOUBLE);
+    }
+    else if (localtypes[i] == 'i') {
+      size = tsize(T_INT);
+    }
+    else {
+      size = 0;
+    }
+    size = size * localwidths[i];
+    printf("localloc %d\n", size);
+  }
 }
 
 /*
@@ -220,8 +249,10 @@ void fhead(struct id_entry *p)
  */
 struct id_entry *fname(int t, char *id)
 {
-   fprintf(stderr, "sem: fname not implemented\n");
-   return ((struct id_entry *) NULL);
+  printf("func %s\n", id);
+  enterblock();
+  // TODO: figure out if we need to return something real here
+  return ((struct id_entry *) NULL);
 }
 
 /*
@@ -284,8 +315,8 @@ void labeldcl(char *id)
  */
 int m()
 {
-   fprintf(stderr, "sem: m not implemented\n");
-   return (0);
+  printf("label L%d\n", ++numlabels);
+  return numlabels;
 }
 
 /*
@@ -337,8 +368,34 @@ struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-   fprintf(stderr, "sem: rel not implemented\n");
-   return ((struct sem_rec *) NULL);
+  // check if conversion is needed
+  int type;
+  struct sem_rec *t1, *t2, *t3;
+  if ((x->s_mode == T_DOUBLE) && (y->s_mode != T_DOUBLE)) {
+    t1 = x;
+    t2 = cast(y, T_DOUBLE);
+    type = T_DOUBLE;
+  }
+  else if ((x->s_mode != T_DOUBLE) && (y->s_mode == T_DOUBLE)) {
+    t1 = cast(x, T_DOUBLE);
+    t2 = y;
+    type = T_DOUBLE;
+  }
+  else {
+    t1 = x;
+    t2 = y;
+    type = T_INT;
+  }
+
+  t3 = gen(op, t1, t2, type);
+
+  printf("bt t%d B%d\n", t3->s_place, ++numblabels);
+  printf("br B%d\n", ++numblabels);
+  return (0, 0,
+      node(numblabels-1, 0, (struct sem_rec *) NULL, 
+           (struct sem_rec *) NULL),
+      node(numblabels, 0, (struct sem_rec *) NULL, 
+           (struct sem_rec *) NULL));
 }
 
 /*
