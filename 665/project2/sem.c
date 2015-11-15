@@ -412,18 +412,18 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
     tempx = op1("@", x);
     struct sem_rec *t1, *t2;
     int type;
-    if ((x->s_mode == T_DOUBLE) && (y->s_mode != T_DOUBLE)) {
-      t1 = x;
+    if ((tempx->s_mode == T_DOUBLE) && (y->s_mode != T_DOUBLE)) {
+      t1 = tempx;
       t2 = cast(y, T_DOUBLE);
       type = T_DOUBLE;
     }
-    else if ((x->s_mode != T_DOUBLE) && (y->s_mode == T_DOUBLE)) {
-      t1 = cast(x, T_DOUBLE);
+    else if ((tempx->s_mode != T_DOUBLE) && (y->s_mode == T_DOUBLE)) {
+      t1 = cast(tempx, T_DOUBLE);
       t2 = y;
       type = T_DOUBLE;
     }
     else {
-      t1 = x;
+      t1 = tempx;
       t2 = y;
       type = T_INT;
     }
