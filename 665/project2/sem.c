@@ -18,7 +18,7 @@ int numblabels = 0;                     /* total backpatch labels in file */
  */
 void backpatch(struct sem_rec *p, int k)
 {
-   fprintf(stderr, "sem: backpatch not implemented\n");
+  printf("B%d=L%d\n", p->s_place, k);
 }
 
 /*
@@ -144,7 +144,10 @@ void dodo(int m1, int m2, struct sem_rec *e, int m3)
 void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
            int m3, struct sem_rec *n2, int m4)
 {
-   fprintf(stderr, "sem: dofor not implemented\n");
+   backpatch(e2->back.s_true, m3);
+   backpatch(e2->s_false, m4);
+   backpatch(n1, m1);
+   backpatch(n2, m2);
 }
 
 /*
@@ -260,7 +263,8 @@ struct id_entry *fname(int t, char *id)
  */
 void ftail()
 {
-   fprintf(stderr, "sem: ftail not implemented\n");
+  printf("fend\n");
+  leaveblock();
 }
 
 /*
@@ -324,8 +328,8 @@ int m()
  */
 struct sem_rec *n()
 {
-   fprintf(stderr, "sem: n not implemented\n");
-   return ((struct sem_rec *) NULL);
+  printf("br B%d\n", ++numblabels);
+  return (node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL));
 }
 
 /*
@@ -391,11 +395,9 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 
   printf("bt t%d B%d\n", t3->s_place, ++numblabels);
   printf("br B%d\n", ++numblabels);
-  return (0, 0,
-      node(numblabels-1, 0, (struct sem_rec *) NULL, 
-           (struct sem_rec *) NULL),
-      node(numblabels, 0, (struct sem_rec *) NULL, 
-           (struct sem_rec *) NULL));
+  t3->back.s_true = node(numblabels-1, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
+  t3->s_false = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
+  return (t3);
 }
 
 /*
@@ -404,11 +406,29 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 {
   /* assign the value of expression y to the lval x */
-  struct sem_rec *p, *cast_y;
+  struct sem_rec *p, *cast_y, *tempx, *tempres;
 
   if(*op!='\0' || x==NULL || y==NULL){
-    fprintf(stderr, "sem: set not implemented\n");
-    return((struct sem_rec *) NULL);
+    tempx = op1("@", x);
+    struct sem_rec *t1, *t2;
+    int type;
+    if ((x->s_mode == T_DOUBLE) && (y->s_mode != T_DOUBLE)) {
+      t1 = x;
+      t2 = cast(y, T_DOUBLE);
+      type = T_DOUBLE;
+    }
+    else if ((x->s_mode != T_DOUBLE) && (y->s_mode == T_DOUBLE)) {
+      t1 = cast(x, T_DOUBLE);
+      t2 = y;
+      type = T_DOUBLE;
+    }
+    else {
+      t1 = x;
+      t2 = y;
+      type = T_INT;
+    }
+    tempres = gen(op, t1, t2, type);
+    return(set("", x, tempres));
   }
 
   /* if for type consistency of x and y */
@@ -446,7 +466,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 void startloopscope()
 {
-   fprintf(stderr, "sem: startloopscope not implemented\n");
+  // TODO: figure out what needs to happen here
 }
 
 /*
