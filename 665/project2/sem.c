@@ -59,9 +59,28 @@ struct sem_rec *call(char *f, struct sem_rec *args)
  */
 struct sem_rec *ccand(struct sem_rec *e1, int m, struct sem_rec *e2)
 {
+  struct sem_rec *t1, *end_e1_false;
   backpatch(e1->back.s_true, m);
 
-  return(rel("&&", e1, e2));
+  // find end of e1 false
+  end_e1_false = e1;
+  if (end_e1_false->s_false) {
+    end_e1_false = end_e1_false->s_false;
+    while(end_e1_false->back.s_link) {
+      end_e1_false = end_e1_false->back.s_link;
+    }
+  }
+
+  // concat with e2 false
+  if (end_e1_false == e1) {
+    end_e1_false->s_false = e2->s_false;
+  }
+  else {
+    end_e1_false->back.s_link = e2->s_false;
+  }
+
+  t1 = node(0, 0, e2->back.s_true, e1->s_false);
+  return(t1);
 }
 
 /*
@@ -92,7 +111,10 @@ struct sem_rec *ccexpr(struct sem_rec *e)
  */
 struct sem_rec *ccnot(struct sem_rec *e)
 {
-  return(rel("~", (struct sem_rec*) NULL, e));
+  struct sem_rec *t1;
+  // swap true and false lists
+  t1 = node(0, 0, e->s_false, e->back.s_true);
+  return t1;
 }
 
 /*
@@ -100,8 +122,21 @@ struct sem_rec *ccnot(struct sem_rec *e)
  */
 struct sem_rec *ccor(struct sem_rec *e1, int m, struct sem_rec *e2)
 {
-   fprintf(stderr, "sem: ccor not implemented\n");
-   return ((struct sem_rec *) NULL);
+  backpatch(e1->s_false, m);
+
+  struct sem_rec *t1, *end_e1_true;
+
+  // find end of e1 true 
+  end_e1_true = e1;
+  while(end_e1_true->back.s_link) {
+    end_e1_true = end_e1_true->back.s_link;
+  }
+
+  // link with e2 true
+  end_e1_true->back.s_link = e2->back.s_true;
+
+  t1 = node(0, 0, e1->back.s_true, e2->s_false);
+  return(t1);
 }
 
 /*
@@ -423,28 +458,9 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 
   printf("bt t%d B%d\n", t1->s_place, ++numblabels);
   printf("br B%d\n", ++numblabels);
-  endtrue = t1;
-  if (endtrue->back.s_true) {
-    while (endtrue->back.s_link) {
-      endtrue = endtrue->back.s_link;
-    }
-  }
 
-  endfalse = t1;
-  if (endfalse->s_false) {
-    endfalse = endfalse->s_false;
-    while (endfalse->back.s_link) {
-      endfalse = endfalse->back.s_link;
-    }
-  }
-
-  endtrue->back.s_true = node(numblabels-1, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
-  if (endfalse == t1) {
-    endfalse->s_false = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
-  }
-  else {
-    endfalse->back.s_link = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
-  }
+  t1->back.s_true = node(numblabels-1, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
+  t1->s_false = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
   return (t1);
 }
 
