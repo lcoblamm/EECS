@@ -36,8 +36,19 @@ void bgnstmt()
  */
 struct sem_rec *call(char *f, struct sem_rec *args)
 {
-   fprintf(stderr, "sem: call not implemented\n");
-   return ((struct sem_rec *) NULL);
+  int numArgs;
+  numArgs = 0;
+  while (args) {
+    gen("arg", (struct sem_rec*) NULL, args, args->s_mode);
+    args = args->back.s_link;
+    numArgs++;
+  }
+
+  printf("t%d := global %s\n", nexttemp(), f);
+  struct sem_rec* fun;
+  fun = node(currtemp(), 0, (struct sem_rec*) NULL, (struct sem_rec*) NULL);
+
+  return (gen("f", fun, node(numArgs, 0, (struct sem_rec*) NULL, (struct sem_rec*) NULL), T_INT));
 }
 
 /*
@@ -135,7 +146,9 @@ void docontinue()
  */
 void dodo(int m1, int m2, struct sem_rec *e, int m3)
 {
-   fprintf(stderr, "sem: dodo not implemented\n");
+  fprintf(stderr, "sem: dodo not implemented\n");
+  // TODO: figure out argument to endloopscope
+  endloopscope(0);
 }
 
 /*
@@ -144,10 +157,12 @@ void dodo(int m1, int m2, struct sem_rec *e, int m3)
 void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
            int m3, struct sem_rec *n2, int m4)
 {
-   backpatch(e2->back.s_true, m3);
-   backpatch(e2->s_false, m4);
-   backpatch(n1, m1);
-   backpatch(n2, m2);
+  backpatch(e2->back.s_true, m3);
+  backpatch(e2->s_false, m4);
+  backpatch(n1, m1);
+  backpatch(n2, m2);
+  // TODO: figure out argument to endloopscope
+  endloopscope(0);
 }
 
 /*
@@ -190,7 +205,9 @@ void doret(struct sem_rec *e)
 void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
              int m3)
 {
-   fprintf(stderr, "sem: dowhile not implemented\n");
+  fprintf(stderr, "sem: dowhile not implemented\n");
+  // TODO: figure out argument to endloopscope
+  endloopscope(0);
 }
 
 /*
@@ -198,7 +215,7 @@ void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
  */
 void endloopscope(int m)
 {
-   fprintf(stderr, "sem: endloopscope not implemented\n");
+  leaveblock();
 }
 
 /*
@@ -206,8 +223,13 @@ void endloopscope(int m)
  */
 struct sem_rec *exprs(struct sem_rec *l, struct sem_rec *e)
 {
-   fprintf(stderr, "sem: exprs not implemented\n");
-   return ((struct sem_rec *) NULL);
+  struct sem_rec *listend;
+  listend = l;
+  while (listend->back.s_link) {
+    listend = listend->back.s_link;
+  }
+  listend->back.s_link = e;
+  return (l);
 }
 
 /*
@@ -337,15 +359,14 @@ struct sem_rec *n()
  */
 struct sem_rec *op1(char *op, struct sem_rec *y)
 {
-  if (*op == '@' && !(y->s_mode&T_ARRAY)){
+  if (*op == '@' && !(y->s_mode&T_ARRAY)) {
     /* get rid of T_ADDR if it is being dereferenced so can handle
        T_DOUBLE types correctly */
     y->s_mode &= ~T_ADDR;
     return (gen(op, (struct sem_rec *) NULL, y, y->s_mode));
   }
-  else{
-    fprintf(stderr, "sem: op1 not implemented\n");
-    return ((struct sem_rec *) NULL);
+  else {
+    return (gen(op, (struct sem_rec*) NULL, y, y->s_mode));
   }
 }
 
@@ -354,27 +375,9 @@ struct sem_rec *op1(char *op, struct sem_rec *y)
  */
 struct sem_rec *op2(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-   fprintf(stderr, "sem: op2 not implemented\n");
-   return ((struct sem_rec *) NULL);
-}
-
-/*
- * opb - bitwise operators
- */
-struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
-{
-   fprintf(stderr, "sem: opb not implemented\n");
-   return ((struct sem_rec *) NULL);
-}
-
-/*
- * rel - relational operators
- */
-struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
-{
   // check if conversion is needed
   int type;
-  struct sem_rec *t1, *t2, *t3;
+  struct sem_rec *t1, *t2;
   if ((x->s_mode == T_DOUBLE) && (y->s_mode != T_DOUBLE)) {
     t1 = x;
     t2 = cast(y, T_DOUBLE);
@@ -390,14 +393,31 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
     t2 = y;
     type = T_INT;
   }
+  return(gen(op, t1, t2, type));
+}
 
-  t3 = gen(op, t1, t2, type);
+/*
+ * opb - bitwise operators
+ */
+struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
+{
+  // TODO: figure out if you need to do something else here
+  return (op2(op, x, y));
+}
 
-  printf("bt t%d B%d\n", t3->s_place, ++numblabels);
+/*
+ * rel - relational operators
+ */
+struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
+{
+  struct sem_rec *temp;
+  temp = op2(op, x, y);
+
+  printf("bt t%d B%d\n", temp->s_place, ++numblabels);
   printf("br B%d\n", ++numblabels);
-  t3->back.s_true = node(numblabels-1, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
-  t3->s_false = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
-  return (t3);
+  temp->back.s_true = node(numblabels-1, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
+  temp->s_false = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
+  return (temp);
 }
 
 /*
@@ -467,6 +487,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 void startloopscope()
 {
   // TODO: figure out what needs to happen here
+  enterblock();
 }
 
 /*
@@ -474,8 +495,8 @@ void startloopscope()
  */
 struct sem_rec *string(char *s)
 {
-   fprintf(stderr, "sem: string not implemented\n");
-   return ((struct sem_rec *) NULL);
+  // TODO: check if I need to do something else here
+  return(con(s));
 }
 
 
