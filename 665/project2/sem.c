@@ -425,7 +425,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
     else {
       t1 = tempx;
       t2 = y;
-      type = T_INT;
+      type = y->s_mode;
     }
     tempres = gen(op, t1, t2, type);
     return(set("", x, tempres));
