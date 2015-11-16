@@ -233,7 +233,7 @@ void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
   // TODO: test
   backpatch(e->back.s_true, m1);
   backpatch(e->s_false, m2);
-  backpatch(n, m2);
+  backpatch(n, m3);
 }
 
 /*
