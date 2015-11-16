@@ -59,7 +59,6 @@ struct sem_rec *call(char *f, struct sem_rec *args)
  */
 struct sem_rec *ccand(struct sem_rec *e1, int m, struct sem_rec *e2)
 {
-  struct sem_rec *end_e1_true;
   backpatch(e1->back.s_true, m);
 
   return(rel("&&", e1, e2));
@@ -93,8 +92,7 @@ struct sem_rec *ccexpr(struct sem_rec *e)
  */
 struct sem_rec *ccnot(struct sem_rec *e)
 {
-   fprintf(stderr, "sem: ccnot not implemented\n");
-   return ((struct sem_rec *) NULL);
+  return(rel("~", (struct sem_rec*) NULL, e));
 }
 
 /*
@@ -396,7 +394,7 @@ struct sem_rec *op2(char *op, struct sem_rec *x, struct sem_rec *y)
   else {
     t1 = x;
     t2 = y;
-    type = T_INT;
+    type = y->s_mode;
   }
   return(gen(op, t1, t2, type));
 }
@@ -416,7 +414,12 @@ struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
 struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 {
   struct sem_rec *t1, *endtrue, *endfalse;
-  t1 = op2(op, x, y);
+  if (x) {
+    t1 = op2(op, x, y);
+  }
+  else {
+    t1 = op1(op, y);
+  }
 
   printf("bt t%d B%d\n", t1->s_place, ++numblabels);
   printf("br B%d\n", ++numblabels);
@@ -455,24 +458,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 
   if(*op!='\0' || x==NULL || y==NULL){
     tempx = op1("@", x);
-    struct sem_rec *t1, *t2;
-    int type;
-    if ((tempx->s_mode == T_DOUBLE) && (y->s_mode != T_DOUBLE)) {
-      t1 = tempx;
-      t2 = cast(y, T_DOUBLE);
-      type = T_DOUBLE;
-    }
-    else if ((tempx->s_mode != T_DOUBLE) && (y->s_mode == T_DOUBLE)) {
-      t1 = cast(tempx, T_DOUBLE);
-      t2 = y;
-      type = T_DOUBLE;
-    }
-    else {
-      t1 = tempx;
-      t2 = y;
-      type = y->s_mode;
-    }
-    tempres = gen(op, t1, t2, type);
+    tempres = op2(op, tempx, y);
     return(set("", x, tempres));
   }
 
