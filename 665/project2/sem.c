@@ -168,7 +168,7 @@ struct sem_rec *con(char *x)
  */
 void dobreak()
 {
-   fprintf(stderr, "sem: dobreak not implemented\n");
+  fprintf(stderr, "sem: dobreak not implemented\n");
 }
 
 /*
@@ -176,7 +176,7 @@ void dobreak()
  */
 void docontinue()
 {
-   fprintf(stderr, "sem: docontinue not implemented\n");
+  fprintf(stderr, "sem: docontinue not implemented\n");
 }
 
 /*
@@ -184,7 +184,10 @@ void docontinue()
  */
 void dodo(int m1, int m2, struct sem_rec *e, int m3)
 {
-  fprintf(stderr, "sem: dodo not implemented\n");
+  // TODO: test
+  backpatch(e->back.s_true, m1);
+  backpatch(e->s_false, m3);
+  // TODO: figure out if there's anything to do with m2
   // TODO: figure out argument to endloopscope
   endloopscope(0);
 }
@@ -208,7 +211,8 @@ void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
  */
 void dogoto(char *id)
 {
-   fprintf(stderr, "sem: dogoto not implemented\n");
+  // TODO: figure out if anything else needs to happen, test
+  printf("br %s\n", id);
 }
 
 /*
@@ -224,9 +228,12 @@ void doif(struct sem_rec *e, int m1, int m2)
  * doifelse - if then else statement
  */
 void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
-                         int m2, int m3)
+  int m2, int m3)
 {
-   fprintf(stderr, "sem: doifelse not implemented\n");
+  // TODO: test
+  backpatch(e->back.s_true, m1);
+  backpatch(e->s_false, m2);
+  backpatch(n, m2);
 }
 
 /*
@@ -243,7 +250,10 @@ void doret(struct sem_rec *e)
 void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
              int m3)
 {
-  fprintf(stderr, "sem: dowhile not implemented\n");
+  // TODO: test
+  backpatch(e->back.s_true, m2);
+  backpatch(e->s_false, m3);
+  backpatch(n, m1);
   // TODO: figure out argument to endloopscope
   endloopscope(0);
 }
@@ -371,7 +381,8 @@ struct sem_rec *tom_index(struct sem_rec *x, struct sem_rec *i)
  */
 void labeldcl(char *id)
 {
-   fprintf(stderr, "sem: labeldcl not implemented\n");
+  // TODO: test
+  printf("label %s\n", id);
 }
 
 /*
