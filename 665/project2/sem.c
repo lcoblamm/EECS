@@ -18,7 +18,10 @@ int numblabels = 0;                     /* total backpatch labels in file */
  */
 void backpatch(struct sem_rec *p, int k)
 {
-  printf("B%d=L%d\n", p->s_place, k);
+  while (p) {
+    printf("B%d=L%d\n", p->s_place, k);
+    p = p->back.s_link;
+  }
 }
 
 /*
@@ -56,8 +59,10 @@ struct sem_rec *call(char *f, struct sem_rec *args)
  */
 struct sem_rec *ccand(struct sem_rec *e1, int m, struct sem_rec *e2)
 {
-   fprintf(stderr, "sem: ccand not implemented\n");
-   return ((struct sem_rec *) NULL);
+  struct sem_rec *end_e1_true;
+  backpatch(e1->back.s_true, m);
+
+  return(rel("&&", e1, e2));
 }
 
 /*
@@ -410,14 +415,34 @@ struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-  struct sem_rec *temp;
-  temp = op2(op, x, y);
+  struct sem_rec *t1, *endtrue, *endfalse;
+  t1 = op2(op, x, y);
 
-  printf("bt t%d B%d\n", temp->s_place, ++numblabels);
+  printf("bt t%d B%d\n", t1->s_place, ++numblabels);
   printf("br B%d\n", ++numblabels);
-  temp->back.s_true = node(numblabels-1, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
-  temp->s_false = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
-  return (temp);
+  endtrue = t1;
+  if (endtrue->back.s_true) {
+    while (endtrue->back.s_link) {
+      endtrue = endtrue->back.s_link;
+    }
+  }
+
+  endfalse = t1;
+  if (endfalse->s_false) {
+    endfalse = endfalse->s_false;
+    while (endfalse->back.s_link) {
+      endfalse = endfalse->back.s_link;
+    }
+  }
+
+  endtrue->back.s_true = node(numblabels-1, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
+  if (endfalse == t1) {
+    endfalse->s_false = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
+  }
+  else {
+    endfalse->back.s_link = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
+  }
+  return (t1);
 }
 
 /*
