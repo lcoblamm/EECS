@@ -464,8 +464,11 @@ struct sem_rec *op2(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 struct sem_rec *opb(char *op, struct sem_rec *x, struct sem_rec *y)
 {
-  // TODO: figure out if you need to do something else here
-  return (op2(op, x, y));
+  struct sem_rec *cast_x, *cast_y;
+  cast_x = cast(x, T_INT);
+  cast_y = cast(y, T_INT);
+
+  return (op2(op, cast_x, cast_y));
 }
 
 /*

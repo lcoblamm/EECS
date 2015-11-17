@@ -28,30 +28,29 @@ t8 := global x
 t9 := global y
 t10 := @f t9
 t11 := 1
-t12 := cvf t11
-t13 := t10 <<f t12
-t14 := cvi t13
-t15 := t8 =i t14
+t12 := cvi t10
+t13 := t12 <<i t11
+t14 := t8 =i t13
 bgnstmt 12
-t16 := local 0
-t17 := global x
-t18 := @i t17
-t19 := -i t18
-t20 := t16 =i t19
+t15 := local 0
+t16 := global x
+t17 := @i t16
+t18 := -i t17
+t19 := t15 =i t18
 bgnstmt 13
-t21 := global y
-t22 := global x
-t23 := @i t22
-t24 := 2
-t25 := t23 %i t24
-t26 := cvf t25
-t27 := t21 =f t26
+t20 := global y
+t21 := global x
+t22 := @i t21
+t23 := 2
+t24 := t22 %i t23
+t25 := cvf t24
+t26 := t20 =f t25
 bgnstmt 14
-t28 := global x
-t29 := @i t28
-t30 := 15
-t31 := t29 >=i t30
-bt t31 B3
+t27 := global x
+t28 := @i t27
+t29 := 15
+t30 := t28 >=i t29
+bt t30 B3
 br B4
 label L3
 bgnstmt 14
@@ -60,7 +59,7 @@ label L4
 B3=L3
 B4=L4
 bgnstmt 16
-t32 := 0
-t33 := cvf t32
-retf t33
+t31 := 0
+t32 := cvf t31
+retf t32
 fend
