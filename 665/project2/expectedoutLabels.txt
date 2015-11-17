@@ -1,0 +1,88 @@
+alloc m 48
+func scale
+formal 8
+formal 4
+bgnstmt 6
+label L1
+t1 := param 0
+t2 := param 0
+t3 := @f t2
+t4 := 1
+t5 := cvf t4
+t6 := t3 +f t5
+t7 := t1 =f t6
+label L2
+t8 := param 0
+t9 := @f t8
+t10 := param 1
+t11 := @i t10
+t12 := cvf t11
+t13 := t9 <f t12
+bt t13 B1
+br B2
+label L3
+t14 := param 0
+t15 := @f t14
+t16 := 10
+t17 := cvf t16
+t18 := t15 !=f t17
+bt t18 B3
+br B4
+B1=L3
+label L4
+B3=L1
+B2=L4
+B4=L4
+bgnstmt 9
+t19 := param 0
+t20 := @f t19
+t21 := 10
+t22 := cvf t21
+t23 := t20 ==f t22
+bt t23 B5
+br B6
+label L5
+bgnstmt 10
+br B7
+label L6
+B5=L5
+B6=L6
+bgnstmt 12
+t24 := param 0
+t25 := 0
+t26 := cvf t25
+t27 := t24 =f t26
+bgnstmt 14
+label L7
+B7=L7
+t28 := param 0
+t29 := @f t28
+t30 := 0
+t31 := cvf t30
+t32 := t29 ==f t31
+bt t32 B8
+br B9
+label L8
+bgnstmt 16
+t33 := param 0
+t34 := param 1
+t35 := @i t34
+t36 := cvf t35
+t37 := t33 =f t36
+br B10
+label L9
+bgnstmt 18
+t38 := param 0
+t39 := 1
+t40 := cvf t39
+t41 := t38 =f t40
+label L10
+B8=L8
+B9=L9
+B10=L10
+bgnstmt 19
+t42 := param 0
+t43 := @f t42
+t44 := cvi t43
+reti t44
+fend
