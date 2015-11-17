@@ -381,7 +381,7 @@ struct sem_rec *tom_index(struct sem_rec *x, struct sem_rec *i)
  */
 void labeldcl(char *id)
 {
-  // TODO: test
+  // TODO: fix this to be L# and backpatching
   printf("label %s\n", id);
 }
 
