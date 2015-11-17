@@ -2,10 +2,8 @@ alloc m 48
 func scale
 formal 8
 formal 4
-bgnstmt 5
-label L1
-bgnstmt 5
 bgnstmt 6
+label L1
 t1 := param 0
 t2 := param 0
 t3 := @f t2
@@ -36,15 +34,13 @@ B3=L1
 B2=L4
 B4=L4
 bgnstmt 9
-label L5
 t19 := param 1
 t20 := @i t19
 t21 := 0
 t22 := t20 >i t21
 bt t22 B5
 br B6
-label L6
-bgnstmt 9
+label L5
 bgnstmt 10
 t23 := param 1
 t24 := 1
@@ -52,25 +48,24 @@ t25 := @i t23
 t26 := t25 -i t24
 t27 := t23 =i t26
 br B7
-label L7
-B5=L6
-B6=L7
-B7=L5
-bgnstmt 13
+label L6
+B5=L5
+B6=L6
+B7=L4
+bgnstmt 12
 t28 := param 1
 t29 := @i t28
 t30 := 0
 t31 := t29 !=i t30
 bt t31 B8
 br B9
-label L8
+label L7
 bgnstmt 13
-bgnstmt 14
-br test
-label L9
-B9=L8
-B8=L9
-bgnstmt 17
+br B10
+label L8
+B9=L7
+B8=L8
+bgnstmt 15
 t32 := param 0
 t33 := param 1
 t34 := @i t33
@@ -78,54 +73,55 @@ t35 := 1
 t36 := t34 >>i t35
 t37 := cvf t36
 t38 := t32 =f t37
-bgnstmt 19
+bgnstmt 17
 t39 := param 1
 t40 := 2
 t41 := 3
 t42 := t40 *i t41
 t43 := t39 =i t42
-bgnstmt 21
-label test
+bgnstmt 19
+label L9
+B10=L9
 t44 := 1
 t45 := param 0
 t46 := @f t45
 t47 := cvf t44
 t48 := t47 <=f t46
-bt t48 B10
-br B11
+bt t48 B11
+br B12
 label L10
 t49 := param 1
 t50 := @i t49
 t51 := 5
 t52 := t50 >=i t51
-bt t52 B12
-br B13
-B10=L10
+bt t52 B13
+br B14
+B11=L10
 label L11
 t53 := 0
 t54 := 0
 t55 := t53 !=i t54
-bt t55 B14
-br B15
-B11=L11
-B13=L11
+bt t55 B15
+br B16
+B12=L11
+B14=L11
 label L12
-bgnstmt 22
+bgnstmt 21
 t56 := param 1
 t57 := 0
 t58 := t56 =i t57
-br B16
+br B17
 label L13
-bgnstmt 24
+bgnstmt 23
 t59 := param 1
 t60 := 1
 t61 := t59 =i t60
 label L14
-B12=L12
-B15=L12
-B14=L13
-B16=L14
-bgnstmt 26
+B13=L12
+B16=L12
+B15=L13
+B17=L14
+bgnstmt 24
 t62 := param 1
 t63 := @i t62
 reti t63
