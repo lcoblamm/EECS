@@ -2,19 +2,26 @@ double m[6];
 
 scale(double x, int y) 
 {
-    do
+    do {
         x = x + 1;
-    while (x < y && x != 10);
+    } while (x < y && x != 10);
 
-    if (x == 10) 
-        goto lynne;
+    while (y > 0) {
+        y -= 1;
+    }
 
-    x = 0;
+    if (!y) {
+        goto test;
+    }
 
-    lynne:
-    if (x == 0)
-        x = y;
-    else 
-        x = 1;
-    return x;
+    x = y >> 1;
+
+    y = 2 * 3;
+
+    test:
+    if (1 <= x && y >= 5 || !0) 
+        y = 0;
+    else
+        y = 1;
+    return y;
 }
