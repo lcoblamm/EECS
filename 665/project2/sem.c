@@ -248,9 +248,8 @@ void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
 void doret(struct sem_rec *e)
 {
   struct sem_rec *cast_e;
-  if (e->s_mode != funcType) {
-    cast_e = cast(e, funcType);
-  }
+  cast_e = cast(e, funcType);
+
   gen("ret", (struct sem_rec*)NULL, cast_e, cast_e->s_mode);
 }
 

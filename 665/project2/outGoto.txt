@@ -30,7 +30,7 @@ t10 := @f t9
 t11 := 1
 t12 := cvf t11
 t13 := t10 <<f t12
-t14 = cvi t13
+t14 := cvi t13
 t15 := t8 =i t14
 bgnstmt 12
 t16 := local 0
@@ -44,7 +44,7 @@ t22 := global x
 t23 := @i t22
 t24 := 2
 t25 := t23 %i t24
-t26 = cvf t25
+t26 := cvf t25
 t27 := t21 =f t26
 bgnstmt 14
 t28 := global x
@@ -61,5 +61,6 @@ B3=L3
 B4=L4
 bgnstmt 16
 t32 := 0
-reti t32
+t33 := cvf t32
+retf t33
 fend

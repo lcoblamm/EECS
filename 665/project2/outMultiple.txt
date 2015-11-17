@@ -187,5 +187,6 @@ B22=L18
 bgnstmt 31
 t96 := local 0
 t97 := @f t96
-retf t97
+t98 := cvi t97
+reti t98
 fend
