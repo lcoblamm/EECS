@@ -1,0 +1,66 @@
+alloc x 4
+alloc y 8
+func bar
+formal 4
+formal 8
+localloc 4
+bgnstmt 6
+label L1
+t1 := param 0
+t2 := @i t1
+t3 := 0
+t4 := t2 !=i t3
+bt t4 B1
+br B2
+label L2
+bgnstmt 8
+br B3
+label L3
+B2=L2
+B1=L3
+bgnstmt 9
+t5 := param 0
+t6 := 5
+t7 := t5 =i t6
+bgnstmt 10
+label L4
+B3=L4
+t8 := global x
+t9 := global y
+t10 := @f t9
+t11 := 1
+t12 := cvi t10
+t13 := t12 <<i t11
+t14 := t8 =i t13
+bgnstmt 12
+t15 := local 0
+t16 := global x
+t17 := @i t16
+t18 := -i t17
+t19 := t15 =i t18
+bgnstmt 13
+t20 := global y
+t21 := global x
+t22 := @i t21
+t23 := 2
+t24 := t22 %i t23
+t25 := cvf t24
+t26 := t20 =f t25
+bgnstmt 14
+t27 := global x
+t28 := @i t27
+t29 := 15
+t30 := t28 >=i t29
+bt t30 B4
+br B5
+label L5
+bgnstmt 15
+br L1
+label L6
+B4=L5
+B5=L6
+bgnstmt 16
+t31 := 0
+t32 := cvf t31
+retf t32
+fend

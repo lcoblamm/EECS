@@ -1,7 +1,7 @@
 int x;
 double y;
 
-main(int a, char* v) {
+double bar(int a, double v) {
 	int m;
 	jacob:
 	if (!a) 
