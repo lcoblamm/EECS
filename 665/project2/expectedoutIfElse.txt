@@ -1,0 +1,51 @@
+func foo
+formal 4
+formal 8
+bgnstmt 2
+t1 := 1
+t2 := param 0
+t3 := @i t2
+t4 := t1 <=i t3
+bt t4 B1
+br B2
+label L1
+t5 := param 1
+t6 := @f t5
+t7 := 5
+t8 := cvf t7
+t9 := t6 >=f t8
+bt t9 B3
+br B4
+B1=L1
+label L2
+t10 := 0
+t11 := 0
+t12 := t10 !=i t11
+bt t12 B5
+br B6
+B2=L2
+B4=L2
+label L3
+bgnstmt 3
+t13 := param 1
+t14 := 0
+t15 := cvf t14
+t16 := t13 =f t15
+br B7
+label L4
+bgnstmt 5
+t17 := param 1
+t18 := 1
+t19 := cvf t18
+t20 := t17 =f t19
+label L5
+B3=L3
+B6=L3
+B5=L4
+B7=L5
+bgnstmt 6
+t21 := param 1
+t22 := @f t21
+t23 := cvi t22
+reti t23
+fend

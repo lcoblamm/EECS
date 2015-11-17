@@ -1,0 +1,38 @@
+func main
+formal 4
+formal 4
+bgnstmt 3
+t1 := param 0
+t2 := @i t1
+t3 := 100
+t4 := t2 <i t3
+bt t4 B1
+br B2
+label L1
+t5 := param 0
+t6 := @i t5
+t7 := 200
+t8 := t6 >i t7
+bt t8 B3
+br B4
+label L2
+t9 := param 0
+t10 := @i t9
+t11 := param 1
+t12 := @i t11
+t13 := t10 !=i t12
+bt t13 B5
+br B6
+B3=L2
+B2=L1
+label L3
+bgnstmt 3
+t14 := param 0
+t15 := 0
+t16 := t14 =i t15
+label L4
+B1=L3
+B5=L3
+B4=L4
+B6=L4
+fend

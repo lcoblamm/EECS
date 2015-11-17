@@ -1,0 +1,23 @@
+func main
+formal 4
+formal 4
+localloc 8
+localloc 4
+bgnstmt 5
+t1 := "%d %f %d %d\n"
+t2 := local 1
+t3 := @i t2
+t4 := local 0
+t5 := @f t4
+t6 := param 0
+t7 := @i t6
+t8 := param 1
+t9 := @i t8
+argi t1
+argi t3
+argf t5
+argi t7
+argi t9
+t10 := global printf
+t11 := fi t10 5
+fend
