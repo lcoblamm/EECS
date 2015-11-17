@@ -35,7 +35,6 @@ void bgnstmt()
   extern int lineno;
 
   printf("bgnstmt %d\n", lineno);
-  labelNeededFlag = 1;
 }
 
 /*
@@ -100,8 +99,7 @@ struct sem_rec *ccexpr(struct sem_rec *e)
      
      printf("bt t%d B%d\n", t1->s_place, ++numblabels);
      printf("br B%d\n", ++numblabels);
-     labelNeededFlag = 1;
-     return (node(0, 0,
+          return (node(0, 0,
 		  node(numblabels-1, 0, (struct sem_rec *) NULL, 
 		       (struct sem_rec *) NULL),
 		  node(numblabels, 0, (struct sem_rec *) NULL, 
@@ -161,6 +159,7 @@ struct sem_rec *con(char *x)
   /* print the quad t%d = const */
   printf("t%d := %s\n", nexttemp(), x);
   
+  labelNeededFlag = 1;
   /* construct a new node corresponding to this constant generation 
      into a temporary. This will allow this temporary to be referenced
      in an expression later*/
@@ -324,6 +323,7 @@ void fhead(struct id_entry *p)
     size = size * localwidths[i];
     printf("localloc %d\n", size);
   }
+  labelNeededFlag = 1;
 }
 
 /*
@@ -334,6 +334,7 @@ struct id_entry *fname(int t, char *id)
   printf("func %s\n", id);
   enterblock();
   funcType = t;
+  labelNeededFlag = 1;
   // TODO: figure out if we need to return something real here
   return ((struct id_entry *) NULL);
 }
@@ -344,6 +345,7 @@ struct id_entry *fname(int t, char *id)
 void ftail()
 {
   printf("fend\n");
+  labelNeededFlag = 1;
   leaveblock();
 }
 
@@ -352,30 +354,32 @@ void ftail()
  */
 struct sem_rec *id(char *x)
 {
-   struct id_entry *p;
+  struct id_entry *p;
 
-   if ((p = lookup(x, 0)) == NULL) {
-      yyerror("undeclared identifier");
-      p = install(x, -1);
-      p->i_type = T_INT;
-      p->i_scope = LOCAL;
-      p->i_defined = 1;
-   }
-   if (p->i_scope == GLOBAL)
-      printf("t%d := global %s\n", nexttemp(), x);
-   else if (p->i_scope == LOCAL)
-      printf("t%d := local %d\n", nexttemp(), p->i_offset);
-   else if (p->i_scope == PARAM) {
-      printf("t%d := param %d\n", nexttemp(), p->i_offset);
-      if (p->i_type & T_ARRAY) {
-         (void) nexttemp();
-         printf("t%d := @i t%d\n", currtemp(), currtemp()-1);
-      }
-   }
+  if ((p = lookup(x, 0)) == NULL) {
+    yyerror("undeclared identifier");
+    p = install(x, -1);
+    p->i_type = T_INT;
+    p->i_scope = LOCAL;
+    p->i_defined = 1;
+  }
+  if (p->i_scope == GLOBAL)
+    printf("t%d := global %s\n", nexttemp(), x);
+  else if (p->i_scope == LOCAL)
+    printf("t%d := local %d\n", nexttemp(), p->i_offset);
+  else if (p->i_scope == PARAM) {
+    printf("t%d := param %d\n", nexttemp(), p->i_offset);
+    if (p->i_type & T_ARRAY) {
+       (void) nexttemp();
+       printf("t%d := @i t%d\n", currtemp(), currtemp()-1);
+    }
+  }
+
+  labelNeededFlag = 1;
 
    /* add the T_ADDR to know that it is still an address */
-   return (node(currtemp(), p->i_type|T_ADDR, (struct sem_rec *) NULL,
-                (struct sem_rec *) NULL));
+  return (node(currtemp(), p->i_type|T_ADDR, (struct sem_rec *) NULL, 
+    (struct sem_rec *) NULL));
 }
 
 /*
@@ -393,6 +397,7 @@ void labeldcl(char *id)
 {
   // TODO: fix this to be L# and backpatching
   printf("label %s\n", id);
+  labelNeededFlag = 0;
 }
 
 /*
@@ -486,8 +491,9 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 
   printf("bt t%d B%d\n", t1->s_place, ++numblabels);
   printf("br B%d\n", ++numblabels);
-  labelNeededFlag = 1;
 
+  labelNeededFlag = 1;
+  
   t1->back.s_true = node(numblabels-1, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
   t1->s_false = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
   return (t1);
@@ -504,6 +510,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
   if(*op!='\0' || x==NULL || y==NULL){
     tempx = op1("@", x);
     tempres = op2(op, tempx, y);
+    labelNeededFlag = 1;
     return(set("", x, tempres));
   }
 
@@ -532,6 +539,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
     printf("t%d := t%d =i t%d\n", nexttemp(), 
 	   x->s_place, cast_y->s_place);
 
+  labelNeededFlag = 1;
   /*create a new node to allow just created temporary to be referenced later */
   return(node(currtemp(), (x->s_mode&~(T_ARRAY)),
 	      (struct sem_rec *)NULL, (struct sem_rec *)NULL));
@@ -577,23 +585,25 @@ struct sem_rec *cast(struct sem_rec *y, int t)
  */
 struct sem_rec *gen(char *op, struct sem_rec *x, struct sem_rec *y, int t)
 {
-   if (strncmp(op, "arg", 3) != 0 && strncmp(op, "ret", 3) != 0)
-      printf("t%d := ", nexttemp());
-   if (x != NULL && *op != 'f')
-      printf("t%d ", x->s_place);
-   printf("%s", op);
-   if (t & T_DOUBLE && (!(t & T_ADDR) || (*op == '[' && *(op+1) == ']'))) {
-      printf("f");
-      if (*op == '%')
-         yyerror("cannot %% floating-point values");
-   }
-   else
-      printf("i");
-   if (x != NULL && *op == 'f')
-      printf(" t%d %d", x->s_place, y->s_place);
-   else if (y != NULL)
-      printf(" t%d", y->s_place);
-   printf("\n");
-   return (node(currtemp(), t, (struct sem_rec *) NULL,
-           (struct sem_rec *) NULL));
+  if (strncmp(op, "arg", 3) != 0 && strncmp(op, "ret", 3) != 0)
+    printf("t%d := ", nexttemp());
+  if (x != NULL && *op != 'f')
+    printf("t%d ", x->s_place);
+  printf("%s", op);
+  if (t & T_DOUBLE && (!(t & T_ADDR) || (*op == '[' && *(op+1) == ']'))) {
+    printf("f");
+    if (*op == '%')
+       yyerror("cannot %% floating-point values");
+  }
+  else
+    printf("i");
+  if (x != NULL && *op == 'f')
+    printf(" t%d %d", x->s_place, y->s_place);
+  else if (y != NULL)
+    printf(" t%d", y->s_place);
+  printf("\n");
+
+  labelNeededFlag = 1;
+  return (node(currtemp(), t, (struct sem_rec *) NULL,
+         (struct sem_rec *) NULL));
 }
