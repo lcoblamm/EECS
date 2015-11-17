@@ -13,6 +13,8 @@ extern int localwidths[];
 int numlabels = 0;                      /* total labels in file */
 int numblabels = 0;                     /* total backpatch labels in file */
 
+int labelNeededFlag = 0;
+
 /*
  * backpatch - backpatch list of quadruples starting at p with k
  */
@@ -32,6 +34,7 @@ void bgnstmt()
   extern int lineno;
 
   printf("bgnstmt %d\n", lineno);
+  labelNeededFlag = 1;
 }
 
 /*
@@ -390,7 +393,10 @@ void labeldcl(char *id)
  */
 int m()
 {
-  printf("label L%d\n", ++numlabels);
+  if (labelNeededFlag == 1) {
+      printf("label L%d\n", ++numlabels);
+  }
+  labelNeededFlag = 0;
   return numlabels;
 }
 

@@ -22,7 +22,6 @@ t12 := cvf t11
 t13 := t9 <f t12
 bt t13 B1
 br B2
-label L3
 t14 := param 0
 t15 := @f t14
 t16 := 10
@@ -30,103 +29,8 @@ t17 := cvf t16
 t18 := t15 !=f t17
 bt t18 B3
 br B4
-B1=L3
-label L4
+B1=L2
 B3=L1
-B2=L4
-B4=L4
-bgnstmt 9
-label L5
-t19 := param 1
-t20 := @i t19
-t21 := 0
-t22 := t20 >i t21
-bt t22 B5
-br B6
-label L6
-bgnstmt 9
-bgnstmt 10
-t23 := param 1
-t24 := 1
-t25 := @i t23
-t26 := t25 -i t24
-t27 := t23 =i t26
-br B7
-label L7
-B5=L6
-B6=L7
-B7=L5
-bgnstmt 13
-t28 := param 1
-t29 := @i t28
-t30 := 0
-t31 := t29 !=i t30
-bt t31 B8
-br B9
-label L8
-bgnstmt 13
-bgnstmt 14
-br test
-label L9
-B9=L8
-B8=L9
-bgnstmt 17
-t32 := param 0
-t33 := param 1
-t34 := @i t33
-t35 := 1
-t36 := t34 >>i t35
-t37 = cvf t36
-t38 := t32 =f t37
-bgnstmt 19
-t39 := param 1
-t40 := 2
-t41 := 3
-t42 := t40 *i t41
-t43 := t39 =i t42
-bgnstmt 21
-label test
-t44 := 1
-t45 := param 0
-t46 := @f t45
-t47 := cvf t44
-t48 := t47 <=f t46
-bt t48 B10
-br B11
-label L10
-t49 := param 1
-t50 := @i t49
-t51 := 5
-t52 := t50 >=i t51
-bt t52 B12
-br B13
-B10=L10
-label L11
-t53 := 0
-t54 := 0
-t55 := t53 !=i t54
-bt t55 B14
-br B15
-B11=L11
-B13=L11
-label L12
-bgnstmt 22
-t56 := param 1
-t57 := 0
-t58 := t56 =i t57
-br B16
-label L13
-bgnstmt 24
-t59 := param 1
-t60 := 1
-t61 := t59 =i t60
-label L14
-B12=L12
-B15=L12
-B14=L13
-B16=L14
-bgnstmt 26
-t62 := param 1
-t63 := @i t62
-reti t63
+B2=L2
+B4=L2
 fend
