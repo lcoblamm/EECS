@@ -209,7 +209,7 @@ binop   : ID IEQ ID     { }
                           function_printtemp(function,$1);
                           printf( ", %%ecx\n" );
 
-                          printf( "    shl        " );
+                          printf( "    sal        " );
                           printf( "%%cl, %%eax\n"); }
         | ID ISHR ID    { printf( "    movl       " );
                           function_printtemp(function,$3);
@@ -220,7 +220,7 @@ binop   : ID IEQ ID     { }
                           function_printtemp(function,$1);
                           printf( ", %%ecx\n" );
 
-                          printf( "    shr        " );
+                          printf( "    sar        " );
                           printf( "%%cl, %%eax\n"); }
         | ID IADD ID    { printf( "    movl       " );
                           function_printtemp(function,$3);
