@@ -2,7 +2,7 @@ double m[6];
 
 scale(double x, int y) 
 {
-    do {
+    do
         x = x + 1;
-    } while (x < y && x != 10);
+    while (x < y && x != 10);
 }

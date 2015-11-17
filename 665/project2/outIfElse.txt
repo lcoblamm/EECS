@@ -29,14 +29,14 @@ label L3
 bgnstmt 2
 t13 := param 1
 t14 := 0
-t15 = cvf t14
+t15 := cvf t14
 t16 := t13 =f t15
 br B7
 label L4
 bgnstmt 4
 t17 := param 1
 t18 := 1
-t19 = cvf t18
+t19 := cvf t18
 t20 := t17 =f t19
 label L5
 B3=L3
@@ -46,5 +46,6 @@ B7=L5
 bgnstmt 6
 t21 := param 1
 t22 := @f t21
-retf t22
+t23 := cvi t22
+reti t23
 fend

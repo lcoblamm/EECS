@@ -2,9 +2,8 @@ alloc m 48
 func scale
 formal 8
 formal 4
-bgnstmt 5
-label L1
 bgnstmt 6
+label L1
 t1 := param 0
 t2 := param 0
 t3 := @f t2

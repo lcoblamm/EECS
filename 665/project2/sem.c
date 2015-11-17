@@ -14,6 +14,7 @@ int numlabels = 0;                      /* total labels in file */
 int numblabels = 0;                     /* total backpatch labels in file */
 
 int labelNeededFlag = 0;
+int funcType = 0;
 
 /*
  * backpatch - backpatch list of quadruples starting at p with k
@@ -99,6 +100,7 @@ struct sem_rec *ccexpr(struct sem_rec *e)
      
      printf("bt t%d B%d\n", t1->s_place, ++numblabels);
      printf("br B%d\n", ++numblabels);
+     labelNeededFlag = 1;
      return (node(0, 0,
 		  node(numblabels-1, 0, (struct sem_rec *) NULL, 
 		       (struct sem_rec *) NULL),
@@ -216,6 +218,7 @@ void dogoto(char *id)
 {
   // TODO: figure out if anything else needs to happen, test
   printf("br %s\n", id);
+  labelNeededFlag = 1;
 }
 
 /*
@@ -244,7 +247,11 @@ void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
  */
 void doret(struct sem_rec *e)
 {
-  gen("ret", (struct sem_rec*)NULL, e, e->s_mode);
+  struct sem_rec *cast_e;
+  if (e->s_mode != funcType) {
+    cast_e = cast(e, funcType);
+  }
+  gen("ret", (struct sem_rec*)NULL, cast_e, cast_e->s_mode);
 }
 
 /*
@@ -327,6 +334,7 @@ struct id_entry *fname(int t, char *id)
 {
   printf("func %s\n", id);
   enterblock();
+  funcType = t;
   // TODO: figure out if we need to return something real here
   return ((struct id_entry *) NULL);
 }
@@ -406,6 +414,7 @@ int m()
 struct sem_rec *n()
 {
   printf("br B%d\n", ++numblabels);
+  labelNeededFlag = 1;
   return (node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL));
 }
 
@@ -475,6 +484,7 @@ struct sem_rec *rel(char *op, struct sem_rec *x, struct sem_rec *y)
 
   printf("bt t%d B%d\n", t1->s_place, ++numblabels);
   printf("br B%d\n", ++numblabels);
+  labelNeededFlag = 1;
 
   t1->back.s_true = node(numblabels-1, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
   t1->s_false = node(numblabels, 0, (struct sem_rec *) NULL, (struct sem_rec *) NULL);
@@ -500,14 +510,14 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
   if((x->s_mode & T_DOUBLE) && !(y->s_mode & T_DOUBLE)){
     
     /*cast y to a double*/
-    printf("t%d = cvf t%d\n", nexttemp(), y->s_place);
+    printf("t%d := cvf t%d\n", nexttemp(), y->s_place);
     cast_y = node(currtemp(), T_DOUBLE, (struct sem_rec *) NULL,
 		  (struct sem_rec *) NULL);
   }
   else if((x->s_mode & T_INT) && !(y->s_mode & T_INT)){
 
     /*convert y to integer*/
-    printf("t%d = cvi t%d\n", nexttemp(), y->s_place);
+    printf("t%d := cvi t%d\n", nexttemp(), y->s_place);
     cast_y = node(currtemp(), T_INT, (struct sem_rec *) NULL,
 		  (struct sem_rec *) NULL);
   }
