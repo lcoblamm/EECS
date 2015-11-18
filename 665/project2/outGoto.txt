@@ -5,25 +5,26 @@ formal 4
 formal 8
 localloc 4
 bgnstmt 6
-label jacob
+label L1
 t1 := param 0
 t2 := @i t1
 t3 := 0
 t4 := t2 !=i t3
 bt t4 B1
 br B2
-label L1
-bgnstmt 7
-br lynne
 label L2
-B2=L1
-B1=L2
+bgnstmt 7
+br B3
+label L3
+B2=L2
+B1=L3
 bgnstmt 9
 t5 := param 0
 t6 := 5
 t7 := t5 =i t6
 bgnstmt 10
-label lynne
+label L4
+B3=L4
 t8 := global x
 t9 := global y
 t10 := @f t9
@@ -50,14 +51,14 @@ t27 := global x
 t28 := @i t27
 t29 := 15
 t30 := t28 >=i t29
-bt t30 B3
-br B4
-label L3
+bt t30 B4
+br B5
+label L5
 bgnstmt 14
-br jacob
-label L4
-B3=L3
-B4=L4
+br L1
+label L6
+B4=L5
+B5=L6
 bgnstmt 16
 t31 := 0
 t32 := cvf t31

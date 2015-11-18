@@ -35,3 +35,4 @@ struct sem_rec *rel(char *, struct sem_rec *, struct sem_rec *);
 struct sem_rec *set(char *, struct sem_rec *, struct sem_rec *);
 void startloopscope();
 struct sem_rec *string(char *);
+struct labelTracker *newLabel(char *, struct sem_rec*, int, struct labelTracker*);
