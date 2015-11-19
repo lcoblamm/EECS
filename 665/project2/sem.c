@@ -4,7 +4,7 @@
 # include "sem.h"
 # include "sym.h"
 
-# define MAXLABELS   1000
+# define MAX   1000
 
 extern int formalnum;
 extern char formaltypes[];
@@ -19,6 +19,7 @@ int labelNeededFlag = 0;
 int funcType = 0;
 int numgtlabels = 0;
 int loopscope = 0;
+int numContinues = 0;
 
 struct labelTracker {
   char* name;                     // holds label name
@@ -27,7 +28,19 @@ struct labelTracker {
   struct labelTracker *nextLabel; // holds linked list of labels
 };
 
-struct labelTracker gtLabels[MAXLABELS];
+struct continueTracker {
+  int valid;
+  struct sem_rec *back;
+}
+
+struct breakTracker {
+  int valid;
+  struct sem_rec *back;
+}
+
+struct labelTracker gtLabels[MAX];
+struct continueTracker continues[MAX];
+struct breakTracker breaks[MAX];
 
 /*
  * backpatch - backpatch list of quadruples starting at p with k
@@ -315,7 +328,9 @@ void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
  */
 void endloopscope(int m)
 {
-  leaveblock();
+  contines[m].isValid = 0;
+  breaks[m].isValid = 0;
+  loopscope--;
 }
 
 /*
@@ -608,8 +623,7 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 void startloopscope()
 {
-  // TODO: figure out what needs to happen here
-  enterblock();
+  loopscope++;
 }
 
 /*
