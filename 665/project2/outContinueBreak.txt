@@ -1,0 +1,103 @@
+func loopControl
+formal 4
+formal 4
+localloc 4
+localloc 4
+bgnstmt 5
+t1 := local 0
+t2 := 0
+t3 := t1 =i t2
+label L1
+t4 := local 0
+t5 := @i t4
+t6 := param 0
+t7 := @i t6
+t8 := t5 <i t7
+bt t8 B1
+br B2
+label L2
+t9 := local 0
+t10 := 1
+t11 := @i t9
+t12 := t11 +i t10
+t13 := t9 =i t12
+br B3
+label L3
+bgnstmt 5
+bgnstmt 6
+t14 := local 0
+t15 := @i t14
+t16 := 2
+t17 := t15 %i t16
+t18 := 0
+t19 := t17 ==i t18
+bt t19 B4
+br B5
+label L4
+bgnstmt 6
+br B6
+label L5
+bgnstmt 8
+t20 := local 1
+t21 := local 0
+t22 := @i t21
+t23 := @i t20
+t24 := t23 +i t22
+t25 := t20 =i t24
+label L6
+B4=L4
+B5=L5
+B6=L6
+br B7
+label L7
+B1=L3
+B2=L7
+B3=L1
+B7=L2
+bgnstmt 12
+t26 := local 0
+t27 := 0
+t28 := t26 =i t27
+bgnstmt 13
+label L8
+t29 := local 0
+t30 := @i t29
+t31 := param 1
+t32 := @i t31
+t33 := t30 <i t32
+bt t33 B8
+br B9
+label L9
+bgnstmt 13
+bgnstmt 14
+t34 := param 0
+t35 := @i t34
+t36 := param 1
+t37 := @i t36
+t38 := t35 +i t37
+t39 := 10
+t40 := t38 <=i t39
+bt t40 B10
+br B11
+label L10
+bgnstmt 14
+B10=L10
+B11=L10
+bgnstmt 16
+t41 := local 0
+t42 := local 1
+t43 := @i t42
+t44 := @i t41
+t45 := t44 +i t43
+t46 := t41 =i t45
+br B12
+label L11
+B8=L9
+B9=L11
+B12=L8
+bgnstmt 19
+t47 := local 1
+t48 := @i t47
+t49 := cvf t48
+retf t49
+fend

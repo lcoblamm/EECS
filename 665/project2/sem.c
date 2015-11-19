@@ -4,6 +4,8 @@
 # include "sem.h"
 # include "sym.h"
 
+# define MAXLABELS   1000
+
 extern int formalnum;
 extern char formaltypes[];
 extern int localnum;
@@ -15,6 +17,8 @@ int numblabels = 0;                     /* total backpatch labels in file */
 
 int labelNeededFlag = 0;
 int funcType = 0;
+int numgtlabels = 0;
+int loopscope = 0;
 
 struct labelTracker {
   char* name;                     // holds label name
@@ -23,7 +27,7 @@ struct labelTracker {
   struct labelTracker *nextLabel; // holds linked list of labels
 };
 
-struct labelTracker *labelList = NULL;
+struct labelTracker gtLabels[MAXLABELS];
 
 /*
  * backpatch - backpatch list of quadruples starting at p with k
@@ -224,18 +228,18 @@ void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
  */
 void dogoto(char *id)
 {
-  struct labelTracker *labels;
+  int i;
   struct sem_rec *t;
   int labelFound;
+  int currgtlabel = 0;
   labelFound = 0;
 
-  labels = labelList;
   // check if ID has been assigned label number
-  while (labels) {
-    if (labels->name == id) {
-      if (labels->number != 0) {
+  for (i = 0; i < numgtlabels; i++) {
+    if (gtLabels[i].name == id) {
+      if (gtLabels[i].number != 0) {
         // found label and its id
-        printf("br L%d\n", labels->number);
+        printf("br L%d\n", gtLabels[i].number);
         labelNeededFlag = 1;
         return;
       }
@@ -243,16 +247,18 @@ void dogoto(char *id)
       labelFound = 1;
       break;
     }
-    labels = labels->nextLabel;
   }
 
   // if not, create backpatch label and store it with ID
   if (labelFound == 1) {
-    t = node(++numblabels, 0, labels->back, (struct sem_rec*) NULL);
+    t = node(++numblabels, 0, gtLabels[i].back, (struct sem_rec*) NULL);
   }
   else {
     t = node(++numblabels, 0, (struct sem_rec*) NULL, (struct sem_rec*) NULL);
-    labelList = newLabel(id, t, 0, labelList);
+    currgtlabel = numgtlabels++;
+    gtLabels[currgtlabel].name = id;
+    gtLabels[currgtlabel].back = t;
+    gtLabels[currgtlabel].number = 0;
   }
   printf("br B%d\n", numblabels);
   labelNeededFlag = 1;
@@ -433,22 +439,24 @@ struct sem_rec *tom_index(struct sem_rec *x, struct sem_rec *i)
  */
 void labeldcl(char *id)
 {
-  struct labelTracker *labels;
+  int i;
+  int currgtlabel;
 
-  labels = labelList;
   // check if ID has been assigned label number
-  while (labels) {
-    if (labels->name == id) {
-      labels->number = ++numlabels;
-      printf("label L%d\n", labels->number);
-      backpatch(labels->back, labels->number);
+  for (i = 0; i < numgtlabels; i++) {
+    if (gtLabels[i].name == id) {
+      gtLabels[i].number = ++numlabels;
+      printf("label L%d\n", gtLabels[i].number);
+      backpatch(gtLabels[i].back, gtLabels[i].number);
       labelNeededFlag = 0;
       return;
       }
-    labels = labels->nextLabel;
   }
   // didn't find label, create new one
-  labelList = newLabel(id, (struct sem_rec*) NULL, ++numlabels, labelList);
+  currgtlabel = numgtlabels++;
+  gtLabels[currgtlabel].name = id;
+  gtLabels[currgtlabel].back = (struct sem_rec*) NULL;
+  gtLabels[currgtlabel].number = ++numlabels;
   printf("label L%d\n", numlabels);
   labelNeededFlag = 0;
 }
@@ -656,21 +664,4 @@ struct sem_rec *gen(char *op, struct sem_rec *x, struct sem_rec *y, int t)
   labelNeededFlag = 1;
   return (node(currtemp(), t, (struct sem_rec *) NULL,
          (struct sem_rec *) NULL));
-}
-
-struct labelTracker *newLabel(char* name, struct sem_rec* back, int num, struct labelTracker* next) {
-  struct labelTracker *t;
-
-  /* allocate space */
-  t = (struct labelTracker *) alloc(sizeof(struct labelTracker));
-
-  // TODO: save label tracker so you can delete it later
-  //save_rec(t);
-
-  /* fill in the fields */
-  t->name = name;
-  t->back = back;
-  t->number = num;
-  t->nextLabel = next;
-  return (t);
 }
