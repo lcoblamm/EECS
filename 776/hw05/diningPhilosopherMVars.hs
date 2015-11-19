@@ -25,11 +25,11 @@ philosophers = [(0, "Plato"), (1, "Confucius"), (2, "Socrates"), (3, "Voltaire")
 
 eatLoop :: Philosopher -> Fork -> Fork -> MVar String -> IO ()
 eatLoop (i,name) f1 f2 m = do
-    n <- randomRIO (1,1000)
-    threadDelay (n * 1000)
+    --n <- randomRIO (1,1000)
+    --threadDelay (n * 1000)
     grabForks (i,name) f1 f2 m
     putMVar m $ "I, " ++ name ++ ", am eating"
-    threadDelay (n * 1000)
+    --threadDelay (n * 1000)
     releaseForks (i,name) f1 f2 m
     eatLoop (i,name) f1 f2 m
 
