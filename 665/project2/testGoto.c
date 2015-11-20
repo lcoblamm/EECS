@@ -13,5 +13,7 @@ double bar(int a, double v) {
 	y = x % 2; 
 	if (x >= 15) 
 		goto jacob;
+	else
+		goto lynne;
 	return 0;
 }

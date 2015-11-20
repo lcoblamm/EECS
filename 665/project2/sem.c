@@ -31,12 +31,12 @@ struct labelTracker {
 struct continueTracker {
   int valid;
   struct sem_rec *back;
-}
+};
 
 struct breakTracker {
   int valid;
   struct sem_rec *back;
-}
+};
 
 struct labelTracker gtLabels[MAX];
 struct continueTracker continues[MAX];
@@ -198,7 +198,15 @@ struct sem_rec *con(char *x)
  */
 void dobreak()
 {
-  fprintf(stderr, "sem: dobreak not implemented\n");
+  struct sem_rec *t;
+
+  printf("br B%d\n", ++numblabels);
+
+  t = node(numblabels, 0, breaks[loopscope - 1].back, (struct sem_rec*) NULL);
+  breaks[loopscope - 1].back = t;
+  breaks[loopscope - 1].valid = 1;
+
+  labelNeededFlag = 1;
 }
 
 /*
@@ -206,7 +214,15 @@ void dobreak()
  */
 void docontinue()
 {
-  fprintf(stderr, "sem: docontinue not implemented\n");
+  struct sem_rec *t;
+
+  printf("br B%d\n", ++numblabels);
+
+  t = node(numblabels, 0, continues[loopscope - 1].back, (struct sem_rec*) NULL);
+  continues[loopscope - 1].back = t;
+  continues[loopscope - 1].valid = 1;
+
+  labelNeededFlag = 1;
 }
 
 /*
@@ -214,12 +230,16 @@ void docontinue()
  */
 void dodo(int m1, int m2, struct sem_rec *e, int m3)
 {
-  // TODO: test
   backpatch(e->back.s_true, m1);
   backpatch(e->s_false, m3);
-  // TODO: figure out if there's anything to do with m2
-  // TODO: figure out argument to endloopscope
-  endloopscope(0);
+
+  if (continues[loopscope - 1].valid == 1) {
+    backpatch(continues[loopscope - 1].back, m2);
+  }
+  if (breaks[loopscope - 1].valid == 1) {
+    backpatch(breaks[loopscope - 1].back, m3);
+  }
+  endloopscope(loopscope - 1);
 }
 
 /*
@@ -232,8 +252,15 @@ void dofor(int m1, struct sem_rec *e2, int m2, struct sem_rec *n1,
   backpatch(e2->s_false, m4);
   backpatch(n1, m1);
   backpatch(n2, m2);
-  // TODO: figure out argument to endloopscope
-  endloopscope(0);
+
+  if (continues[loopscope - 1].valid == 1) {
+    backpatch(continues[loopscope - 1].back, m2);
+  }
+  if (breaks[loopscope - 1].valid == 1) {
+    backpatch(breaks[loopscope - 1].back, m4);
+  }
+
+  endloopscope(loopscope - 1);
 }
 
 /*
@@ -292,7 +319,6 @@ void doif(struct sem_rec *e, int m1, int m2)
 void doifelse(struct sem_rec *e, int m1, struct sem_rec *n,
   int m2, int m3)
 {
-  // TODO: test
   backpatch(e->back.s_true, m1);
   backpatch(e->s_false, m2);
   backpatch(n, m3);
@@ -315,12 +341,17 @@ void doret(struct sem_rec *e)
 void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
              int m3)
 {
-  // TODO: test
   backpatch(e->back.s_true, m2);
   backpatch(e->s_false, m3);
   backpatch(n, m1);
-  // TODO: figure out argument to endloopscope
-  endloopscope(0);
+  
+  if (continues[loopscope - 1].valid== 1) {
+    backpatch(continues[loopscope - 1].back, m1);
+  }
+  if (breaks[loopscope - 1].valid == 1) {
+    backpatch(breaks[loopscope - 1].back, m3);
+  }
+  endloopscope(loopscope - 1);
 }
 
 /*
@@ -328,8 +359,8 @@ void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
  */
 void endloopscope(int m)
 {
-  contines[m].isValid = 0;
-  breaks[m].isValid = 0;
+  continues[m].valid = 0;
+  breaks[m].valid = 0;
   loopscope--;
 }
 
@@ -394,7 +425,7 @@ struct id_entry *fname(int t, char *id)
   enterblock();
   funcType = t;
   labelNeededFlag = 1;
-  // TODO: figure out if we need to return something real here
+
   return ((struct id_entry *) NULL);
 }
 
@@ -623,6 +654,8 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
  */
 void startloopscope()
 {
+  continues[loopscope].valid = 0;
+  breaks[loopscope].valid = 0;
   loopscope++;
 }
 
@@ -631,7 +664,6 @@ void startloopscope()
  */
 struct sem_rec *string(char *s)
 {
-  // TODO: check if I need to do something else here
   return(con(s));
 }
 

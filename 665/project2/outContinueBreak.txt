@@ -36,6 +36,7 @@ br B5
 label L4
 bgnstmt 6
 br B6
+br B7
 label L5
 bgnstmt 8
 t20 := local 1
@@ -47,13 +48,14 @@ t25 := t20 =i t24
 label L6
 B4=L4
 B5=L5
-B6=L6
-br B7
+B7=L6
+br B8
 label L7
 B1=L3
 B2=L7
 B3=L1
-B7=L2
+B8=L2
+B6=L2
 bgnstmt 12
 t26 := local 0
 t27 := 0
@@ -65,8 +67,8 @@ t30 := @i t29
 t31 := param 1
 t32 := @i t31
 t33 := t30 <i t32
-bt t33 B8
-br B9
+bt t33 B9
+br B10
 label L9
 bgnstmt 13
 bgnstmt 14
@@ -77,12 +79,14 @@ t37 := @i t36
 t38 := t35 +i t37
 t39 := 10
 t40 := t38 <=i t39
-bt t40 B10
-br B11
+bt t40 B11
+br B12
 label L10
 bgnstmt 14
-B10=L10
+br B13
+label L11
 B11=L10
+B12=L11
 bgnstmt 16
 t41 := local 0
 t42 := local 1
@@ -90,11 +94,12 @@ t43 := @i t42
 t44 := @i t41
 t45 := t44 +i t43
 t46 := t41 =i t45
-br B12
-label L11
-B8=L9
-B9=L11
-B12=L8
+br B14
+label L12
+B9=L9
+B10=L12
+B14=L8
+B13=L12
 bgnstmt 19
 t47 := local 1
 t48 := @i t47
