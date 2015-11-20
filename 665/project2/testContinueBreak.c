@@ -8,7 +8,7 @@ double loopControl(int x, int y) {
         else 
             t += i;
         t >> 2;
-        if (t / 3 = 0) 
+        if (t / 3 == 0) 
             continue;
         t = x - t;
         while (t < 10) {

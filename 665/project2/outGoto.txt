@@ -56,10 +56,15 @@ br B5
 label L5
 bgnstmt 14
 br L1
+br B6
 label L6
+bgnstmt 16
+br L4
+label L7
 B4=L5
 B5=L6
-bgnstmt 16
+B6=L7
+bgnstmt 18
 t31 := 0
 t32 := cvf t31
 retf t32
