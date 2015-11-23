@@ -102,9 +102,9 @@
                         (vxs (ex-val ex-sto)
                              (interp-cfwaes (closureV-body f-val)
                                             (aSub (closureV-param f) 
-                                                  (ex-val) 
+                                                  (ex-val) ; TODO: this should be location
                                                   (closureV-env f-val)) 
-                                            ex-sto)))
+                                            ex-sto))) ; TODO: this should include new location above
                       (error 'interp-cfwae 
                              "Functional argument to app expected, non-functional received")))))
       (if0 (cnd thn el) 
@@ -117,10 +117,10 @@
             (type-case ValueXStore (interp-cfwaes ex env sto)
               (vxs (ex-val ex-sto)
                    (interp-cfwaes body 
-                                  (aSub name (ex-val) env)
-                                  ex-sto))))
+                                  (aSub name (ex-val) env) ; TODO: this should hold a location
+                                  ex-sto)))) ; TODO: this should include new location above
       (seq (f s) (error 'interp "Not yet implemented"))
-      (assign (name ex) (error 'interp "Not yet implemented")))))
+      (assign (name ex) (error 'interp "Not yet implemented"))))))))
 
 ; helper function to carry out binary operations on two values
 (define operVal
