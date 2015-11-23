@@ -107,15 +107,20 @@
                                             ex-sto)))
                       (error 'interp-cfwae 
                              "Functional argument to app expected, non-functional received")))))
-      (if0 (c t e) 
-           (type-case ValueXStore (interp-cfwaes c env sto)
-             (vxs (c-val c-sto)
-                  (if (equal? (numV 0) (c-val))
-                      (interp-cfwae t env c-sto)
-                      (interp-cfwae e env c-sto)))))
-      (with (i ex b) (interp-cfwae b (aSub i (interp-cfwae ex env) env)))
-      (seq (f s) ())
-      (assign (name ex) ()))))
+      (if0 (cnd thn el) 
+           (type-case ValueXStore (interp-cfwaes cnd env sto)
+             (vxs (cnd-val cnd-sto)
+                  (if (equal? (numV 0) (cnd-val))
+                      (interp-cfwaes thn env cnd-sto)
+                      (interp-cfwaes el env cnd-sto)))))
+      (with (name ex body) 
+            (type-case ValueXStore (interp-cfwaes ex env sto)
+              (vxs (ex-val ex-sto)
+                   (interp-cfwaes body 
+                                  (aSub name (ex-val) env)
+                                  ex-sto))))
+      (seq (f s) (error 'interp "Not yet implemented"))
+      (assign (name ex) (error 'interp "Not yet implemented")))))
 
 ; helper function to carry out binary operations on two values
 (define operVal
