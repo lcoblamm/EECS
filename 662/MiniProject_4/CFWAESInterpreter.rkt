@@ -69,7 +69,7 @@
     (type-case Store s
       (mtSto () (error 'stoLookup "No binding for location"))
       (aSto (l val restSto)
-            (if (symbol=? loc l)
+            (if (= loc l)
                 val
                 (stoLookup loc restSto))))))
 
@@ -106,13 +106,13 @@
                                               (aSub (closureV-param f-val) 
                                                     newloc 
                                                     (closureV-env f-val)) 
-                                              (aSto newloc (closureV-body f-val) ex-sto))))) 
+                                              (aSto newloc ex-val ex-sto))))) 
                       (error 'interp-cfwae 
                              "Functional argument to app expected, non-functional received")))))
       (if0 (cnd thn el) 
            (type-case ValueXStore (interp-cfwaes cnd env sto)
              (vxs (cnd-val cnd-sto)
-                  (if (equal? (numV 0) (cnd-val))
+                  (if (equal? (numV 0) cnd-val)
                       (interp-cfwaes thn env cnd-sto)
                       (interp-cfwaes el env cnd-sto)))))
       (with (name ex body) 
@@ -123,11 +123,11 @@
                                     (aSub name newloc env)
                                     (aSto newloc ex-val ex-sto))))))
       (seq (fst snd) 
-           (type-case ValueXSto (interp-cfwaes fst env sto)
+           (type-case ValueXStore (interp-cfwaes fst env sto)
              (vxs (fst-val fst-sto)
                   (interp-cfwaes snd env fst-sto))))
       (assign (name ex) 
-              (type-case ValueXSto (interp-cfwaes ex env sto)
+              (type-case ValueXStore (interp-cfwaes ex env sto)
                 (vxs (ex-val ex-sto)
                      (vxs ex-val
                           (aSto (envLookup name env) ex-val sto))))))))
@@ -149,7 +149,9 @@
   (local ((define loc (box 0)))
     (lambda () (begin (set-box! loc (+ (unbox loc) 1))
                       (unbox loc)))))
-
-
-               
   
+(define test-eval
+  (lambda (expr)
+    (type-case ValueXStore (interp-cfwaes expr (mtSub) (mtSto))
+      (vxs (val newSto)
+           val))))

@@ -421,12 +421,18 @@ void fhead(struct id_entry *p)
  */
 struct id_entry *fname(int t, char *id)
 {
+  struct id_entry* p;
+
   printf("func %s\n", id);
   enterblock();
   funcType = t;
   labelNeededFlag = 1;
 
-  return ((struct id_entry *) NULL);
+  p = install(id, -1);
+  p->i_type = t;
+  p->i_scope = GLOBAL;
+  p->i_defined = 1;
+  return (p);
 }
 
 /*
