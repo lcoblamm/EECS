@@ -37,6 +37,6 @@
 (test (test-eval (with 'y (num 1) (with 'f (fun 'x (binop (op 'add) (id 'y) (id 'x))) (app (id 'f) (num 3))))) (numV 4))
 (test (test-eval (with 'y (num 1) (with 'f (fun 'x (binop (op 'add) (id 'y) (id 'x))) (with 'y (num 100) (app (id 'f) (num 3)))))) (numV 4))
 ; assign and sequence
-(test (test-eval (with 'x (num 3) (seq (assign 'x (num 10)) (binop (op 'sub) (num 10) (id 'x))))) (numV 0))
+(test (test-eval (with 'x (num 3) (seq (assign 'x (num 10)) (binop (op 'subt) (num 10) (id 'x))))) (numV 0))
 (test (test-eval (with 'y (num 1) (assign 'y (num 2)))) (numV 2))
 (test/exn (test-eval (assign 'y (num 2))) "No binding for identifier")
