@@ -37,7 +37,7 @@
 
 ; value store pair
 (define-type ValueXStore
-  (vxs (value BCFAE-value?) (store Store?)))
+  (vxs (value CFWAES-value?) (store Store?)))
 
 ; binary operators
 (define-type operator
@@ -66,11 +66,12 @@
 ; looks up a location in the store
 (define stoLookup
   (lambda (loc s)
-    (mtSto () (error 'stoLookup "No binding for location"))
-    (aSto (l val restSto)
-          (if (symbol=? loc l)
-              val
-              (stoLookup loc restSto)))))
+    (type-case Store s
+      (mtSto () (error 'stoLookup "No binding for location"))
+      (aSto (l val restSto)
+            (if (symbol=? loc l)
+                val
+                (stoLookup loc restSto))))))
 
 ; looks up the operation associated with a binary operation name
 (define opLookup
@@ -85,26 +86,27 @@
 (define interp-cfwaes
   (lambda (expr env sto)
     (type-case CFWAES expr
-      (num (n) (vxs (numV n) sto)
-      (id (name) (vxs (stoLookup (envLookup name env) sto) sto)
+      (num (n) (vxs (numV n) sto))
+      (id (name) (vxs (stoLookup (envLookup name env) sto) sto))
       (binop (oper l r) 
              (type-case ValueXStore (interp-cfwaes l env sto)
                           (vxs (l-val l-sto)
                                (type-case ValueXStore (interp-cfwaes r env l-sto)
                                  (vxs (r-val r-sto)
                                       (vxs (operVal oper l-val r-val) r-sto))))))
-      (fun (param body) (vxs (closureV param body env) sto)
+      (fun (param body) (vxs (closureV param body env) sto))
       (app (func expr) 
            (type-case ValueXStore (interp-cfwaes func env sto)
              (vxs (f-val f-sto)
                   (if (closureV? f-val)
                       (type-case ValueXStore (interp-cfwaes expr env f-sto)
                         (vxs (ex-val ex-sto)
-                             (interp-cfwaes (closureV-body f-val)
-                                            (aSub (closureV-param f) 
-                                                  (ex-val) ; TODO: this should be location
-                                                  (closureV-env f-val)) 
-                                            ex-sto))) ; TODO: this should include new location above
+                             (let ((newloc (next-location)))
+                               (interp-cfwaes (closureV-body f-val)
+                                              (aSub (closureV-param f-val) 
+                                                    newloc 
+                                                    (closureV-env f-val)) 
+                                              (aSto newloc (closureV-body f-val) ex-sto))))) 
                       (error 'interp-cfwae 
                              "Functional argument to app expected, non-functional received")))))
       (if0 (cnd thn el) 
@@ -116,21 +118,38 @@
       (with (name ex body) 
             (type-case ValueXStore (interp-cfwaes ex env sto)
               (vxs (ex-val ex-sto)
-                   (interp-cfwaes body 
-                                  (aSub name (ex-val) env) ; TODO: this should hold a location
-                                  ex-sto)))) ; TODO: this should include new location above
-      (seq (f s) (error 'interp "Not yet implemented"))
-      (assign (name ex) (error 'interp "Not yet implemented"))))))))
+                   (let ((newloc (next-location)))
+                     (interp-cfwaes body 
+                                    (aSub name newloc env)
+                                    (aSto newloc ex-val ex-sto))))))
+      (seq (fst snd) 
+           (type-case ValueXSto (interp-cfwaes fst env sto)
+             (vxs (fst-val fst-sto)
+                  (interp-cfwaes snd env fst-sto))))
+      (assign (name ex) 
+              (type-case ValueXSto (interp-cfwaes ex env sto)
+                (vxs (ex-val ex-sto)
+                     (vxs ex-val
+                          (aSto (envLookup name env) ex-val sto))))))))
 
 ; helper function to carry out binary operations on two values
 (define operVal
   (lambda (o l r)
-    (numV ((opLookup (op-name oper) binop-table)
+    (numV ((opLookup (op-name o) binop-table)
            (if (numV? l)
                (numV-n l)
-               (error 'operVal "Numeric argument expected to binary operation, non-numeric received"))
+               (error 'operVal 
+                      "Numeric argument expected to binary operation, non-numeric received"))
            (if (numV? r)
                (numV-n r)
-               (error 'operVal "Numeric argument expected to binary operation, non-numeric received"))))))
+               (error 'operVal 
+                      "Numeric argument expected to binary operation, non-numeric received"))))))
+
+(define next-location
+  (local ((define loc (box 0)))
+    (lambda () (begin (set-box! loc (+ (unbox loc) 1))
+                      (unbox loc)))))
+
+
                
   
