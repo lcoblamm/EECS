@@ -28,5 +28,20 @@ main(int x, int y)
         y = 0;
     else
         y = 1;
+
+    for (i = 0; i < 10 i += 1) {
+        if (y = 1)
+            goto lynne;
+        if (y = 0)
+            continue;
+        y = 2;
+        x = 3;
+        if (i < 5)
+            break;
+        if (i > 5)
+            continue;
+        y = 3;
+    }
+    
     return d;
 }
