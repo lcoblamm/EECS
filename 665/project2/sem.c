@@ -292,6 +292,7 @@ void dogoto(char *id)
   // if not, create backpatch label and store it with ID
   if (labelFound == 1) {
     t = node(++numblabels, 0, gtLabels[i].back, (struct sem_rec*) NULL);
+    gtLabels[i].back = t;
   }
   else {
     t = node(++numblabels, 0, (struct sem_rec*) NULL, (struct sem_rec*) NULL);
@@ -360,7 +361,9 @@ void dowhile(int m1, struct sem_rec *e, int m2, struct sem_rec *n,
 void endloopscope(int m)
 {
   continues[m].valid = 0;
+  continues[m].back = (struct sem_rec*) NULL;
   breaks[m].valid = 0;
+  breaks[m].back = (struct sem_rec*) NULL;
   loopscope--;
 }
 
@@ -661,7 +664,9 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 void startloopscope()
 {
   continues[loopscope].valid = 0;
+  continues[loopscope].back = (struct sem_rec*) NULL;
   breaks[loopscope].valid = 0;
+  breaks[loopscope].back = (struct sem_rec*) NULL;
   loopscope++;
 }
 

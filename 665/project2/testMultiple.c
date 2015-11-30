@@ -8,6 +8,9 @@ main(int x, int y)
 
     printf("%d %f %d %d\n", i, d, x, y);
 
+    if (x = 0) 
+        goto lynne;
+
     y = 10;
     while (y > 0) 
         y -= 1;
@@ -29,7 +32,7 @@ main(int x, int y)
     else
         y = 1;
 
-    for (i = 0; i < 10 i += 1) {
+    for (i = 0; i < 10; i += 1) {
         if (y = 1)
             goto lynne;
         if (y = 0)
@@ -42,6 +45,9 @@ main(int x, int y)
             continue;
         y = 3;
     }
+
+    for (i = 0; i < 4; i += 1) 
+        continue;
     
     return d;
 }

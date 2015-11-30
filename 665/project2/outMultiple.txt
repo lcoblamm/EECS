@@ -55,138 +55,276 @@ argi t25
 t26 := global printf
 t27 := fi t26 5
 bgnstmt 11
-t28 := param 1
-t29 := 10
+t28 := param 0
+t29 := 0
 t30 := t28 =i t29
-bgnstmt 12
-label L5
-t31 := param 1
-t32 := @i t31
-t33 := 0
-t34 := t32 >i t33
-bt t34 B7
+t31 := 0
+t32 := t30 !=i t31
+bt t32 B7
 br B8
-label L6
-bgnstmt 12
-t35 := param 1
-t36 := 1
-t37 := @i t35
-t38 := t37 -i t36
-t39 := t35 =i t38
+label L5
+bgnstmt 11
 br B9
+label L6
+B7=L5
+B8=L6
+bgnstmt 14
+t33 := param 1
+t34 := 10
+t35 := t33 =i t34
+bgnstmt 15
 label L7
-B7=L6
-B8=L7
-B9=L5
-bgnstmt 15
-bgnstmt 15
-t40 := param 0
-t41 := param 0
-t42 := @i t41
-t43 := 1
-t44 := t42 +i t43
-t45 := t40 =i t44
+t36 := param 1
+t37 := @i t36
+t38 := 0
+t39 := t37 >i t38
+bt t39 B10
+br B11
 label L8
+bgnstmt 15
+t40 := param 1
+t41 := 1
+t42 := @i t40
+t43 := t42 -i t41
+t44 := t40 =i t43
+br B12
+label L9
+B10=L8
+B11=L9
+B12=L7
+bgnstmt 18
+bgnstmt 18
+t45 := param 0
 t46 := param 0
 t47 := @i t46
-t48 := param 1
-t49 := @i t48
-t50 := t47 <i t49
-bt t50 B10
-br B11
-label L9
+t48 := 1
+t49 := t47 +i t48
+t50 := t45 =i t49
+label L10
 t51 := param 0
 t52 := @i t51
-t53 := 10
-t54 := t52 !=i t53
-bt t54 B12
-br B13
-B10=L9
-label L10
-B12=L7
-B11=L10
-B13=L10
-bgnstmt 19
-t55 := param 0
-t56 := @i t55
-t57 := 0
-t58 := t56 !=i t57
-bt t58 B14
-br B15
+t53 := param 1
+t54 := @i t53
+t55 := t52 <i t54
+bt t55 B13
+br B14
 label L11
-bgnstmt 19
+t56 := param 0
+t57 := @i t56
+t58 := 10
+t59 := t57 !=i t58
+bt t59 B15
 br B16
+B13=L11
 label L12
-B15=L11
+B15=L9
 B14=L12
-bgnstmt 21
-t59 := param 0
-t60 := 5
-t61 := t59 =i t60
+B16=L12
 bgnstmt 22
+t60 := param 0
+t61 := @i t60
+t62 := 0
+t63 := t61 !=i t62
+bt t63 B17
+br B18
 label L13
-B16=L13
-t62 := param 0
-t63 := param 1
-t64 := @i t63
-t65 := 1
-t66 := t64 <<i t65
-t67 := t62 =i t66
+bgnstmt 22
+br B19
+label L14
+B18=L13
+B17=L14
 bgnstmt 24
-t68 := local 1
-t69 := param 0
-t70 := @i t69
-t71 := -i t70
-t72 := t68 =i t71
+t64 := param 0
+t65 := 5
+t66 := t64 =i t65
 bgnstmt 25
-t73 := param 1
+label L15
+B19=L15
+B9=L15
+t67 := param 0
+t68 := param 1
+t69 := @i t68
+t70 := 1
+t71 := t69 <<i t70
+t72 := t67 =i t71
+bgnstmt 27
+t73 := local 1
 t74 := param 0
 t75 := @i t74
-t76 := 2
-t77 := t75 %i t76
-t78 := t73 =i t77
-bgnstmt 27
-t79 := 1
-t80 := param 0
-t81 := @i t80
-t82 := t79 <=i t81
-bt t82 B17
-br B18
-label L14
-t83 := param 1
-t84 := @i t83
-t85 := 5
-t86 := t84 >=i t85
-bt t86 B19
-br B20
-B17=L14
-label L15
-t87 := 0
-t88 := 0
-t89 := t87 !=i t88
-bt t89 B21
-br B22
-B18=L15
-B20=L15
+t76 := -i t75
+t77 := t73 =i t76
+bgnstmt 28
+t78 := param 1
+t79 := param 0
+t80 := @i t79
+t81 := 2
+t82 := t80 %i t81
+t83 := t78 =i t82
+bgnstmt 30
+t84 := 1
+t85 := param 0
+t86 := @i t85
+t87 := t84 <=i t86
+bt t87 B20
+br B21
 label L16
-bgnstmt 27
-t90 := param 1
-t91 := 0
-t92 := t90 =i t91
+t88 := param 1
+t89 := @i t88
+t90 := 5
+t91 := t89 >=i t90
+bt t91 B22
 br B23
+B20=L16
 label L17
-bgnstmt 29
-t93 := param 1
-t94 := 1
-t95 := t93 =i t94
-label L18
-B19=L16
-B22=L16
+t92 := 0
+t93 := 0
+t94 := t92 !=i t93
+bt t94 B24
+br B25
 B21=L17
-B23=L18
-bgnstmt 31
-t96 := local 0
-t97 := @f t96
-t98 := cvi t97
-reti t98
+B23=L17
+label L18
+bgnstmt 30
+t95 := param 1
+t96 := 0
+t97 := t95 =i t96
+br B26
+label L19
+bgnstmt 32
+t98 := param 1
+t99 := 1
+t100 := t98 =i t99
+label L20
+B22=L18
+B25=L18
+B24=L19
+B26=L20
+bgnstmt 35
+t101 := local 1
+t102 := 0
+t103 := t101 =i t102
+label L21
+t104 := local 1
+t105 := @i t104
+t106 := 10
+t107 := t105 <i t106
+bt t107 B27
+br B28
+label L22
+t108 := local 1
+t109 := 1
+t110 := @i t108
+t111 := t110 +i t109
+t112 := t108 =i t111
+br B29
+label L23
+bgnstmt 35
+bgnstmt 36
+t113 := param 1
+t114 := 1
+t115 := t113 =i t114
+t116 := 0
+t117 := t115 !=i t116
+bt t117 B30
+br B31
+label L24
+bgnstmt 36
+br L15
+label L25
+B30=L24
+B31=L25
+bgnstmt 38
+t118 := param 1
+t119 := 0
+t120 := t118 =i t119
+t121 := 0
+t122 := t120 !=i t121
+bt t122 B32
+br B33
+label L26
+bgnstmt 38
+br B34
+label L27
+B32=L26
+B33=L27
+bgnstmt 40
+t123 := param 1
+t124 := 2
+t125 := t123 =i t124
+bgnstmt 41
+t126 := param 0
+t127 := 3
+t128 := t126 =i t127
+bgnstmt 42
+t129 := local 1
+t130 := @i t129
+t131 := 5
+t132 := t130 <i t131
+bt t132 B35
+br B36
+label L28
+bgnstmt 42
+br B37
+label L29
+B35=L28
+B36=L29
+bgnstmt 44
+t133 := local 1
+t134 := @i t133
+t135 := 5
+t136 := t134 >i t135
+bt t136 B38
+br B39
+label L30
+bgnstmt 44
+br B40
+label L31
+B38=L30
+B39=L31
+bgnstmt 46
+t137 := param 1
+t138 := 3
+t139 := t137 =i t138
+br B41
+label L32
+B27=L23
+B28=L32
+B29=L21
+B41=L22
+B40=L22
+B34=L22
+B37=L32
+bgnstmt 49
+t140 := local 1
+t141 := 0
+t142 := t140 =i t141
+label L33
+t143 := local 1
+t144 := @i t143
+t145 := 4
+t146 := t144 <i t145
+bt t146 B42
+br B43
+label L34
+t147 := local 1
+t148 := 1
+t149 := @i t147
+t150 := t149 +i t148
+t151 := t147 =i t150
+br B44
+label L35
+bgnstmt 49
+br B45
+br B46
+label L36
+B42=L35
+B43=L36
+B44=L33
+B46=L34
+B45=L34
+bgnstmt 52
+t152 := local 0
+t153 := @f t152
+t154 := cvi t153
+reti t154
 fend
