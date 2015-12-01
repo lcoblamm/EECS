@@ -328,24 +328,20 @@ t153 := @f t152
 t154 := cvi t153
 reti t154
 fend
-func func
+func foo
 formal 4
-formal 4
-formal 4
-localloc 8
-localloc 4
 localloc 8
 bgnstmt 57
 label L37
 bgnstmt 57
 bgnstmt 58
-t155 := param 2
+t155 := param 0
 t156 := 2
 t157 := @i t155
 t158 := t157 +i t156
 t159 := t155 =i t158
 bgnstmt 59
-t160 := param 2
+t160 := param 0
 t161 := @i t160
 t162 := 5
 t163 := t161 >i t162
@@ -358,21 +354,21 @@ label L39
 B47=L38
 B48=L39
 bgnstmt 61
-t164 := param 2
+t164 := param 0
 t165 := 3
 t166 := @i t164
 t167 := t166 +i t165
 t168 := t164 =i t167
 bgnstmt 62
 label L40
-t169 := param 2
+t169 := param 0
 t170 := @i t169
 t171 := 5
 t172 := t170 <i t171
 bt t172 B50
 br B51
 label L41
-t173 := param 2
+t173 := param 0
 t174 := 10
 t175 := @i t173
 t176 := t175 -i t174
@@ -381,16 +377,16 @@ br B52
 label L42
 bgnstmt 62
 bgnstmt 63
-t178 := param 2
+t178 := param 0
 t179 := @i t178
-t180 := local 2
+t180 := local 0
 t181 := @f t180
 t182 := cvf t179
 t183 := t182 >f t181
 bt t183 B53
 br B54
 label L43
-t184 := param 2
+t184 := param 0
 t185 := @i t184
 t186 := 10
 t187 := t185 <i t186
@@ -398,7 +394,7 @@ bt t187 B55
 br B56
 B53=L43
 label L44
-t188 := param 2
+t188 := param 0
 t189 := @i t188
 t190 := 15
 t191 := t189 ==i t190
@@ -414,14 +410,14 @@ B55=L45
 B57=L45
 B58=L46
 bgnstmt 65
-t192 := param 2
+t192 := param 0
 t193 := @i t192
 t194 := 5
 t195 := t193 <i t194
 bt t195 B60
 br B61
 label L47
-t196 := param 2
+t196 := param 0
 t197 := @i t196
 t198 := 10
 t199 := t197 >i t198
@@ -429,7 +425,7 @@ bt t199 B62
 br B63
 B61=L47
 label L48
-t200 := local 2
+t200 := local 0
 t201 := @f t200
 t202 := 0
 t203 := cvf t202
@@ -446,12 +442,13 @@ B62=L49
 B64=L49
 B65=L50
 bgnstmt 67
-t205 := local 2
+t205 := local 0
 t206 := 1
 t207 := @f t205
-t208 := cvf t206
-t209 := t207 <<f t208
-t210 := t205 =f t209
+t208 := cvi t207
+t209 := t208 <<i t206
+t210 := cvf t209
+t211 := t205 =f t210
 br B67
 label L51
 B50=L42
@@ -460,11 +457,11 @@ B52=L40
 B67=L41
 B66=L41
 B59=L51
-t211 := param 2
-t212 := @i t211
-t213 := 10
-t214 := t212 <i t213
-bt t214 B68
+t212 := param 0
+t213 := @i t212
+t214 := 10
+t215 := t213 <i t214
+bt t215 B68
 br B69
 label L52
 B68=L37

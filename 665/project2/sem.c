@@ -445,6 +445,8 @@ void ftail()
 {
   printf("fend\n");
   labelNeededFlag = 1;
+  formalnum = 0;
+  localnum = 0;
   leaveblock();
 }
 
@@ -623,7 +625,12 @@ struct sem_rec *set(char *op, struct sem_rec *x, struct sem_rec *y)
 
   if(*op!='\0' || x==NULL || y==NULL){
     tempx = op1("@", x);
-    tempres = op2(op, tempx, y);
+    if (*op == '+' || *op == '-' || *op == '*' || *op == '/' || *op == '%') {
+      tempres = op2(op, tempx, y);
+    }
+    else {
+      tempres = opb(op, tempx, y);
+    }
     return(set("", x, tempres));
   }
 

@@ -52,7 +52,7 @@ main(int x, int y)
     return d;
 }
 
-double func(int x) {
+double foo(int x) {
     double d;
     do {
         x += 2;
