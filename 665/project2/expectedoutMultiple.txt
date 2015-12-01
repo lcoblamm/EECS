@@ -326,7 +326,7 @@ t153 := @f t152
 t154 := cvi t153
 reti t154
 fend
-func func
+func foo
 formal 4
 localloc 8
 bgnstmt 57
