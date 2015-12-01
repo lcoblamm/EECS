@@ -31,6 +31,13 @@ double loopControl(int x, int y) {
                 continue;
             x += 3;
         } while (x < y);
+        do {
+            x += 2;
+            if (x > 5)
+                break;
+            x += 3;
+        } while (x < y);
+        continue;
     }
 
     return t;

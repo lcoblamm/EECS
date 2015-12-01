@@ -51,3 +51,20 @@ main(int x, int y)
     
     return d;
 }
+
+double func(int x) {
+    double d;
+    do {
+        x += 2;
+        if (x > 5)
+            break;
+        x += 3;
+        for (; x < 5; x -= 10) {
+            if (x > d && x < 10 || x == 15) 
+                break;
+            if (x < 5 || x > 10 || d < 0)
+                continue;
+            d <<= 1;
+        }
+    } while (x < 10);
+}

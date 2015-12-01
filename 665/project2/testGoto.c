@@ -3,6 +3,7 @@ double y;
 
 double bar(int a, double v) {
 	int m;
+	goto lynne;
 	jacob:
 	if (!a) 
 		goto lynne;
@@ -15,5 +16,7 @@ double bar(int a, double v) {
 		goto jacob;
 	else
 		goto lynne;
+	if (x < 15)
+		goto jacob;
 	return 0;
 }
