@@ -211,16 +211,58 @@ label L24
 B29=L20
 B30=L24
 B28=L23
-br B31
-label L25
-B18=L16
-B19=L25
-B31=L15
-B25=L25
-B22=L25
+bgnstmt 34
+bgnstmt 34
+bgnstmt 35
+t101 := param 0
+t102 := 2
+t103 := @i t101
+t104 := t103 +i t102
+t105 := t101 =i t104
 bgnstmt 36
-t101 := local 1
-t102 := @i t101
-t103 := cvf t102
-retf t103
+t106 := param 0
+t107 := @i t106
+t108 := 5
+t109 := t107 >i t108
+bt t109 B31
+br B32
+label L25
+bgnstmt 36
+br B33
+label L26
+B31=L25
+B32=L26
+bgnstmt 38
+t110 := param 0
+t111 := 3
+t112 := @i t110
+t113 := t112 +i t111
+t114 := t110 =i t113
+label L27
+t115 := param 0
+t116 := @i t115
+t117 := param 1
+t118 := @i t117
+t119 := t116 <i t118
+bt t119 B34
+br B35
+label L28
+B34=L24
+B35=L28
+B33=L28
+bgnstmt 40
+br B36
+br B37
+label L29
+B18=L16
+B19=L29
+B37=L15
+B36=L15
+B25=L29
+B22=L29
+bgnstmt 43
+t120 := local 1
+t121 := @i t120
+t122 := cvf t121
+retf t122
 fend

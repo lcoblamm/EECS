@@ -326,3 +326,141 @@ t153 := @f t152
 t154 := cvi t153
 reti t154
 fend
+func func
+formal 4
+localloc 8
+bgnstmt 57
+label L37
+bgnstmt 58
+t155 := param 0
+t156 := 2
+t157 := @i t155
+t158 := t157 +i t156
+t159 := t155 =i t158
+bgnstmt 59
+t160 := param 0
+t161 := @i t160
+t162 := 5
+t163 := t161 >i t162
+bt t163 B47
+br B48
+label L38
+bgnstmt 60
+br B49
+label L39
+B47=L38
+B48=L39
+bgnstmt 61
+t164 := param 0
+t165 := 3
+t166 := @i t164
+t167 := t166 +i t165
+t168 := t164 =i t167
+bgnstmt 62
+label L40
+t169 := param 0
+t170 := @i t169
+t171 := 5
+t172 := t170 <i t171
+bt t172 B50
+br B51
+label L41
+t173 := param 0
+t174 := 10
+t175 := @i t173
+t176 := t175 -i t174
+t177 := t173 =i t176
+br B52
+label L42
+bgnstmt 63
+t178 := param 0
+t179 := @i t178
+t180 := local 0
+t181 := @f t180
+t182 := cvf t179
+t183 := t182 >f t181
+bt t183 B53
+br B54
+label L43
+t184 := param 0
+t185 := @i t184
+t186 := 10
+t187 := t185 <i t186
+bt t187 B55
+br B56
+B53=L43
+label L44
+t188 := param 0
+t189 := @i t188
+t190 := 15
+t191 := t189 ==i t190
+bt t191 B57
+br B58
+B54=L44
+B56=L44
+label L45
+bgnstmt 64
+br B59
+label L46
+B55=L45
+B57=L45
+B58=L46
+bgnstmt 65
+t192 := param 0
+t193 := @i t192
+t194 := 5
+t195 := t193 <i t194
+bt t195 B60
+br B61
+label L47
+t196 := param 0
+t197 := @i t196
+t198 := 10
+t199 := t197 >i t198
+bt t199 B62
+br B63
+B61=L47
+label L48
+t200 := local 0
+t201 := @f t200
+t202 := 0
+t203 := cvf t202
+t204 := t201 <f t203
+bt t204 B64
+br B65
+B63=L48
+label L49
+bgnstmt 66
+br B66
+label L50
+B60=L49
+B62=L49
+B64=L49
+B65=L50
+bgnstmt 67
+t205 := local 0
+t206 := 1
+t207 := @f t205
+t208 := cvi t207
+t209 := t208 <<i t206
+t210 := cvf t209
+t211 := t205 =f t210
+br B67
+label L51
+B50=L42
+B51=L51
+B66=L41
+B52=L40
+B67=L41
+B59=L51
+t212 := param 0
+t213 := @i t212
+t214 := 10
+t215 := t213 <i t214
+bt t215 B68
+br B69
+label L52
+B68=L37
+B69=L52
+B49=L52
+fend
