@@ -1,3 +1,7 @@
+// Lynne Coblammers
+// EECS 665
+// Project 2
+
 # include <stdio.h>
 # include "cc.h"
 # include "semutil.h"
