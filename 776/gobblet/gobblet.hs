@@ -59,7 +59,7 @@ loop context board turn = do
       | x <- [0,1,2,3,4,5], y <- [1,2,3,4] ]
     restore()
     let text = if turn == White then "White's turn" else "Black's turn"
-    printText text (width context / 2, 30)
+    printText context text
 
   grabPiece context board turn
 {- event <- wait context
@@ -94,7 +94,13 @@ grabPiece context board turn = do
       Nothing -> grabPiece context board turn
       Just pos -> do
         print pos
-        loop context board (swap turn)
+        case Map.lookup pos board of
+          Nothing -> grabPiece context board turn
+          Just [] -> grabPiece context board turn
+          Just (p:ps) -> if (color p /= turn) 
+            then grabPiece context board turn
+            else loop context board (swap turn)
+
 
 -- placePiece :: Context -> Map (Int, Int) Stack -> Color ->
 
@@ -119,13 +125,13 @@ blackColor = "#000000"
 lineColor = "#0000ff"
 textColor = "#458B00"
 
-printText :: Text -> (Double, Double) -> Canvas ()
-printText text (x,y) = do
-  clearRect (0,0, x * 2,30)
+printText :: DeviceContext -> Text -> Canvas ()
+printText context text = do
+  clearRect (0, 0, width context, 30)
   font "20pt Calibri"
   textAlign "center"
   fillStyle textColor
-  fillText(text, x, y)
+  fillText(text, width context / 2, 30)
 
 drawPiece :: Piece -> (Double, Double) -> Double -> Canvas ()
 drawPiece piece (x,y) maxRad = do 
