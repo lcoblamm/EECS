@@ -61,7 +61,9 @@ loop context board turn = do
     let text = if turn == White then "White's turn" else "Black's turn"
     printText context text
 
-  grabPiece context board turn
+  pos <- grabPiece context board turn
+  newMap <- placePiece context board pos
+  loop context newMap (swap turn)
 {- event <- wait context
   print event
   case ePageXY event of
@@ -85,24 +87,32 @@ loop context board turn = do
                   Just qs -> loop context (Map.insert pos' (p:qs) board) (swap turn)
 -}
 
-grabPiece :: DeviceContext -> Map (Int, Int) Stack -> Color -> IO ()
+grabPiece :: DeviceContext -> Map (Int, Int) Stack -> Color -> IO (Int,Int)
 grabPiece context board turn = do
   event <- wait context
   case ePageXY event of
     Nothing -> grabPiece context board turn
     Just (x,y) -> case getBox context (x,y) of
       Nothing -> grabPiece context board turn
-      Just pos -> do
-        print pos
-        case Map.lookup pos board of
-          Nothing -> grabPiece context board turn
-          Just [] -> grabPiece context board turn
-          Just (p:ps) -> if (color p /= turn) 
-            then grabPiece context board turn
-            else loop context board (swap turn)
+      Just pos -> case Map.lookup pos board of
+        Nothing -> grabPiece context board turn
+        Just [] -> grabPiece context board turn
+        Just (p:ps) -> if (color p /= turn) 
+          then grabPiece context board turn
+          else return pos
 
 
--- placePiece :: Context -> Map (Int, Int) Stack -> Color ->
+placePiece :: DeviceContext -> Map (Int, Int) Stack -> (Int, Int) -> IO (Map (Int, Int) Stack)
+placePiece context board pos = do
+  let stack = case Map.lookup pos board of Just x -> x
+  event <- wait context
+  case ePageXY event of
+    Nothing -> placePiece context board pos
+    Just (x,y) -> case getBox context (x,y) of
+      Nothing -> placePiece context board pos
+      Just (x',y') -> if (x' < 1 || x' > 4 || y' < 1 || y' > 4)
+        then placePiece context board pos
+        else return (Map.insert pos (tail stack) board)
 
 getBox :: DeviceContext -> (Double, Double) -> Maybe (Int, Int)
 getBox context (x,y) = do
