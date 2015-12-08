@@ -64,28 +64,6 @@ loop context board turn = do
   pos <- grabPiece context board turn
   newMap <- placePiece context board pos
   loop context newMap (swap turn)
-{- event <- wait context
-  print event
-  case ePageXY event of
-    Nothing -> loop context board turn
-    Just (x,y) -> case getBox context (x,y) of
-      Nothing -> loop context board turn
-      Just pos -> case Map.lookup pos board of
-        Nothing -> loop context board turn
-        Just [] -> loop context board turn
-        Just (p:_) -> if (color p /= turn)
-          then loop context board turn
-          else do 
-            event <- wait context
-            case ePageXY event of
-              Nothing -> loop context board turn
-              Just (a,b) -> case getBox context (a,b) of
-                Nothing -> loop context board turn
-                Just pos' -> case Map.lookup pos' board of
-                  Nothing -> loop context (Map.insert pos' [p] board) (swap turn)
-                  -- TODO: check that you can put piece here
-                  Just qs -> loop context (Map.insert pos' (p:qs) board) (swap turn)
--}
 
 grabPiece :: DeviceContext -> Map (Int, Int) Stack -> Color -> IO (Int,Int)
 grabPiece context board turn = do
@@ -112,7 +90,12 @@ placePiece context board pos = do
       Nothing -> placePiece context board pos
       Just (x',y') -> if (x' < 1 || x' > 4 || y' < 1 || y' > 4)
         then placePiece context board pos
-        else return (Map.insert pos (tail stack) board)
+        else case Map.lookup (x',y') board of
+          Nothing -> return (Map.insert (x',y') [(head stack)] (Map.insert pos (tail stack) board))
+          Just [] -> return (Map.insert (x',y') [(head stack)] (Map.insert pos (tail stack) board))
+          Just curr -> if (size (head curr) < size (head stack))
+            then return (Map.insert (x',y') ((head stack) : curr) (Map.insert pos (tail stack) board))
+            else placePiece context board pos
 
 getBox :: DeviceContext -> (Double, Double) -> Maybe (Int, Int)
 getBox context (x,y) = do
