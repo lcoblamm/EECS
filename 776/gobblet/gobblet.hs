@@ -58,8 +58,14 @@ loop context board turn = do
         Nothing -> return () 
       | x <- [0,1,2,3,4,5], y <- [1,2,3,4] ]
     restore()
-    let text = if turn == White then "White's turn" else "Black's turn"
-    printText context text
+    case checkWin board of
+      Just c -> do 
+        let text = if c == White then "White wins!!" else "Black wins!!"
+        printText context text
+        return ()
+      Nothing -> do
+        let text = if turn == White then "White's turn" else "Black's turn"
+        printText context text
 
   pos <- grabPiece context board turn
   newMap <- placePiece context board pos
@@ -97,6 +103,59 @@ placePiece context board pos = do
             then return (Map.insert (x',y') ((head stack) : curr) (Map.insert pos (tail stack) board))
             else placePiece context board pos
 
+checkWin :: Map (Int, Int) Stack -> Maybe Color
+checkWin board = case checkHorizontal board of
+  Just c -> Just c
+  Nothing -> case checkVertical board of
+    Just c -> Just c
+    Nothing -> case checkDiagonal board of 
+      Just c -> Just c
+      Nothing -> Nothing 
+
+checkHorizontal :: Map (Int, Int) Stack -> Maybe Color
+checkHorizontal board = foldl1 checkForColor 
+  [ let s = [ Map.lookup (x,1) board
+            , Map.lookup (x,2) board
+            , Map.lookup (x,3) board
+            , Map.lookup (x,4) board ]
+    in foldl1 compareColors (map getStackColor s)
+    | x <- [1..4] ]
+
+checkVertical :: Map (Int, Int) Stack -> Maybe Color
+checkVertical board = foldl1 checkForColor 
+  [ let s = [ Map.lookup (1,x) board
+            , Map.lookup (2,x) board
+            , Map.lookup (3,x) board
+            , Map.lookup (4,x) board ]
+    in foldl1 compareColors (map getStackColor s)
+    | x <- [1..4] ]
+
+checkDiagonal :: Map (Int, Int) Stack -> Maybe Color
+checkDiagonal board = checkForColor (let s = [ Map.lookup (1,1) board
+                                             , Map.lookup (2,2) board
+                                             , Map.lookup (3,3) board
+                                             , Map.lookup (4,4) board ]
+                                      in foldl1 compareColors (map getStackColor s))
+                                    (let s = [ Map.lookup (1,4) board
+                                             , Map.lookup (2,3) board
+                                             , Map.lookup (3,2) board
+                                             , Map.lookup (4,1) board ]
+                                      in foldl1 compareColors (map getStackColor s))
+
+getStackColor :: Maybe Stack -> Maybe Color
+getStackColor Nothing = Nothing
+getStackColor (Just []) = Nothing
+getStackColor (Just (p:ps)) = Just (color p)
+
+compareColors :: Maybe Color -> Maybe Color -> Maybe Color
+compareColors Nothing _ = Nothing
+compareColors _ Nothing = Nothing
+compareColors (Just a) (Just b) = if (a == b) then Just a else Nothing
+
+checkForColor :: Maybe Color -> Maybe Color -> Maybe Color
+checkForColor (Just a) _ = Just a
+checkForColor _ _ = Nothing
+
 getBox :: DeviceContext -> (Double, Double) -> Maybe (Int, Int)
 getBox context (x,y) = do
   let adjX = x - width context / 2
@@ -111,6 +170,8 @@ getBox context (x,y) = do
 
 boardSize :: DeviceContext -> Double
 boardSize context = min (width context) (height context)
+
+-- Functions for drawing and printing to canvas
 
 whiteColor, blackColor, lineColor, textColor :: Text
 whiteColor = "#faebd7"
