@@ -37,23 +37,23 @@ createMap = Map.fromList [((0,1), fullStack Black)
 
 loop :: DeviceContext -> Map (Int, Int) Stack -> Color -> IO ()
 loop context board turn = do
-  let size = min (width context) (height context)
+  let sz = boardSize context
   send context $ do
     clearCanvas
     save()
     translate(width context / 2, height context / 2)
     -- draw board lines
     sequence_ [ do 
-      drawLine (x * size, -0.33 * size) (x * size, 0.33 * size)
-      drawLine (-0.33 * size, x * size) (0.33 * size, x * size)
+      drawLine (x * sz, -0.33 * sz) (x * sz, 0.33 * sz)
+      drawLine (-0.33 * sz, x * sz) (0.33 * sz, x * sz)
       | x <- [-0.167, 0, 0.167] ]
     restore()
     save()
-    translate(width context / 2 - size / 2, height context / 2 - size / 2)
+    translate(width context / 2 - sz / 2, height context / 2 - sz / 2)
     -- print pieces from map
     sequence_ [ do 
       case Map.lookup (x,y) board of 
-        Just (p:ps) -> drawPiece p ((fromIntegral x) * size / 6.0 + (size * 0.083), (fromIntegral y) * size / 6.0 + (size * 0.083)) (size * 0.075)
+        Just (p:ps) -> drawPiece p ((fromIntegral x) * sz / 6.0 + (sz * 0.083), (fromIntegral y) * sz / 6.0 + (sz * 0.083)) (sz * 0.075)
         Just [] -> return ()
         Nothing -> return () 
       | x <- [0,1,2,3,4,5], y <- [1,2,3,4] ]
@@ -61,10 +61,12 @@ loop context board turn = do
     let text = if turn == White then "White's turn" else "Black's turn"
     printText text (width context / 2, 30)
 
-  event <- wait context
+  grabPiece context board turn
+{- event <- wait context
+  print event
   case ePageXY event of
     Nothing -> loop context board turn
-    Just (x,y) -> case getBox (x,y) (width context) (height context) size of
+    Just (x,y) -> case getBox context (x,y) of
       Nothing -> loop context board turn
       Just pos -> case Map.lookup pos board of
         Nothing -> loop context board turn
@@ -75,13 +77,41 @@ loop context board turn = do
             event <- wait context
             case ePageXY event of
               Nothing -> loop context board turn
-              Just (a,b) -> case getBox (a,b) (width context) (height context) size of
+              Just (a,b) -> case getBox context (a,b) of
                 Nothing -> loop context board turn
                 Just pos' -> case Map.lookup pos' board of
                   Nothing -> loop context (Map.insert pos' [p] board) (swap turn)
                   -- TODO: check that you can put piece here
                   Just qs -> loop context (Map.insert pos' (p:qs) board) (swap turn)
+-}
 
+grabPiece :: DeviceContext -> Map (Int, Int) Stack -> Color -> IO ()
+grabPiece context board turn = do
+  event <- wait context
+  case ePageXY event of
+    Nothing -> grabPiece context board turn
+    Just (x,y) -> case getBox context (x,y) of
+      Nothing -> grabPiece context board turn
+      Just pos -> do
+        print pos
+        loop context board (swap turn)
+
+-- placePiece :: Context -> Map (Int, Int) Stack -> Color ->
+
+getBox :: DeviceContext -> (Double, Double) -> Maybe (Int, Int)
+getBox context (x,y) = do
+  let adjX = x - width context / 2
+  let adjY = y - height context / 2
+  let s = boardSize context
+  if (((abs adjX) >  s / 2) || ((abs adjY) > s / 2))
+    then Nothing
+    else do
+      let coordX = 2 + (ceiling $ adjX / (s / 6))
+      let coordY = 2 + (ceiling $ adjY / (s / 6))
+      Just (coordX, coordY)
+
+boardSize :: DeviceContext -> Double
+boardSize context = min (width context) (height context)
 
 whiteColor, blackColor, lineColor, textColor :: Text
 whiteColor = "#faebd7"
@@ -128,14 +158,3 @@ drawLine (a, b) (c, d) = do
   lineWidth 5
   strokeStyle lineColor
   stroke()
-
-getBox :: (Double, Double) -> Double -> Double -> Double -> Maybe (Int, Int)
-getBox (x,y) width height size = do
-  let adjX = x - width / 2
-  let adjY = y - height / 2
-  if (((abs adjX) >  size / 2) || ((abs adjY) > size / 2))
-    then Nothing
-    else do
-      let coordX = ceiling $ adjX / (size / 6)
-      let coordY = ceiling $ adjY / (size / 6)
-      Just (coordX, coordY)
