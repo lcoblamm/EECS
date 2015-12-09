@@ -247,7 +247,7 @@ Definition retrieve_and_sign {T : Type} (id : nat) (s : keyStore) (pub : keyType
     | keyStoreValue k => (fun (p : is_retrievable (s id)) => (sign T (key T k) (inverse pub)))
   end.
 
-Theorem is_retrievable_dec: forall k, {(is_retrievable k)}+{not (is_retrievable k)}.
+Theorem is_a_dec: forall k, {(is_retrievable k)}+{not (is_retrievable k)}.
 Proof.
   intros.
   destruct k.

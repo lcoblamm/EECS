@@ -62,14 +62,16 @@ loop context board turn = do
       Just c -> do 
         let text = if c == White then "White wins!!" else "Black wins!!"
         printText context text
-        return ()
       Nothing -> do
         let text = if turn == White then "White's turn" else "Black's turn"
         printText context text
 
-  pos <- grabPiece context board turn
-  newMap <- placePiece context board pos
-  loop context newMap (swap turn)
+  case checkWin board of
+    Just _ -> return ()
+    Nothing -> do
+      pos <- grabPiece context board turn
+      newMap <- placePiece context board pos
+      loop context newMap (swap turn)
 
 grabPiece :: DeviceContext -> Map (Int, Int) Stack -> Color -> IO (Int,Int)
 grabPiece context board turn = do
@@ -154,6 +156,7 @@ compareColors (Just a) (Just b) = if (a == b) then Just a else Nothing
 
 checkForColor :: Maybe Color -> Maybe Color -> Maybe Color
 checkForColor (Just a) _ = Just a
+checkForColor _ (Just a) = Just a
 checkForColor _ _ = Nothing
 
 getBox :: DeviceContext -> (Double, Double) -> Maybe (Int, Int)
