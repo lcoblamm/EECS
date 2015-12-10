@@ -150,7 +150,7 @@
     (lambda () (begin (set-box! loc (+ (unbox loc) 1))
                       (unbox loc)))))
   
-(define test-eval
+(define eval-cfwaes
   (lambda (expr)
     (type-case ValueXStore (interp-cfwaes expr (mtSub) (mtSto))
       (vxs (val newSto)
