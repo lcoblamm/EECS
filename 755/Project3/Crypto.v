@@ -255,60 +255,42 @@ Defined.
 Definition get_and_check_failure : Prop :=
   True.
 
-Definition get_and_check_key (T: Type) (id : nat) (s : keyStore) (storePub : keyType) (storePriv : keyType) : keyType + {(get_and_check_failure)}.
+Definition get_and_check_key (T: Type) (m : message T) (storePub : keyType) : keyType + {(get_and_check_failure)}.
 refine
-  match (retrieve_and_sign T id s storePriv) with
-    | inleft m => match (check m storePub) with
-      | left t => match m with
-        | basic c => inright _ _
-        | key k => inleft _ k
-        | sign m' j => inright _ _
-        | encrypt m' k => inright _ _
-        | hash _ => inright _ _
-        | pair _ _ => inright _ _
-        end
-      | right f => inright _ _
-      end
-    | inright n => inright _ _
+  match (check m storePub) with
+    | left t => match m with
+          | basic c => inright _ _
+          | key k => inleft _ k
+          | sign m' j => inright _ _
+          | encrypt m' k => inright _ _
+          | hash _ => inright _ _
+          | pair _ _ => inright _ _
+          end
+    | right f => inright _ _
   end.
 Proof.
-  reflexivity. reflexivity. reflexivity. reflexivity. reflexivity. reflexivity. reflexivity.
+  reflexivity. reflexivity. reflexivity. reflexivity. reflexivity. reflexivity.
 Defined.
 
 (* Encryption *)
-
-Definition encrypt_and_sign_failure : Prop :=
-  True.
-
-Definition encrypt_and_sign (T: Type) (id : nat) (s : keyStore) (m : message T) (storePub : keyType) (storePriv : keyType) (decPub : key) (encPriv : key) : (message T) + {(encrypt_and_sign_failure)}.
-refine
-  match (get_and_check_key T id s storePub storePriv) with
-    | inleft k =>  inleft _ (sign T (encrypt T m decPub) encPriv)
-    | inright f => inright _ _
-  end.
-Proof.
-  reflexivity.
-Defined.
+Definition encrypt_and_sign (T: Type) (m : message T) (decPub : keyType) (encPriv : keyType) : (message T) :=
+  sign T (encrypt T m decPub) encPriv.
 
 (* Decryption *)
-
 Definition decrypt_and_check_failure : Prop :=
   True.
 
-Definition decrypt_and_check (T: Type) (id : nat) (s : keyStore) (m : message T) : (message T) + {(decrypt_and_check_failure)}.
+Definition decrypt_and_check (T: Type) (m : message T) (encPub : keyType) (decPriv : keyType) : (message T) + {(decrypt_and_check_failure)}.
 refine
-  match (get_and_check_key T id s) with
-    | inleft k => match (check m k) with
-      | left t => match (decrypt m decryptorPriv) with
+  match (check m encPub) with
+    | left t => match (decrypt m decPriv) with
         | inleft m' => inleft _ m'
         | inright n => inright _ _
         end
-      | right f' => inright _ _
-      end
-    | inright f => inright _ _
+    | right f => inright _ _
   end.
 Proof.
-  reflexivity. reflexivity. reflexivity.
+  reflexivity. reflexivity.
 Defined.
 
 (* Proofs *)
@@ -350,7 +332,7 @@ Qed.
 (* Theorem retrieve_and_sign : forall T i s, (s i = ??) -> (retrieve_and_sign T i s) = inright _ _. *)
 
 (* Retrieve and sign on known key returns signed key *)
-Theorem retrieve_and_sign_success : forall T i k s, (retrieve_and_sign T i (add_key i k s)) = (inleft _ (sign T (key T k) keyStorePriv)).
+Theorem retrieve_and_sign_success : forall T i k s priv, (retrieve_and_sign T i (add_key i k s) priv) = (inleft _ (sign T (key T k) priv)).
 Proof.
   intros.
   unfold add_key.
@@ -359,46 +341,35 @@ Proof.
   reflexivity.
 Qed.
 
-(* Get and check fails for unknown key *)
-(* Theorem get_and_check_unknown : forall T i, get_and_check_key T i empty_store = (inright _ True). *)
-
 (* Get and check fails for bad signature *)
-(* Theorem get_and_check_bad_signature *)
+(* Theorem get_and_check_bad_signature : forall T kPub kPriv m, (kPriv <> (inverse kPub)) -> (get_and_check_key T (sign T kPriv m) kPub) = inright _ _. *)
 
 (* Get and check succeeds for good signature, valid key *)
+Theorem get_and_check_succeed : forall T kPub kPriv k, (kPriv = (inverse kPub)) -> (get_and_check_key T (sign T (key T k) kPriv) kPub) = inleft _ k.
+Proof.
+  intros.
+  unfold get_and_check_key.
+  simpl.
+Admitted.
 
 (* Any message leaving a sending node is encrypted and signed *)
-Theorem encrypt_and_sign_success : forall T i k s m, (retrieve_and_sign_success T i k s) -> (encrypt_and_sign T i
+Theorem encrypt_and_sign_success : forall T m decK encK, encrypt_and_sign T m decK encK = sign T (encrypt T m decK) encK.
+Proof.
+  intros.
+  unfold encrypt_and_sign.
+  reflexivity.
+Qed.
 
-(* Any message processed by a receiving node is signed and encrypted *)
+(* Any message processed by a receiving node is signed and encrypted - don't know what to do for this at all *)
 
-(* All retrieved keys are validated before use *)
+(* All retrieved keys are validated before use - might be proved above? *)
 
 (* A message is never processed if its signature cannot be authenticated using a validated key *)
+(* Theorem decrypt_and_check_unvalidated : forall T m encPub encPriv decPriv, (encPub <> (inverse encPriv)) -> decrypt_and_check T (sign T m encPriv) encPub decPriv = inright _ _. *)
 
 (* A message is never processed if it cannot be decrypted *)
+(* Theorem decrypt_and_check_decrypt_fail : forall T m encPub encPriv decPriv decPub, (encPub = (inverse encPriv)) -> (decPub <> (inverse decPriv)) -> decrypt_and_check T (sign T (encrypt m decPub) encPriv) encPub decPriv = inright _ _. *)
 
-(* Might be able to get rid of this *)
-Definition theKeyStore : keyStore :=
-  add_key 1 decryptorPub (add_key 0 encryptorPub (empty_store)).
-
-Definition keyStorePriv : keyType :=
-  private 0.
-
-Definition keyStorePub : keyType :=
-  public 0.
-
-Definition encryptorPriv : keyType :=
-  private 1.
-
-Definition encryptorPub : keyType :=
-  public 1.
-
-Definition decryptorPriv : keyType :=
-  private 2.
-
-Definition decryptorPub : keyType :=
-  public 2.
 
 
 
