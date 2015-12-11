@@ -235,34 +235,170 @@ Definition empty_store : keyStore :=
 Definition add_key (id : nat) (k : keyType) (s : keyStore) : keyStore :=
   (fun n:nat => if (beq_nat n id) then (keyStoreValue k) else (s n)).
 
-Definition is_retrievable (k : keyStoreEntry) : Prop :=
+Definition is_not_retrievable (k : keyStoreEntry) : Prop :=
   match k with
-    | ?? => False
-    | keyStoreValue k => True
+    | ?? => True
+    | keyStoreValue k => False
   end.
 
-Definition retrieve_and_sign {T : Type} (id : nat) (s : keyStore) (pub : keyType) : (is_retrievable (s id)) -> (message T) :=
+Definition retrieve_and_sign (T : Type) (id : nat) (s : keyStore) (priv : keyType) : (message T) + {(is_not_retrievable (s id))}.
+refine 
   match (s id) with
-    | ?? => (fun (p : is_retrievable (s id)) => (key T (public 0)))
-    | keyStoreValue k => (fun (p : is_retrievable (s id)) => (sign T (key T k) (inverse pub)))
+    | ?? => inright _ _
+    | keyStoreValue k => inleft _ (sign T (key T k) priv)
   end.
-
-Theorem is_a_dec: forall k, {(is_retrievable k)}+{not (is_retrievable k)}.
 Proof.
-  intros.
-  destruct k.
-  left. reflexivity.
-  right. unfold not. simpl. intros. inversion H.
+  reflexivity.
 Defined.
 
 (* Functions to get key from key server *)
+Definition get_and_check_failure : Prop :=
+  True.
 
-Definition get_and_check_key {T: Type} (id : nat) (s : keyStore) (pub : keyType) : keyType.
+Definition get_and_check_key (T: Type) (id : nat) (s : keyStore) (storePub : keyType) (storePriv : keyType) : keyType + {(get_and_check_failure)}.
 refine
-  if (check ((retrieve_and_sign id s pub) _)) then
-    (public 0) else (public 0).
+  match (retrieve_and_sign T id s storePriv) with
+    | inleft m => match (check m storePub) with
+      | left t => match m with
+        | basic c => inright _ _
+        | key k => inleft _ k
+        | sign m' j => inright _ _
+        | encrypt m' k => inright _ _
+        | hash _ => inright _ _
+        | pair _ _ => inright _ _
+        end
+      | right f => inright _ _
+      end
+    | inright n => inright _ _
+  end.
+Proof.
+  reflexivity. reflexivity. reflexivity. reflexivity. reflexivity. reflexivity. reflexivity.
+Defined.
 
+(* Encryption *)
 
+Definition encrypt_and_sign_failure : Prop :=
+  True.
+
+Definition encrypt_and_sign (T: Type) (id : nat) (s : keyStore) (m : message T) (storePub : keyType) (storePriv : keyType) (decPub : key) (encPriv : key) : (message T) + {(encrypt_and_sign_failure)}.
+refine
+  match (get_and_check_key T id s storePub storePriv) with
+    | inleft k =>  inleft _ (sign T (encrypt T m decPub) encPriv)
+    | inright f => inright _ _
+  end.
+Proof.
+  reflexivity.
+Defined.
+
+(* Decryption *)
+
+Definition decrypt_and_check_failure : Prop :=
+  True.
+
+Definition decrypt_and_check (T: Type) (id : nat) (s : keyStore) (m : message T) : (message T) + {(decrypt_and_check_failure)}.
+refine
+  match (get_and_check_key T id s) with
+    | inleft k => match (check m k) with
+      | left t => match (decrypt m decryptorPriv) with
+        | inleft m' => inleft _ m'
+        | inright n => inright _ _
+        end
+      | right f' => inright _ _
+      end
+    | inright f => inright _ _
+  end.
+Proof.
+  reflexivity. reflexivity. reflexivity.
+Defined.
+
+(* Proofs *)
+
+(* Empty store always returns unknown *)
+Theorem empty_unknown : forall i, empty_store i = unknown.
+Proof.
+  intros.
+  reflexivity.
+Qed.
+
+Lemma beq_nat_equal : forall i, beq_nat i i = true.
+Proof.
+  intros.
+  induction i.
+  reflexivity.
+  simpl. rewrite IHi. reflexivity.
+Qed.
+
+(* Calling add on store adds key *)
+Theorem add_immediate: forall i k s, ((add_key i k s) i) = (keyStoreValue k).
+Proof.
+  intros.
+  unfold add_key. 
+  rewrite beq_nat_equal.
+  reflexivity.
+Qed.
+
+(* Calling add on store doesn't change rest of store *)
+Theorem add_invariant: forall i n k s, (beq_nat n i = false) -> ((add_key i k s) n) = s n.
+Proof.
+  intros.
+  unfold add_key.
+  rewrite H.
+  reflexivity.
+Qed.
+
+(* Retrieve and sign on unkown key returns non-retrievable proof *)
+(* Theorem retrieve_and_sign : forall T i s, (s i = ??) -> (retrieve_and_sign T i s) = inright _ _. *)
+
+(* Retrieve and sign on known key returns signed key *)
+Theorem retrieve_and_sign_success : forall T i k s, (retrieve_and_sign T i (add_key i k s)) = (inleft _ (sign T (key T k) keyStorePriv)).
+Proof.
+  intros.
+  unfold add_key.
+  unfold retrieve_and_sign.
+  rewrite beq_nat_equal.
+  reflexivity.
+Qed.
+
+(* Get and check fails for unknown key *)
+(* Theorem get_and_check_unknown : forall T i, get_and_check_key T i empty_store = (inright _ True). *)
+
+(* Get and check fails for bad signature *)
+(* Theorem get_and_check_bad_signature *)
+
+(* Get and check succeeds for good signature, valid key *)
+
+(* Any message leaving a sending node is encrypted and signed *)
+Theorem encrypt_and_sign_success : forall T i k s m, (retrieve_and_sign_success T i k s) -> (encrypt_and_sign T i
+
+(* Any message processed by a receiving node is signed and encrypted *)
+
+(* All retrieved keys are validated before use *)
+
+(* A message is never processed if its signature cannot be authenticated using a validated key *)
+
+(* A message is never processed if it cannot be decrypted *)
+
+(* Might be able to get rid of this *)
+Definition theKeyStore : keyStore :=
+  add_key 1 decryptorPub (add_key 0 encryptorPub (empty_store)).
+
+Definition keyStorePriv : keyType :=
+  private 0.
+
+Definition keyStorePub : keyType :=
+  public 0.
+
+Definition encryptorPriv : keyType :=
+  private 1.
+
+Definition encryptorPub : keyType :=
+  public 1.
+
+Definition decryptorPriv : keyType :=
+  private 2.
+
+Definition decryptorPub : keyType :=
+  public 2.
 
 
 
