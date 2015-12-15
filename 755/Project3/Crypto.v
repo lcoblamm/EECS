@@ -260,7 +260,6 @@ Proof.
 Defined.
 
 Eval compute in (retrieve_and_sign nat 1 (add_key 1 (public 1) empty_store) (private 0)).
-
 Eval compute in (retrieve_and_sign nat 1 (add_key 2 (public 1) empty_store) (private 0)).
 
 (* Functions to get key from key server *)
@@ -310,6 +309,8 @@ Eval compute in (get_and_check_key nat (sign nat (key nat (public 1)) (private 0
 Definition encrypt_and_sign (T: Type) (m : message T) (decPub : keyType) (encPriv : keyType) : (message T) :=
   sign T (encrypt T m decPub) encPriv.
 
+Eval compute in encrypt_and_sign nat (key nat (symmetric 3)) (public 2) (private 1).
+
 (* Decryption *)
 Definition decrypt_and_check_failure (T : Type) (m : message T) (pub : keyType) (priv : keyType) : Prop :=
   True.
@@ -330,7 +331,11 @@ Proof.
   reflexivity. reflexivity. reflexivity. 
 Defined.
 
-(* Proofs *)
+Eval compute in decrypt_and_check nat (sign nat (encrypt nat (key nat (symmetric 3)) (public 2)) (private 1)) (public 1) (private 2).
+Eval compute in decrypt_and_check nat (sign nat (encrypt nat (key nat (symmetric 3)) (public 2)) (private 1)) (public 0) (private 2).
+Eval compute in decrypt_and_check nat (sign nat (encrypt nat (key nat (symmetric 3)) (public 2)) (private 1)) (public 1) (private 3).
+
+(* Validation *)
 
 (* Empty store always returns unknown *)
 Theorem empty_unknown : forall i, empty_store i = unknown.
@@ -366,7 +371,15 @@ Proof.
 Qed.
 
 (* Retrieve and sign on unkown key returns non-retrievable proof *)
-(* Theorem retrieve_and_sign : forall T i s k, (s i = ??) -> (retrieve_and_sign T i s) k  = (inright _ (is_not_retrievable (s i))). *)
+Theorem retrieve_and_sign_unkown : forall T i s k p, (s i = ??) -> (retrieve_and_sign T i s) k  <> inleft p.
+Proof.
+  intros.
+  unfold not.
+  unfold retrieve_and_sign.
+  rewrite H.
+  intros.
+  inversion H0.
+Qed.
 
 (* Retrieve and sign on known key returns signed key *)
 Theorem retrieve_and_sign_success : forall T i k s priv, (retrieve_and_sign T i (add_key i k s) priv) = (inleft _ (sign T (key T k) priv)).
@@ -378,20 +391,41 @@ Proof.
   reflexivity.
 Qed.
 
-(* Get and check fails for bad signature *)
-(* Theorem get_and_check_bad_signature : forall T kPub kPriv m, (kPriv <> (inverse kPub)) -> (get_and_check_key T (sign T m kPriv) kPub) = inright _ (get_and_check_failure). *)
+Lemma check_key_not_inverse : forall T k j m p, (k <> inverse j) -> check (sign T m k) j = right p.
+Proof.
+  intros.
+  unfold check.
+  unfold not in H.
+Admitted.
 
-(* Lemma is_inverse_inverse : forall k j, k = inverse j -> is_inverse k j = left _ (k = inverse j). *)
+(* Get and check fails for bad signature *)
+Theorem get_and_check_bad_signature : forall T kPub kPriv m p (q: ~ is_signed (sign T m kPriv) kPub), (kPriv <> inverse kPub) -> (get_and_check_key T (sign T m kPriv) kPub) <> inleft p.
+Proof.
+  intros.
+  unfold not.
+  intros.
+  unfold get_and_check_key in H0.
+  rewrite (check_key_not_inverse T kPriv kPub m q) in H0.
+  inversion H0.
+  assumption.
+Qed.
+
+Lemma check_key_inverse : forall T k j m p, (k = inverse j) -> check (sign T m k) j = left p.
+Proof.
+  intros.
+  unfold check.
+Admitted.
 
 (* Get and check succeeds for good signature, valid key *)
-Theorem get_and_check_succeed : forall T kPub kPriv k, (kPub = (inverse kPriv)) -> (get_and_check_key T (sign T (key T k) kPriv) kPub) = inleft _ k.
+Theorem get_and_check_succeed : forall T kPub kPriv k (p : is_signed (sign T (key T k) kPriv) kPub), (kPriv = (inverse kPub)) -> (get_and_check_key T (sign T (key T k) kPriv) kPub) = inleft _ k.
 Proof.
   intros.
   unfold get_and_check_key.
+  rewrite (check_key_inverse T kPriv kPub (key T k) p).
   simpl.
-  destruct kPriv.
-  rewrite H.
-Abort.
+  reflexivity.
+  assumption.
+Qed.
 
 (* Any message leaving a sending node is encrypted and signed *)
 Theorem encrypt_and_sign_success : forall T m decK encK, encrypt_and_sign T m decK encK = sign T (encrypt T m decK) encK.
@@ -401,16 +435,53 @@ Proof.
   reflexivity.
 Qed.
 
+(* A message is never processed if its signature cannot be authenticated using a validated key *)
+Theorem decrypt_and_check_unvalidated : forall T m encPub encPriv decPriv (q: ~ is_signed (sign T m encPriv) encPub), (encPriv <> (inverse encPub)) -> decrypt_and_check T (sign T m encPriv) encPub decPriv = inright I.
+Proof.
+  intros.
+  unfold decrypt_and_check.
+  rewrite (check_key_not_inverse T encPriv encPub m q).
+  reflexivity.
+  assumption.
+Qed.
+
+Lemma is_inverse_not_inverse : forall k j p, (k <> inverse j) -> is_inverse k j = right p.
+Proof.
+
+Admitted.
+
+(* A message is never processed if it cannot be decrypted *)
+Theorem decrypt_and_check_decrypt_fail : forall T m encPub encPriv decPriv decPub (p : is_signed (sign T (encrypt T m decPub) encPriv) encPub) (q: decPriv <> inverse decPub), (encPriv = (inverse encPub)) -> (decPriv <> (inverse decPub)) -> decrypt_and_check T (sign T (encrypt T m decPub) encPriv) encPub decPriv = inright I.
+Proof.
+  intros.
+  unfold decrypt_and_check.
+  rewrite (check_key_inverse T encPriv encPub (encrypt T m decPub) p).
+  simpl.
+  rewrite (is_inverse_not_inverse decPriv decPub q).
+  reflexivity.
+  assumption.
+  assumption.
+Qed.
+
+Lemma is_inverse_inverse : forall k j p, (k = inverse j) -> is_inverse k j = left p.
+Proof.
+Admitted.
+
+(* decrypt_and check succeeds on correct message types and valid keys *)
+Theorem decrypt_and_check_success : forall T m encPub encPriv decPriv decPub (p : is_signed (sign T (encrypt T m decPub) encPriv) encPub) (q: decPriv = inverse decPub), (encPriv = inverse encPub) -> (decPriv = inverse decPub) -> decrypt_and_check T (sign T (encrypt T m decPub) encPriv) encPub decPriv = inleft m.
+Proof.
+  intros.
+  unfold decrypt_and_check.
+  rewrite (check_key_inverse T encPriv encPub (encrypt T m decPub) p).
+  simpl.
+  rewrite (is_inverse_inverse decPriv decPub q).
+  reflexivity.
+  assumption.
+  assumption.
+Qed.
+
 (* Any message processed by a receiving node is signed and encrypted - don't know what to do for this at all *)
 
 (* All retrieved keys are validated before use - might be proved above? *)
-
-(* A message is never processed if its signature cannot be authenticated using a validated key *)
-(* Theorem decrypt_and_check_unvalidated : forall T m encPub encPriv decPriv, (encPub <> (inverse encPriv)) -> decrypt_and_check T (sign T m encPriv) encPub decPriv = inright _ _. *)
-
-(* A message is never processed if it cannot be decrypted *)
-(* Theorem decrypt_and_check_decrypt_fail : forall T m encPub encPriv decPriv decPub, (encPub = (inverse encPriv)) -> (decPub <> (inverse decPriv)) -> decrypt_and_check T (sign T (encrypt T m decPub) encPriv) encPub decPriv = inright _ decrypt_and_check_failure. *)
-
-
 
 
