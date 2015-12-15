@@ -155,7 +155,7 @@ Proof.
   reflexivity.
   reflexivity.
 Defined.
-  
+
 Eval compute in decrypt(encrypt nat (basic nat 1) (symmetric 1)) (symmetric 1).
 
 Eval compute in decrypt(encrypt nat (basic nat 1) (symmetric 1)) (symmetric 2).
@@ -259,32 +259,33 @@ Proof.
   reflexivity.
 Defined.
 
-(* Functions to get key from key server *)
-Definition get_and_check_failure (T : Type) (m : message T) (k : keyType) : Prop :=
-  if (check m k) then match m with
-    | basic c => True
-    | key k => True
-    | sign m' j => match m' with
-      | basic _ => True
-      | key k => False
-      | sign _ _ => True
-      | encrypt _ _ => True
-      | hash _ => True
-      | pair _ _ => True
-      end
-    | encrypt m' k => True
-    | hash _ => True
-    | pair _ _ => True
-    end
-  else True.
+Eval compute in (retrieve_and_sign nat 1 (add_key 1 (public 1) empty_store) (private 0)).
 
-Definition get_and_check_key (T: Type) (m : message T) (storePub : keyType) : keyType + {(get_and_check_failure T m storePub)}.
+Eval compute in (retrieve_and_sign nat 1 (add_key 2 (public 1) empty_store) (private 0)).
+
+(* Functions to get key from key server *)
+Definition get_and_check_failure : Prop :=
+  True.
+
+Definition get_message_out_of_sign (T : Type) (m : message T) : (message T) + {(get_and_check_failure)}.
+refine 
+  match m with 
+    | basic _ => inright _ _
+    | key _ => inright _ _
+    | sign m' _ => inleft _ m'
+    | encrypt _ _ => inright _ _
+    | hash _ => inright _ _
+    | pair _ _ => inright _ _
+  end.
+Proof.
+  reflexivity. reflexivity. reflexivity. reflexivity. reflexivity.
+Defined.
+
+Definition get_and_check_key (T: Type) (m : message T) (storePub : keyType) : keyType + {(get_and_check_failure)}.
 refine
   match (check m storePub) with
-    | left t => match m with
-          | basic _ => inright _ _
-          | key _ => inright _ _
-          | sign m' _ => match m' with
+    | left t => match (get_message_out_of_sign T m) with
+          | inleft m' => match m' with
             | basic _ => inright _ _
             | key k => inleft _ k
             | sign _ _ => inright _ _
@@ -292,40 +293,41 @@ refine
             | hash _ => inright _ _
             | pair _ _ => inright _ _
             end
-          | encrypt _ _ => inright _ _
-          | hash _ => inright _ _
-          | pair _ _ => inright _ _
+          | inright _ => inright _ _
           end
     | right f => inright _ _
   end.
 Proof.
-  unfold get_and_check_failure. simpl. tauto.
-  unfold get_and_check_failure. simpl. tauto.
-  unfold get_and_check_failure. simpl. tauto.
-  destruct m'. 
-  unfold get_and_check_failure. simpl. destruct (is_inverse storePub k). tauto. tauto.
-  unfold get_and_check_failure. simpl. destruct (is_inverse storePub k).
-Abort.
+  reflexivity. reflexivity. reflexivity. reflexivity. reflexivity. reflexivity. reflexivity.
+Defined.
+
+Eval compute in get_message_out_of_sign nat (sign nat (key nat (public 1)) (private 0)).
+Eval compute in get_message_out_of_sign nat (encrypt nat (key nat (public 1)) (private 0)).
+Eval compute in get_and_check_key nat (sign nat (key nat (public 1)) (private 0)) (public 0).
+Eval compute in (get_and_check_key nat (sign nat (key nat (public 1)) (private 0)) (public 1)).
 
 (* Encryption *)
 Definition encrypt_and_sign (T: Type) (m : message T) (decPub : keyType) (encPriv : keyType) : (message T) :=
   sign T (encrypt T m decPub) encPriv.
 
 (* Decryption *)
-Definition decrypt_and_check_failure : Prop :=
+Definition decrypt_and_check_failure (T : Type) (m : message T) (pub : keyType) (priv : keyType) : Prop :=
   True.
 
-Definition decrypt_and_check (T: Type) (m : message T) (encPub : keyType) (decPriv : keyType) : (message T) + {(decrypt_and_check_failure)}.
+Definition decrypt_and_check (T: Type) (m : message T) (encPub : keyType) (decPriv : keyType) : (message T) + {(decrypt_and_check_failure T m encPub decPriv)}.
 refine
   match (check m encPub) with
-    | left t => match (decrypt m decPriv) with
+    | left t => match (get_message_out_of_sign T m) with
+      | inleft m'  => match (decrypt m' decPriv) with
         | inleft m' => inleft _ m'
         | inright n => inright _ _
         end
+      | inright _ => inright _ _
+      end
     | right f => inright _ _
   end.
 Proof.
-  reflexivity. reflexivity.
+  reflexivity. reflexivity. reflexivity. 
 Defined.
 
 (* Proofs *)
@@ -377,16 +379,17 @@ Proof.
 Qed.
 
 (* Get and check fails for bad signature *)
-(* Theorem get_and_check_bad_signature : forall T kPub kPriv m, (kPriv <> (inverse kPub)) -> (get_and_check_key T (sign T kPriv m) kPub) = inright _ _. *)
+(* Theorem get_and_check_bad_signature : forall T kPub kPriv m, (kPriv <> (inverse kPub)) -> (get_and_check_key T (sign T m kPriv) kPub) = inright _ (get_and_check_failure). *)
 
-(* Lemma check_signed_inverse : forall T (m n : message T) k, m = (sign T n k) -> (check m (inverse k)) = left _ (is_signed m k). *)
+(* Lemma is_inverse_inverse : forall k j, k = inverse j -> is_inverse k j = left _ (k = inverse j). *)
 
 (* Get and check succeeds for good signature, valid key *)
 Theorem get_and_check_succeed : forall T kPub kPriv k, (kPub = (inverse kPriv)) -> (get_and_check_key T (sign T (key T k) kPriv) kPub) = inleft _ k.
 Proof.
   intros.
   unfold get_and_check_key.
-  unfold check.
+  simpl.
+  destruct kPriv.
   rewrite H.
 Abort.
 
