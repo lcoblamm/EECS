@@ -241,12 +241,6 @@ Definition empty_store : keyStore :=
 Definition add_key (id : nat) (k : keyType) (s : keyStore) : keyStore :=
   (fun n:nat => if (beq_nat n id) then (keyStoreValue k) else (s n)).
 
-Definition is_not_retrievable (k : keyStoreEntry) : Prop :=
-  match k with
-    | keyStoreValue k => False
-    | unknown => True
-  end.
-
 Definition retrieve_and_sign (T : Type) (id : nat) (s : keyStore) (priv : keyType) : option (message T) :=
   match (s id) with
     | unknown => None
@@ -433,5 +427,27 @@ Proof.
   contradiction.
 Qed.
 
+(*
+  Full example computation :
+  Encryptor has id 2, private key 5
+  Decryptor has id 1, private key 0
+  Keystore has private key 10, public key 10
+*)
+Definition example_key_store : keyStore :=
+  (add_key 1 (public 0) (add_key 2 (public 5) empty_store)).
 
+(* Testing sending encrypted message "42" *)
+Eval compute in (match (retrieve_and_sign nat 1 example_key_store (private 10)) with
+  | Some signedPubKey1 => match (get_and_check_key nat signedPubKey1 (public 10)) with
+    | Some key1 => match (retrieve_and_sign nat 2 example_key_store (private 10)) with
+      | Some signedPubKey2 => match (get_and_check_key nat signedPubKey2 (public 10)) with
+        | Some key2 => decrypt_and_check nat (encrypt_and_sign nat (basic nat 42) key1 (private 5)) key2 (private 0) 
+        | None => None
+        end
+      | None => None
+      end
+    | None => None
+    end
+  | None => None
+  end).
 
