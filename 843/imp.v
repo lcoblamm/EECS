@@ -68,7 +68,7 @@ Theorem beval_iff_bevalR : forall b r, (bevalR b r) <-> (beval b = r).
 split.
 intros H. induction H; try apply (aeval_iff_aevalR x1 v1) in H; try apply (aeval_iff_aevalR x2 v2) in H0; subst; reflexivity.
 generalize dependent r.
-induction b; simpl; intros; subst; constructor; try apply (aeval_iff_aevalR a); try apply (aeval_iff_aevalR a0); try apply IHb; try apply IHb1; try apply IHb2; reflexivity.
+induction b; intros; subst; constructor; try apply (aeval_iff_aevalR a); try apply (aeval_iff_aevalR a0); try apply IHb; try apply IHb1; try apply IHb2; reflexivity.
 Qed.
 
 
