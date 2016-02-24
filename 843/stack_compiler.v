@@ -112,10 +112,6 @@ Lemma compile_general : forall st e l, s_execute st l (s_compile e) = aeval st e
 Qed.
   
 Theorem s_compile_correct : forall st a, s_execute st [] (s_compile a) = [ (aeval st a) ].
-intros. induction a.
-reflexivity.
-reflexivity.
-simpl. rewrite execute_distribute. rewrite execute_distribute. rewrite compile_general. rewrite IHa1. reflexivity.
-simpl. rewrite execute_distribute. rewrite execute_distribute. rewrite compile_general. rewrite IHa1. reflexivity.
-simpl. rewrite execute_distribute. rewrite execute_distribute. rewrite compile_general. rewrite IHa1. reflexivity.
+  intros.
+  apply compile_general.
 Qed.
