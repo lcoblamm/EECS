@@ -91,17 +91,31 @@ Example s_compile1 :
 reflexivity.
 Qed.
 
-Lemma execute_compile : forall st e1 e2 e3 , s_execute st [] (e1 ++ e2 ++ e3) = s_execute st ((s_execute st [] e2) ++ (s_execute st [] e1)) e3.
-  intros. induction e1. simpl. induction e2.
+Lemma execute_distribute : forall st e1 e2 l, s_execute st l (e1 ++ e2) = s_execute st (s_execute st l e1) e2.
+  intros st e1 e2. induction e1.
   reflexivity.
-  induction a. simpl.
-  Admitted.
+  induction a. simpl. intros l. rewrite IHe1. reflexivity.
+  simpl. intro l. rewrite IHe1. reflexivity.
+  simpl. intro l. rewrite IHe1. reflexivity.
+  simpl. intro l. rewrite IHe1. reflexivity.
+  simpl. intro l. rewrite IHe1. reflexivity.
+Qed.
+
+Lemma compile_general : forall st e l, s_execute st l (s_compile e) = aeval st e :: l.
+  intros st e.
+  induction e.
+  reflexivity.
+  reflexivity.
+  simpl. intro l. rewrite execute_distribute. rewrite execute_distribute. rewrite IHe1. rewrite IHe2. reflexivity.
+  simpl. intro l. rewrite execute_distribute. rewrite execute_distribute. rewrite IHe1. rewrite IHe2. reflexivity.
+  simpl. intro l. rewrite execute_distribute. rewrite execute_distribute. rewrite IHe1. rewrite IHe2. reflexivity.
+Qed.
   
 Theorem s_compile_correct : forall st a, s_execute st [] (s_compile a) = [ (aeval st a) ].
 intros. induction a.
 reflexivity.
 reflexivity.
-simpl. rewrite execute_compile. rewrite IHa1. rewrite IHa2. reflexivity.
-simpl. rewrite execute_compile. rewrite IHa1. rewrite IHa2. reflexivity.
-simpl. rewrite execute_compile. rewrite IHa1. rewrite IHa2. reflexivity.
+simpl. rewrite execute_distribute. rewrite execute_distribute. rewrite compile_general. rewrite IHa1. reflexivity.
+simpl. rewrite execute_distribute. rewrite execute_distribute. rewrite compile_general. rewrite IHa1. reflexivity.
+simpl. rewrite execute_distribute. rewrite execute_distribute. rewrite compile_general. rewrite IHa1. reflexivity.
 Qed.
