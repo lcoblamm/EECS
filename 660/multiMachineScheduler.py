@@ -36,14 +36,26 @@ def schedule(job, machine):
 		machine[i] = 1
 	return True
 
+	# latestStart = job.finish - job.length
+	# startIndex = -1
+	# for i in range(latestStart + 1):
+	# 	startIndex = i
+	# 	for j in range(job.length):
+	# 		if (machine[i + j]):
+	# 			startIndex = -1
+	# 			break
+	# 	if (startIndex != -1):	
+	# 		for i in range(startIndex, startIndex + job.length):
+	# 			machine[i] = 1
+	# 		return True
+	# return False
+
 def test():
-	test0 = [Job(1, 1)]
+	test0 = [Job(1, 1)] 
 	test1 = [Job(3, 2)]
 	test2 = [Job(1, 1), Job(1, 1)]
 	test3 = [Job(3, 1), Job(2, 1), Job(6, 1), Job(4, 1)]
 	test4 = [Job(3, 2), Job(5, 2), Job(7, 2), Job(4, 2), Job(6, 2)]
-	print(scheduleMachines(test0))
-	print(scheduleMachines(test1))
-	print(scheduleMachines(test2))
-	print(scheduleMachines(test3))
-	print(scheduleMachines(test4))
+	test5 = [Job(3, 1), Job(3, 2)]
+	test6 = [Job(10, 9), Job(1, 1), Job(3, 3), Job(5, 4), Job(10, 6), Job(10, 7)]
+	print(scheduleMachines(test5))
