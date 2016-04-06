@@ -27,7 +27,6 @@ def scheduleMachines(jobs):
 			m = [0] * machineSize
 			schedule(job, m)
 			machines.append(m)
-	print(machines)
 	return len(machines)
 
 # schedules job in earliest available slot on machine, or returns False
