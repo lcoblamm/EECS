@@ -253,10 +253,48 @@ Proof.
 Qed.
 
 Theorem hoare_if : forall P Q c1 c2 b,
-                     {{fun st => ((P st) and (bassn b st))}} c1 {{Q}} ->
-                     {{fun st => ((P st) and (not (bassn b st)))}} c2 {{Q}} ->
+                     {{fun st => ((P st) /\ (bassn b st))}} c1 {{Q}} ->
+                     {{fun st => ((P st) /\ (not (bassn b st)))}} c2 {{Q}} ->
                      {{P}} (IFB b THEN c1 ELSE c2 FI) {{Q}}.
+Proof.
+  intros P Q c1 c2 b HTrue HFalse.
+  unfold hoare_triple. intros s st' HIf HP.
+  inversion HIf; subst.
+  apply (HTrue s st'). assumption.
+  apply bexp_eval_true in H4.
+  split; assumption.
+  apply (HFalse s st'). assumption.
+  apply bexp_eval_false in H4.
+  split; assumption.
+Qed.
 
-Lemma hoare_while : forall P b c,
-  {{fun st =>  P st and bassn b st}} c {{P}} ->
-  {{P}} WHILE b DO c END {{fun st => P st and (not (bassn b st))}}.
+Theorem hoare_while : forall P b c,
+  {{fun st =>  P st /\ bassn b st}} c {{P}} ->
+  {{P}} WHILE b DO c END {{fun st => (P st) /\ (not (bassn b st))}}.
+Proof.
+  intros P b c HTrue.
+  unfold hoare_triple. intros st st' HWhile HP.
+  remember (WHILE b DO c END) as wcom eqn:Heqwcom.
+  induction HWhile; try (inversion Heqwcom); subst.
+  apply bexp_eval_false in H. split; assumption.
+  apply IHHWhile2. reflexivity.
+  apply (HTrue st st'). assumption. apply bexp_eval_true in H. split; assumption.
+Qed.
+  
+Theorem hoare_repeat : forall P b c,
+                         {{fun st => P st /\ not (bassn b st)}} c {{P}} ->
+                         {{P}} REPEAT c UNTIL b END {{fun st => P st /\ bassn b st}}.
+Proof.
+  intros P b c HFalse.
+  unfold hoare_triple. intros st st' HRepeat HP.
+  remember (REPEAT c UNTIL b END) as rcom eqn:Heqrcom.
+  induction HRepeat. inversion Heqrcom.
+  inversion Heqrcom.
+  inversion Heqrcom.
+  inversion Heqrcom.
+  inversion Heqrcom.
+  inversion Heqrcom.
+  inversion Heqrcom.
+  inversion Heqrcom.
+  inversion Heqrcom; subst. apply IHHRepeat.
+  try (inversion Heqrcom); subst.
